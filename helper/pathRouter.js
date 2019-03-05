@@ -2,10 +2,10 @@
 
 export var pathRouter={
     login:"login",
+    regit:"regit",
     dashboard:"dashboard",
-    purpase:"purpase",
-    qrcode:"qrcode",
-    rate_intervation:"rate_intervation",
+    drivers:"drivers",
+
 
 
 };

@@ -6,6 +6,7 @@
 // import {localSecured} from "./localSecurity"
 // import {Validation as Valid} from "./validation";
 import { Font, AppLoading,Permissions,Location } from "expo";
+import React, { Component } from 'react';
 import {Toast} from "native-base"
 
 
@@ -18,9 +19,10 @@ import {style,globalStyle} from "./style"
 
 // console.log(cache.setItem("name","prodo"));
 
-export var Models={
-   nav:null,
+var Models={
+   current:null,
    app:null,
+   sidebar:null,
 };
 
 
@@ -31,17 +33,29 @@ export var CONF={
     HOST_IMG:"http://192.168.43.25:8000/img",
 
     // cache:cashe,
+
     style:style,
-    appName:"Intervation",
+    appName:"GTA",
+    appLongName:"Fk management",
     globalStyle:globalStyle,
     path:pathRouter,
     appStateName:"appState",
     isLoggedIn:false,
     AccDenied:"Access denied",
-
-    Agent:null,
+    drawer:null,
+    User:[],
     Client:null,
     defaultRedirection:"/login",
+    currentM(){
+      return Models.current;
+    },
+    btn(){
+       return ['success','small','full','rounded','iconRight'];
+    },
+    setModel(modelName,value){
+      Models[modelName]=value;
+    }
+    ,
     encrypt(data){
      return localSecured.encrypt(data);
 
@@ -61,17 +75,31 @@ export var CONF={
        }
       m.setState({[varName]:value});
     },
-    goTo(model,screen,params={}){
+    goTo(model,screen,params={},isFromMenu=false){
+      if (model.props.navigation==undefined) {
+        return this.Toast("Component navigation error:",'danger',15000);
+      }
       model.props.navigation.navigate(screen,params);
+      if (isFromMenu) {
+         this.closeDrawer();
+      }
     }
+
     ,
-    varToString(variable){
-      return Object.keys(variable)[0];
+    setRouteModel(model){
+
+      if (Models.sidebar!=null) {
+        console.log('init2');
+        Models.sidebar.setState({routes:model});
+      }
+
     },
     initIcon:async(model)=>{//this function helps to load icons in expo
+
+
       await Font.loadAsync({
-        Roboto: require("../../Fonts/Roboto.ttf"),
-        Roboto_medium: require("../../Fonts/Roboto_medium.ttf")
+        Roboto: require("../Fonts/Roboto.ttf"),
+        Roboto_medium: require("../Fonts/Roboto_medium.ttf")
       });
       model.setState({ loading: false });
     },
@@ -153,7 +181,51 @@ export var CONF={
         resp.location={latitude: location.coords.latitude, longitude: location.coords.longitude, latitudeDelta: 0.0922, longitudeDelta: 0.0421 };
         return resp;
 
-   }
+   },
+   inputFocused (model,refName) {
+      setTimeout(() => {
+        let scrollResponder = model.refs.scrollView.getScrollResponder();
+        scrollResponder.scrollResponderScrollNativeHandleToKeyboard(
+          React.findNodeHandle(model.refs[refName]),
+          110, //additionalOffset
+          true
+        );
+      }, 50);
+   },
+  resetAllState(model){
+    for (var key in model.state) {
+       model.setState({[key]:""});
+
+    }
+  }
+  ,
+  resetModel(keyIndex=[],model){//this will reset the value of a kid in state of model
+    //according to the index of the keyIndex
+    var state=model.state;
+    if (keyIndex=="all") {
+       return this.resetAllState(model);
+    }
+    for (var i = 0; i < keyIndex.length; i++) {
+
+         var currentIndex=keyIndex[i].split(":");
+         var kidIndex=currentIndex[0];
+         var valueToReplace=currentIndex[1]==undefined?"":currentIndex[1];
+         var keyName=this.getKeyName(state,kidIndex);
+
+
+
+
+         model.setState({[keyName]:valueToReplace});
+    }
+
+  },
+  closeDrawer(){
+    this.drawer._root.close()
+  },
+  openDrawer(){
+    Models.sidebar.setState({user:this.User});
+    this.drawer._root.open()
+  }
 
 
 

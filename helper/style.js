@@ -17,9 +17,14 @@ AmericanTypewriter-Light
 */
 
 export var globalStyle={
-    app_color:"#61dafb",
+    app_color:"white",
+    text_color:"black",
+    back_color:"#4caf50",
+    green_color:"#4caf50",
     react_dns:"http://localhost:3000",
-   transp_color9_color:"rgba(0, 0, 0, 0.5)",
+    transp_color2:"rgba(0, 0, 0, 0.2)",
+    transp_color3:"rgba(0, 0, 0, 0.3)",
+   transp_color4:"rgba(0, 0, 0, 0.4)",
    transp_color5:"rgba(0, 0, 0, 0.5)",
    transp_color6:"rgba(0, 0, 0, 0.6)",
    transp_color7:"rgba(0, 0, 0, 0.7)",
@@ -40,9 +45,11 @@ export var globalStyle={
 }
 
 export var style=StyleSheet.create({
-   app_layout:{backgroundColor: globalStyle.transp_color5,flex:1},
+   app_layout:{backgroundColor: globalStyle.transp_color3,flex:1},
    app_color:{color:globalStyle.app_color},
+   text_color:{color:globalStyle.text_color},
    white_color:{color:globalStyle.white_color},
+   green_color:{color:globalStyle.green_color},
    error_color:{
      textAlign: 'center',
      color:globalStyle.error_color,
@@ -55,8 +62,18 @@ export var style=StyleSheet.create({
     spinColor:{color:globalStyle.app_color},
     center:{textAlign: "center",margin:5},
     headers:{
-        backgroundColor:globalStyle.transp_color5,
+        backgroundColor:globalStyle.back_color,
+        
     },
+    base_headers:{
+        backgroundColor:globalStyle.back_color,
+        height:"35%",
+        paddingTop:"4%"
+    },
+    content:{
+       marginTop:"-40%",flex:1
+    }
+    ,
     title:{color:"white"},
 
     container:{
@@ -135,7 +152,7 @@ export var style=StyleSheet.create({
 
    },
    textBtn:{
-     color:globalStyle.app_color,
+     color:globalStyle.white_color,
    }
    ,
    helperClient:{
@@ -200,6 +217,9 @@ export var style=StyleSheet.create({
    borderBottomWidth:1,
    borderColor:globalStyle.app_color,
 
-   }
+ },
+ sidebarIcon:{
+    color:globalStyle.green_color
+ }
 
 })

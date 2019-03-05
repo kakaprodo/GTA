@@ -8,7 +8,7 @@ import { Constants, SQLite } from 'expo';
 
 export class Con{
 
-   constructor(name="intervention"){
+   constructor(name="gta"){
       this.db = SQLite.openDatabase(name+'.db');
 
    }
