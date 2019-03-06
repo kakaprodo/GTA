@@ -5,6 +5,26 @@ import { StyleSheet, Text, View,ImageBackground,StatusBar  } from 'react-native'
 import {Spinner} from "native-base"
 
 
+import { Platform } from "react-native";
+import Icons from "react-native-vector-icons/Ionicons";
+
+
+
+export class Icon extends React.Component{
+   constructor({ name, ...props }){
+        super(props);
+        this.state={
+            name:name
+        }
+   }
+   render(){
+     return <Icons
+       name={Platform.OS === "ios" ? `ios-${this.state.name}` : `md-${this.state.name}`}
+       {...this.props}
+     />
+   }
+}
+
 
 
 export class AppLayout extends React.Component{

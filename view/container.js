@@ -7,18 +7,15 @@ import Login from "./user/login"
 import Regit from "./user/regit"
 import Dashboard from "./dashboard"
 import AllDrivers from "./drivers/"
-// import Dashboard from "./dashboard"
-// import Purpase from "./purpase"
-// import Qrcode from "./qrcode_scanner"
-// import ClientLoc from "./client_location"
-// import RateIntervation from "./rateIntervation"
+import CreateDriver from "./drivers/create"
+
 
 var AllScreen=createStackNavigator({
   // 'demo':{screen:Demo},
   'drivers':{screen:AllDrivers},
+  'create_driver':{screen:CreateDriver },
   'login':{screen:Login },
   'dashboard':{screen:Dashboard },
-
   'regit':{screen:Regit },
 
 

@@ -117,16 +117,24 @@ export class Query extends Con{
       return this;
   }
 
-  all(toCall){
+  all(onExist,onNull){
 
     const md=this;
     this.db.transaction((tx)=>{
-         tx.executeSql(`select * from ${this.table} limit 1`, [], (_, { rows:{ _array } }) =>{
+         tx.executeSql(`select * from ${this.table}`, [], (_, { rows:{ _array } }) =>{
                   this.all=_array;
 
-                  if (toCall) {
-                     toCall.call(md,_array);
-                  }
+               if (_array.length>0) {
+                 if (onExist) {
+                    onExist.call(md,_array);
+                 }
+               }
+               else{
+                 if (onNull) {
+                    onNull.call(md,[]);
+                 }
+               }
+
 
                   //console.log(rows)
                  }
@@ -185,7 +193,7 @@ export class Query extends Con{
  update(){
      db.transaction(
               tx => {
-                tx.executeSql(`update ${this.table} set done = 1 where id = ?;`, [id]);
+                tx.executeSql(`update ${this.table} set done = 1 where ${this.keyName}=?;`, [id]);
               },
               null,
               null

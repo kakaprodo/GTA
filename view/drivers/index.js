@@ -1,22 +1,26 @@
 import React, { Component } from 'react';
-import { Header,Container, Content, Form, Item, Input, Label,Text,Button,Icon,H2,H3,Body,Title, Picker ,Textarea,Left,Right} from 'native-base';
+import { Header,Container, Content, Form, Item, Input, Label,Text,Button,Icon,H2,H3,Body,Title,
+  Card, CardItem ,Image,Thumbnail,List,ListItem, Left, Right, Switch} from 'native-base';
 
-import { StyleSheet, View,ScrollView,KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, View,ScrollView,Platform,BackHandler } from 'react-native';
 import {AppLayout,AppLoading} from "../app_layout"
 
+import {Driver} from "../../controller/driver"
 
-
+var driver;
+let listener=null;
 
 export default class AllDrivers extends Component {
   constructor(props){
       super(props);
       this.state={
       loading:true,
-      user:null,
+      refreshing:true,
+      drivers:[],
     }
     H.setModel("current",this);
+    driver=new Driver({model:this,container:"drivers"});
 
-    this.drawer=null;
   }
 
   static navigationOptions=({navigation})=>{
@@ -37,19 +41,37 @@ export default class AllDrivers extends Component {
 
   componentWillMount() {
      H.initIcon(this);
+     this.init();
+
+     if (Platform.OS == "android" && listener == null) {
+       listener = BackHandler.addEventListener("hardwareBackPress", () => {
+          this.init();
+       })
+    }
+
 
   }
 
+  init(){
+
+    driver.index(()=>{this.setState({refreshing:false})},
+                 ()=>{this.setState({refreshing:false})}
+               );
+  }
 
 
 
   render() {
 
     var state=this.state;
+     var drivers=state.drivers;
 
-    if (state.loading ) {
+    if (state.loading || drivers.length==0 ) {
       return <AppLoading />
     }
+
+
+
 
 
     return (
@@ -72,22 +94,39 @@ export default class AllDrivers extends Component {
                        <Button transparent>
                          <Icon name='search' />
                        </Button>
-                       <Button transparent>
-                         <Icon name='pluscircleo' />
+                       <Button onPress={()=>{this.init()}} transparent>
+                         <Icon name='refresh' />
+                       </Button>
+                       <Button onPress={()=>{H.goTo(this,H.path.create_driver)}} transparent>
+                         <Text>New</Text>
 
                        </Button>
                      </Right>
                    </Header>
                    <Content padder style={H.style.content}>
 
-                      <View style={{margin:10}}>
 
-                         <Text>List of drivers</Text>
-                      </View>
+                     <List style={{marginLeft:-3}}>
+                        {drivers.map((item,index) => {
+
+                          return <ListItem button onPress={()=>{item.onPress()}} key={index}>
+                             <Left>
+
+                               <Text>{item.names}</Text>
+                             </Left>
+
+                              <Right>
+                                <Icon style={H.style.sidebarIcon} name="arrow-forward" />
+                              </Right>
+                          </ListItem>
+                        })}
 
 
+                      </List>
                   </Content>
+
             </AppLayout>
+
 
     );
   }
