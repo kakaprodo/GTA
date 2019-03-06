@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
-import { Header,Container, Content, Form, Item, Input, Label,Text,Button,Icon,H2,H3,Body,Title, Picker ,Textarea,Left,Right} from 'native-base';
+import { Header,Container, Content, Form, Item, Input, Label,Text,Button,Icon,H2,H3,Body,Title,
+  Card, CardItem ,Image,Thumbnail,List,ListItem, Left, Right, Switch} from 'native-base';
 
 import { StyleSheet, View,ScrollView,KeyboardAvoidingView } from 'react-native';
 import {AppLayout,AppLoading} from "../app_layout"
 
+import {Driver} from "../../controller/driver"
 
+var driver;
 
 
 export default class AllDrivers extends Component {
@@ -12,11 +15,11 @@ export default class AllDrivers extends Component {
       super(props);
       this.state={
       loading:true,
-      user:null,
+      drivers:[],
     }
     H.setModel("current",this);
+    driver=new Driver({model:this,container:"drivers"});
 
-    this.drawer=null;
   }
 
   static navigationOptions=({navigation})=>{
@@ -38,6 +41,7 @@ export default class AllDrivers extends Component {
   componentWillMount() {
      H.initIcon(this);
 
+     driver.index();
   }
 
 
@@ -46,10 +50,14 @@ export default class AllDrivers extends Component {
   render() {
 
     var state=this.state;
-
-    if (state.loading ) {
+     var drivers=state.drivers;
+     
+    if (state.loading || drivers.length==0 ) {
       return <AppLoading />
     }
+
+
+
 
 
     return (
@@ -72,20 +80,31 @@ export default class AllDrivers extends Component {
                        <Button transparent>
                          <Icon name='search' />
                        </Button>
-                       <Button transparent>
-                         <Icon name='pluscircleo' />
+                       <Button onPress={()=>{H.goTo(this,H.path.create_driver)}} transparent>
+                         <Text>New</Text>
 
                        </Button>
                      </Right>
                    </Header>
                    <Content padder style={H.style.content}>
 
-                      <View style={{margin:10}}>
+                     <List style={{marginLeft:-3}}>
+                        {drivers.map((item,index) => {
 
-                         <Text>List of drivers</Text>
-                      </View>
+                          return <ListItem button onPress={()=>{item.onPress()}} key={index}>
+                             <Left>
+
+                               <Text>{item.names}</Text>
+                             </Left>
+
+                              <Right>
+                                <Icon style={H.style.sidebarIcon} name="arrow-forward" />
+                              </Right>
+                          </ListItem>
+                        })}
 
 
+                      </List>
                   </Content>
             </AppLayout>
 

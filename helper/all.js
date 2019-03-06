@@ -225,6 +225,13 @@ export var CONF={
   openDrawer(){
     Models.sidebar.setState({user:this.User});
     this.drawer._root.open()
+  },
+  now(full=false){
+    var date=new Date()
+    if (full) {
+      return date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear()+" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
+    }
+    return date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear();
   }
 
 

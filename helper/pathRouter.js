@@ -5,6 +5,8 @@ export var pathRouter={
     regit:"regit",
     dashboard:"dashboard",
     drivers:"drivers",
+    create_driver:"create_driver",
+    
 
 
 

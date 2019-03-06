@@ -32,7 +32,7 @@ export var globalStyle={
    transp_color9:"rgba(0, 0, 0, 0.9)",
    a_size:"13px",
    placeholder:"#999",
-   error_color:"red",
+   error_color:"#ffcdd2",
    white_color:"#eeeeee",
    center:{textAlign: "center"},
    fontSize(value){
@@ -53,7 +53,7 @@ export var style=StyleSheet.create({
    error_color:{
      textAlign: 'center',
      color:globalStyle.error_color,
-     backgroundColor: globalStyle.transp_color9
+     backgroundColor: globalStyle.transp_color5
    },
   spinner:{flex:1,justifyContent: "center",
              alignItems: "center",
@@ -63,7 +63,7 @@ export var style=StyleSheet.create({
     center:{textAlign: "center",margin:5},
     headers:{
         backgroundColor:globalStyle.back_color,
-        
+
     },
     base_headers:{
         backgroundColor:globalStyle.back_color,
