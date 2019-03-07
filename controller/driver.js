@@ -27,6 +27,7 @@ export class Driver extends Query{
 
     }
 
+<<<<<<< HEAD
     index(onExist,onNodata){
       super.all((drivers)=>{
           if (onExist) {
@@ -37,6 +38,12 @@ export class Driver extends Query{
           if (onNodata) {
              onNodata.call(this);
           }
+=======
+    index(){
+      super.all((drivers)=>{
+          this.model.setState({[this.content]:drivers});
+      },(drivers)=>{
+>>>>>>> 9e23d593c5c0ba7b29331619cf1b86919e0eeb8d
            this.model.setState({[this.content]:drivers});
       });
     }

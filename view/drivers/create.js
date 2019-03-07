@@ -50,9 +50,15 @@ export default class CreateDriver extends Component {
     driver=new Driver({model:this});
      driver.create((driver)=>{
         // H.goTo(this,H.path.login);
+<<<<<<< HEAD
         H.Toast("successfully",undefined,undefined)
      },(msg="error occured")=>{
         H.Toast(msg,'danger',undefined)
+=======
+        H.Toast("successfully",undefined,undefined,'top')
+     },(msg="error occured")=>{
+        H.Toast(msg,'danger')
+>>>>>>> 9e23d593c5c0ba7b29331619cf1b86919e0eeb8d
      });
   }
 

@@ -8,14 +8,21 @@ import {AppLayout,AppLoading} from "../app_layout"
 import {Driver} from "../../controller/driver"
 
 var driver;
+<<<<<<< HEAD
 let listener=null;
+=======
+
+>>>>>>> 9e23d593c5c0ba7b29331619cf1b86919e0eeb8d
 
 export default class AllDrivers extends Component {
   constructor(props){
       super(props);
       this.state={
       loading:true,
+<<<<<<< HEAD
       refreshing:true,
+=======
+>>>>>>> 9e23d593c5c0ba7b29331619cf1b86919e0eeb8d
       drivers:[],
     }
     H.setModel("current",this);
@@ -50,6 +57,7 @@ export default class AllDrivers extends Component {
     }
 
 
+     driver.index();
   }
 
   init(){
@@ -65,7 +73,11 @@ export default class AllDrivers extends Component {
 
     var state=this.state;
      var drivers=state.drivers;
+<<<<<<< HEAD
 
+=======
+     
+>>>>>>> 9e23d593c5c0ba7b29331619cf1b86919e0eeb8d
     if (state.loading || drivers.length==0 ) {
       return <AppLoading />
     }
@@ -94,9 +106,12 @@ export default class AllDrivers extends Component {
                        <Button transparent>
                          <Icon name='search' />
                        </Button>
+<<<<<<< HEAD
                        <Button onPress={()=>{this.init()}} transparent>
                          <Icon name='refresh' />
                        </Button>
+=======
+>>>>>>> 9e23d593c5c0ba7b29331619cf1b86919e0eeb8d
                        <Button onPress={()=>{H.goTo(this,H.path.create_driver)}} transparent>
                          <Text>New</Text>
 
@@ -105,7 +120,14 @@ export default class AllDrivers extends Component {
                    </Header>
                    <Content padder style={H.style.content}>
 
+<<<<<<< HEAD
 
+                     <List style={{marginLeft:-3}}>
+                        {drivers.map((item,index) => {
+
+                          return <ListItem button onPress={()=>{item.onPress()}} key={index}>
+                             <Left>
+=======
                      <List style={{marginLeft:-3}}>
                         {drivers.map((item,index) => {
 
@@ -120,8 +142,21 @@ export default class AllDrivers extends Component {
                               </Right>
                           </ListItem>
                         })}
+>>>>>>> 9e23d593c5c0ba7b29331619cf1b86919e0eeb8d
+
+                               <Text>{item.names}</Text>
+                             </Left>
+
+<<<<<<< HEAD
+                              <Right>
+                                <Icon style={H.style.sidebarIcon} name="arrow-forward" />
+                              </Right>
+                          </ListItem>
+                        })}
 
 
+=======
+>>>>>>> 9e23d593c5c0ba7b29331619cf1b86919e0eeb8d
                       </List>
                   </Content>
 
