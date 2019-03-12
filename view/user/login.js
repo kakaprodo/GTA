@@ -21,6 +21,7 @@ export default class Login extends Component {
         passValid:"",
 
       }
+
     user=new User({model:this});
 
   }
@@ -47,6 +48,7 @@ export default class Login extends Component {
   login(){
 
     user.login((user)=>{
+       H.resetModel(['2','3'],this);
        H.goTo(this,H.path.dashboard,{user:user});
        H.Toast("successfully")
     },(msg="error occured")=>{

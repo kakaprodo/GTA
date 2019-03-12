@@ -5,28 +5,26 @@ import { Header,Container, Content, Form, Item, Input, Label,Text,Button,Icon,H2
 import { StyleSheet, View,ScrollView,Platform,BackHandler } from 'react-native';
 import {AppLayout,AppLoading} from "../app_layout"
 
-import {Driver} from "../../controller/driver"
+import {Mission} from "../../controller/mission"
 
-var driver;
+var mission;
 
 let listener=null;
 
 
 
 
-export default class AllDrivers extends Component {
+export default class Allmissions extends Component {
   constructor(props){
       super(props);
       this.state={
       loading:true,
+      missions:[],
 
-      refreshing:true,
 
-
-      drivers:[],
     }
     H.setModel("current",this);
-    driver=new Driver({model:this,container:"drivers"});
+    mission=new Mission({model:this,container:"missions"});
 
   }
 
@@ -49,24 +47,15 @@ export default class AllDrivers extends Component {
   componentDidMount() {
      H.initIcon(this);
      this.init();
-
-     if (Platform.OS == "android" && listener == null) {
-       listener = BackHandler.addEventListener("hardwareBackPress", () => {
-          this.init();
-       })
-    }
-
-
-
   }
 
   init(){
 
-    driver.index();
+    mission.index();
   }
 
-  delDriver(chauffeur){
-      driver.destroyEl(chauffeur.id,()=>{this.init()});
+  delmission(chauffeur){
+      mission.destroyEl(chauffeur.id,()=>{this.init()});
   }
 
 
@@ -74,7 +63,7 @@ export default class AllDrivers extends Component {
   render() {
 
     var state=this.state;
-     var drivers=state.drivers;
+     var missions=state.missions;
 
 
 
@@ -102,7 +91,7 @@ export default class AllDrivers extends Component {
                        </Button>
                      </Left>
                      <Body>
-                       <Title style={H.style.title}>All drivers</Title>
+                       <Title style={H.style.title}>All missions</Title>
                      </Body>
                      <Right>
                        <Button transparent>
@@ -112,7 +101,7 @@ export default class AllDrivers extends Component {
 
 
 
-                       <Button onPress={()=>{H.goTo(this,H.path.create_driver,{init:()=>{this.init()}})}} transparent>
+                       <Button onPress={()=>{H.goTo(this,H.path.create_mission,{init:()=>{this.init()}})}} transparent>
                          <Text>New</Text>
 
                        </Button>
@@ -124,22 +113,24 @@ export default class AllDrivers extends Component {
 
 
                      <List style={{marginLeft:-3}}>
-                        {drivers.map((item,index) => {
-                          let NumImg=H.getRandomInt(1,6);
+                        {missions.map((item,index) => {
+
                           return <ListItem button
-                                    onPress={()=>{H.goTo(this,"show_driver",{id:item.id,pic:NumImg})}}
+                                    onPress={()=>{H.goTo(this,"show_mission",{id:item.id})}}
                                     avatar key={index}>
                                     <Left>
-                                      <Text></Text>
-                                      <Thumbnail small source={H.img.drivers['driver'+NumImg]} />
+                                      <Button transparent>
+                                        <Icon style={{color:H.randomColor()}} name='navigate' />
+                                      </Button>
                                     </Left>
                                     <Body  >
-                                      <Text>{item.names} / code :{item.id}</Text>
-                                      <Text note>Sex : {item.sex}</Text>
-                                      <Text note>Created : {item.created_at}</Text>
+
+                                      <Text>Chef : {item.chef_mission}</Text>
+                                      <Text note>Organisation : {item.organisation}</Text>
+                                      <Text note>Mission n° : {item.id}</Text>
                                     </Body>
                                     <Right>
-                                      <Button onPress={()=>{this.delDriver(item)}} transparent>
+                                      <Button onPress={()=>{this.delmission(item)}} transparent>
                                           <Icon style={{fontSize: 30,color:"#b71c1c"}}  name="trash" />
                                       </Button>
 

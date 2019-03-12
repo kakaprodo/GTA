@@ -5,16 +5,16 @@ import { Header,Container, Content, Form, Item, Input, Label,Text,Button,Icon,H2
 import { StyleSheet, View,ScrollView,Platform,BackHandler } from 'react-native';
 import {AppLayout,AppLoading} from "../app_layout"
 
-import {Driver} from "../../controller/driver"
+import {Cars} from "../../controller/cars"
 
-var driver;
+var car;
 
 let listener=null;
 
 
 
 
-export default class AllDrivers extends Component {
+export default class Allcars extends Component {
   constructor(props){
       super(props);
       this.state={
@@ -23,10 +23,10 @@ export default class AllDrivers extends Component {
       refreshing:true,
 
 
-      drivers:[],
+      cars:[],
     }
     H.setModel("current",this);
-    driver=new Driver({model:this,container:"drivers"});
+    car=new Cars({model:this,container:"cars"});
 
   }
 
@@ -53,6 +53,7 @@ export default class AllDrivers extends Component {
      if (Platform.OS == "android" && listener == null) {
        listener = BackHandler.addEventListener("hardwareBackPress", () => {
           this.init();
+
        })
     }
 
@@ -62,11 +63,11 @@ export default class AllDrivers extends Component {
 
   init(){
 
-    driver.index();
+    car.index();
   }
 
-  delDriver(chauffeur){
-      driver.destroyEl(chauffeur.id,()=>{this.init()});
+  delcar(veh){
+      car.destroyEl(veh.id,()=>{this.init()});
   }
 
 
@@ -74,7 +75,7 @@ export default class AllDrivers extends Component {
   render() {
 
     var state=this.state;
-     var drivers=state.drivers;
+     var cars=state.cars;
 
 
 
@@ -102,44 +103,46 @@ export default class AllDrivers extends Component {
                        </Button>
                      </Left>
                      <Body>
-                       <Title style={H.style.title}>All drivers</Title>
+                       <Title style={H.style.title}>All cars</Title>
                      </Body>
                      <Right>
                        <Button transparent>
                          <Icon name='search' />
                        </Button>
 
+                       <Button onPress={()=>{this.init()}} transparent>
+                         <Icon name='refresh' />
+                       </Button>
 
 
-
-                       <Button onPress={()=>{H.goTo(this,H.path.create_driver,{init:()=>{this.init()}})}} transparent>
+                       <Button onPress={()=>{H.goTo(this,H.path.create_car)}} transparent>
                          <Text>New</Text>
 
                        </Button>
                      </Right>
                    </Header>
-                   <Content padder style={H.style.content}>
+                   <Content  style={H.style.content}>
 
 
 
 
                      <List style={{marginLeft:-3}}>
-                        {drivers.map((item,index) => {
-                          let NumImg=H.getRandomInt(1,6);
+                        {cars.map((item,index) => {
+
                           return <ListItem button
-                                    onPress={()=>{H.goTo(this,"show_driver",{id:item.id,pic:NumImg})}}
+                                    onPress={()=>{H.goTo(this,"show_car",{id:item.id})}}
                                     avatar key={index}>
                                     <Left>
                                       <Text></Text>
-                                      <Thumbnail small source={H.img.drivers['driver'+NumImg]} />
+                                      <Thumbnail square source={require('../../assets/img/cars.jpeg')} />
                                     </Left>
                                     <Body  >
-                                      <Text>{item.names} / code :{item.id}</Text>
-                                      <Text note>Sex : {item.sex}</Text>
+                                      <Text>{item.marque}</Text>
+                                      <Text note>Plaque : {item.plaque} / code :{item.id}</Text>
                                       <Text note>Created : {item.created_at}</Text>
                                     </Body>
                                     <Right>
-                                      <Button onPress={()=>{this.delDriver(item)}} transparent>
+                                      <Button onPress={()=>{this.delcar(item)}} transparent>
                                           <Icon style={{fontSize: 30,color:"#b71c1c"}}  name="trash" />
                                       </Button>
 
@@ -148,12 +151,7 @@ export default class AllDrivers extends Component {
                         })}
 
 
-
-
-
-
-
-                      </List>
+                    </List>
                   </Content>
 
             </AppLayout>

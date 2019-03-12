@@ -2,20 +2,18 @@
 /*Controller for client*/
 import {Query} from "./query"
 import {Validation as Valid} from "../helper/validation"
-import {IO} from "./driver_io"
-var io=new IO(undefined,'driver_id');
 var val=new Valid();
 
-export class Driver extends Query{
-    constructor(BindView=[],creation=false){
-      super("id");//we set the primary key of the tab
+export class Perdieme extends Query{
+    constructor(BindView=[],keyName='id'){
+      super(keyName);//we set the primary key of the tab
       // this.db=this.super.db;
       this.model=BindView.model;
       this.content=BindView.container;//the state variable to contain the data
       this.agent=null;
-      this.colQuery="names,sex,created_at";
+      this.colQuery="montant,mission_id,created_at";
       /*col to send fro creating the table client for the first time*/
-      this.colCreation="id integer primary key not null, names text,sex text,created_at text";
+      this.colCreation="id integer primary key not null, montant text,mission_id text,created_at text";
 
       this.conf();
 
@@ -26,26 +24,42 @@ export class Driver extends Query{
     conf(){
       //Higuration for SQL request
 
-     super.tab("driver",this.colCreation).newTable(()=>{
+     super.tab("perdieme",this.colCreation).newTable(()=>{
                        super.fields(this.colQuery)
                    },()=>{super.fields(this.colQuery)});
 
+    }
+
+    mission(id,onSucc,onErr){
+       super.keyValue(id).belongsTo("mission","mission_id",(all_driverOperation)=>{
+
+           this.model.setState({[this.content]:all_driverOperation})
+           if (onSucc) {
+              onSucc.call(this,all_driverOperation);
+           }
+       },()=>{
+
+           this.model.setState({[this.content]:[]})
+           if (onErr) {
+              onErr.call(this);
+           }
+       });
     }
 
 
 
 
     index(onSucc,onNodata){
-      super.all((drivers)=>{
+      super.all((Perdiemes)=>{
         if (onSucc) {
-           onSucc.call(this,drivers)
+           onSucc.call(this,Perdiemes)
         }
-          this.model.setState({[this.content]:drivers});
-        },(drivers)=>{
+          this.model.setState({[this.content]:Perdiemes});
+        },(Perdiemes)=>{
           if (onNodata) {
              onNodata.call(this,[])
           }
-           this.model.setState({[this.content]:drivers});
+           this.model.setState({[this.content]:Perdiemes});
       });
     }
 
@@ -54,15 +68,15 @@ export class Driver extends Query{
 
         var model=this.model;
          val.reset();
-         val.add(["required"],model.state.name,"nameValid");
-         val.add(["required"],model.state.sex,"sexValid");
+         val.add(["number"],model.state.montant,"mValid");
+         val.add(["required"],model.state.mission_id,"miValid");
 
 
          if (val.validate(this.model)) {
-             var driver=model.state;
-             var date=new Date();
+             //var Perdieme=model.state;
+             //var date=new Date();
 
-             var data=[driver.name,driver.sex,H.now(true)];
+             var data=super.getData(this.model);
 
                //we insert new info of the agent
                super.insert(data,()=>{
@@ -81,15 +95,15 @@ export class Driver extends Query{
     }
 
     show(id,onSucc,onErr){
-       return super.keyValue(id).getByKey((driver)=>{
+       return super.keyValue(id).getByKey((Perdieme)=>{
 
             if (this.content!=undefined) {
-              this.model.setState({[this.content]:driver});
+              this.model.setState({[this.content]:Perdieme});
             }
 
             if (onSucc) {
 
-                onSucc.call(this,driver);
+                onSucc.call(this,Perdieme);
             }
 
        },()=>{
@@ -98,9 +112,9 @@ export class Driver extends Query{
          }
 
          if (onErr) {
-             onErr.call(this,"driver not found");
+             onErr.call(this,"Perdieme not found");
          }
-          H.Toast("no driver is registered",'danger');
+          H.Toast("no Perdieme is registered",'danger');
        });
     }
 
@@ -108,16 +122,12 @@ export class Driver extends Query{
                 var model=this.model;
                  val.reset();
 
-                 val.add(["required"],model.state.name,"nameValid");
-                 val.add(["required"],model.state.sex,"sexValid");
-
-
+                 val.add(["number"],model.state.montant,"montantValid");
+                 val.add(["required"],model.state.mission_id,"mValid");
 
                  if (val.validate(this.model)) {
-                     var driver=model.state;
-                     var date=new Date();
-
-                     var data=[driver.name,driver.sex,driver.driver.created_at];
+                     //var Perdieme=model.state;
+                     var data=super.getData(this.model);
 
                        //we insert new info of the agent
                        super.keyValue(id).update(data,()=>{
@@ -143,10 +153,10 @@ export class Driver extends Query{
       return super.clearTable();
     }
 
-    destroyEl(id,onSucc,onErr){
+    destroyEl(id,onSucc,onErr,noAlert=false){
 
         super.keyValue(id).destroy(()=>{
-             io.destroyEl(id,undefined,undefined,true);
+
              if (onSucc) {
                 onSucc.call(this);
              }
@@ -154,6 +164,6 @@ export class Driver extends Query{
           if (onErr) {
              onErr.call(this);
           }
-        });
+        },noAlert);
     }
 }

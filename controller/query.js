@@ -21,11 +21,33 @@ export class Query extends Con{
       this.col=null;
       this.data=[];
       this.tagPrepare=null;//wil contain : ?,?,?
+      this.inAction=false;
 
    }
 
    init(){
      this.constructor();
+   }
+
+   getData(model,isCreation=true){//data to insert according to the setting of available columns in model(table) from a state component
+     var state=model.state;
+     var colNames=this.col.split(",");
+     var data=[];
+     for (var i = 0; i < colNames.length; i++) {
+         let colName=colNames[i];
+       if (state[colName]!=undefined) {
+
+             data[i]=state[colName];
+
+
+       }
+       if (colName=="created_at") {//we create new date if creation or we take the existing date in model table if is to update
+          data[i]=isCreation?H.now(true):(state[this.table]!=undefined?state[this.table].created_at:H.now());
+       }
+
+     }
+
+     return data;
    }
 
    keyValue(value){
@@ -41,6 +63,7 @@ export class Query extends Con{
 
       return this;
    }
+
 
    fields(stringNames){
        this.col=stringNames;
@@ -63,21 +86,29 @@ export class Query extends Con{
       return this;
    }
 
-   clearTable(){
-       this.db.transaction(tx=>{
-            tx.executeSql(`DELETE FROM ${this.table}`,[],()=>{
-              this.response.msg="successfully done";
-              this.response.error=false;
-            },(err)=>{
-              this.response.msg=err;
-              this.response.error=false;
-            });
-       });
-      return this;
+   dropTable(){
+
+        this.db.transaction(tx => {
+             tx.executeSql(
+               `DROP TABLE ${this.table}`
+             );
+             //the value of col=id integer primary key not null, names text, email text,picture text,key text
+         },function(err){
+             console.log("error",err);
+         },
+         function(success){
+           // console.log("well created table");
+         }
+       );
+
+       return this;
    }
 
-   newTable(){
+
+   newTable(onSucc,onErr){
+     var rm=this;
      this.db.transaction(tx => {
+
           tx.executeSql(
             `create table if not exists ${this.table}` +
           `  (${this.col});`
@@ -85,8 +116,14 @@ export class Query extends Con{
           //the value of col=id integer primary key not null, names text, email text,picture text,key text
       },function(err){
           console.log("error",err);
+          if (onErr) {
+             onErr.call(rm)
+          }
       },
       function(success){
+        if (onSucc) {
+           onSucc.call(rm)
+        }
         // console.log("well created table");
       }
     );
@@ -94,20 +131,31 @@ export class Query extends Con{
       return this;
    }
 
-   insert(data,toCall) {
+   insert(data,toCall,onErr) {
        let md=this;
+
+      if (this.inAction) {
+        return console.log('wait for previous process...');;
+      }
+      this.inAction=true;
        this.db.transaction(
          tx => {
+           //console.log(`insert into ${this.table} (${this.col}) values (${this.tagPrepare})`);
            var ins=tx.executeSql(`insert into ${this.table} (${this.col}) values (${this.tagPrepare})`,
                                 data,
                                 ()=>{
                                   this.response.msg="successfully done";
                                   this.response.error=false;
                                   if (toCall) {
+
                                      toCall.call(md);
+                                     this.inAction=false;
                                   }
                                 },(err)=>{
-                                  alert(err);
+                                console.log(ins);
+                                  if (onErr) {
+                                     onErr.call(md);
+                                  }
                                   this.response.msg=err;
                                   this.response.error=true;
 
@@ -190,15 +238,131 @@ export class Query extends Con{
 
 
 
- update(){
-     db.transaction(
+
+ update(data,onSucc,onErr){
+
+     if (this.inAction) {
+       return console.log('wait for previous process...');
+     }
+     this.inAction=true;
+
+     var allCol=this.col.split(",");
+     // console.log(this.col);
+     var requeteCol="";
+     var indexData=data.length;
+     data[indexData]=this.keyValue;
+
+     for (var i = 0; i < allCol.length; i++) {
+            const remainerInLoop=allCol.length-1;
+            requeteCol=requeteCol+(allCol[i]+((remainerInLoop==i)?"=?":"=?,"));
+     }
+     var rm=this;
+
+     this.db.transaction(
               tx => {
-                tx.executeSql(`update ${this.table} set done = 1 where ${this.keyName}=?;`, [id]);
-              },
-              null,
-              null
-    );
+                tx.executeSql(`update ${this.table} set ${requeteCol} where ${this.keyName}=?`, data);
+               },
+               (err)=>{
+                 this.response.msg=err;
+                 this.response.error=true;
+
+                 if (onErr) {
+                    onErr.call(rm);
+                    this.inAction=false;
+                 }
+              },()=>{
+                this.response.msg="successfully done";
+                this.response.error=false;
+
+                if (onSucc) {
+                   onSucc.call(rm);
+                }
+
+              });
+
+        return this;
  }
+
+   destroy(onSucc,onErr,noAlert=false){
+     var rm=this;
+
+      if (noAlert) {//if we dont need user confirmation
+        this.db.transaction(tx=>{
+             tx.executeSql(`DELETE FROM ${this.table} where ${this.keyName}=? `, [this.keyValue],()=>{
+               this.response.msg="successfully done";
+               this.response.error=false;
+               if (onSucc) {
+                  onSucc.call(rm);
+               }
+             },(err)=>{
+
+               this.response.msg=err;
+               this.response.error=false;
+               if (onErr) {
+                  onErr.call(rm);
+               }
+             });
+        });
+        return this;
+      }
+
+      H.swal('Do you want to delete this item',()=>{
+        this.db.transaction(tx=>{
+             tx.executeSql(`DELETE FROM ${this.table} where ${this.keyName}=? `, [this.keyValue],()=>{
+               this.response.msg="successfully done";
+               this.response.error=false;
+               if (onSucc) {
+                  onSucc.call(rm);
+               }
+             },(err)=>{
+
+               this.response.msg=err;
+               this.response.error=false;
+               if (onErr) {
+                  onErr.call(rm);
+               }
+             });
+        });
+
+      })
+
+      return this;
+
+   }
+
+   clearTable(){
+       this.db.transaction(tx=>{
+            tx.executeSql(`DELETE FROM ${this.table}`,[],()=>{
+              this.response.msg="successfully done";
+              this.response.error=false;
+            },(err)=>{
+              this.response.msg=err;
+              this.response.error=false;
+            });
+       });
+      return this;
+   }
+
+   belongsTo(table,foreinKey,onSucc,onErr){
+     var md=this;
+     this.db.transaction(tx=>{
+       tx.executeSql(`select * from ${this.table} where ${foreinKey}=?`, [this.keyValue], (_, { rows:{_array} }) =>{
+         this.item=_array;
+
+
+           if (this.item.length!=0) {
+             onSucc.call(md,this.item);
+           }
+           else{
+             onErr.call(md);
+           }
+
+        }
+       );
+     });
+
+     return this;
+   }
 
 
 }

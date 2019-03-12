@@ -23,7 +23,10 @@ export class User extends Query{
 
     conf(){
       //Higuration for SQL request
-     super.tab("user",this.colCreation).newTable().fields(this.colQuery);
+     super.tab("user",this.colCreation).newTable(()=>{
+                       super.fields(this.colQuery)
+                   },()=>{super.fields(this.colQuery)});
+
 
     }
 

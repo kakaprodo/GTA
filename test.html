@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+
+  </body>
+  <script type="text/javascript">
+      //var number=Math.random(0,10);
+
+      var arr={whereNameAndWhere:()=>{
+            console.log(this);
+      },b:{},c:{}}
+      var funcName=arr.whereNameAndWhere.name;
+      funcName=funcName.match(/([A-Z]?[^A-Z]*)/g).slice(0,-1);
+      //console.log(funcName);
+
+      arr.whereNameAndWhere();
+
+      funcName:()=>{
+          return
+      }
+
+
+
+
+      function getRandomInt(min, max) {
+        console.log(arguments);
+
+         //console.log(...args);
+          min = Math.ceil(min);
+          max = Math.floor(max);
+          return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+        var number=getRandomInt(1,10);
+         document.write(number)+"<br>";
+
+
+  </script>
+</html>

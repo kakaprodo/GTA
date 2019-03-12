@@ -7,8 +7,10 @@
 // import {Validation as Valid} from "./validation";
 import { Font, AppLoading,Permissions,Location } from "expo";
 import React, { Component } from 'react';
+import {Alert} from "react-native"
 import {Toast} from "native-base"
-
+const rColor=require('randomcolor');
+import  {Images} from "../assets/img/images"
 
 import {pathRouter} from "./pathRouter"
 // export const MW=mw;
@@ -36,6 +38,7 @@ export var CONF={
 
     style:style,
     appName:"GTA",
+    img:Images,
     appLongName:"Fk management",
     globalStyle:globalStyle,
     path:pathRouter,
@@ -46,6 +49,8 @@ export var CONF={
     User:[],
     Client:null,
     defaultRedirection:"/login",
+    allInputRef:[],
+    randomColor(){return rColor()},
     currentM(){
       return Models.current;
     },
@@ -89,7 +94,7 @@ export var CONF={
     setRouteModel(model){
 
       if (Models.sidebar!=null) {
-        console.log('init2');
+        // console.log('init2');
         Models.sidebar.setState({routes:model});
       }
 
@@ -121,6 +126,27 @@ export var CONF={
                });
 
     },
+    swal(msg='Do you want to do this operation',onYess,title='Are you sure ?',onNo){
+      Alert.alert(title,msg,
+         [
+           {
+             text: 'Yes',
+             onPress: () => {
+                 if (onYess) {
+                   onYess.call(this);
+                 }
+             },
+           },
+           { text: 'No', onPress: () => {
+               if (onNo) {
+                 onNo.call(this);
+               }
+           } },
+         ],
+         { cancellable: false }
+        );
+    }
+    ,
     client_img(name){
       return this.HOST_IMG+"/client/"+name;
     },
@@ -191,18 +217,33 @@ export var CONF={
           true
         );
       }, 50);
-   },
+   }
+  ,
   resetAllState(model){
     for (var key in model.state) {
        model.setState({[key]:""});
 
     }
+  },
+  getKeyName(array,index){
+    var j=1;
+    var keyName;
+    for (var a in array) {
+       if(j==index){
+         keyName=a;
+         break;
+       }
+
+       j++;
+
+    }
+    return keyName;
   }
   ,
   resetModel(keyIndex=[],model){//this will reset the value of a kid in state of model
     //according to the index of the keyIndex
     var state=model.state;
-    if (keyIndex=="all") {
+    if (keyIndex==="all") {
        return this.resetAllState(model);
     }
     for (var i = 0; i < keyIndex.length; i++) {
@@ -212,13 +253,11 @@ export var CONF={
          var valueToReplace=currentIndex[1]==undefined?"":currentIndex[1];
          var keyName=this.getKeyName(state,kidIndex);
 
-
-
-
          model.setState({[keyName]:valueToReplace});
     }
 
-  },
+  }
+  ,
   closeDrawer(){
     this.drawer._root.close()
   },
@@ -232,7 +271,48 @@ export var CONF={
       return date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear()+" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
     }
     return date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear();
+  },
+  getRandomInt(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+  },
+  getParam(props,key){
+      return props.navigation.getParam(key,'no '+key);
+  },
+  goBack(props){
+       return props.navigation.goBack();
+  },
+  descOrder(data=[]){
+     var desc=[];
+
+     for (var i = data.length-1; i >=0; i--) {
+       desc.push(data[i])
+     }
+
+     return desc;
+
+  },
+  getTotal(data=[],col){
+     var total=0;
+
+     for (var i = 0; i <data.length; i++) {
+       total=total+parseInt(data[i][col]);
+     }
+
+     return total;
+
+  },
+ refreshPage(props,funcToCall='init'){
+
+       var initFunc=H.getParam(props,funcToCall);
+       if (initFunc!=undefined) {
+           return initFunc();
+       }
+
   }
+
+
 
 
 

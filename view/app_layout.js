@@ -38,6 +38,13 @@ export class AppLayout extends React.Component{
 
 
   render(){
+    var props=this.props;
+     if (props.noBack) {
+       return <View style={H.style.noBack}>
+          {this.props.children}
+          <StatusBar hidden={this.props.statusbar!=undefined?this.props.statusbar:false}/>
+       </View>
+     }
 
      return ( <ImageBackground
                    source={require('../assets/img/back/whatsap.jpeg')}

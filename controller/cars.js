@@ -2,20 +2,18 @@
 /*Controller for client*/
 import {Query} from "./query"
 import {Validation as Valid} from "../helper/validation"
-import {IO} from "./driver_io"
-var io=new IO(undefined,'driver_id');
 var val=new Valid();
 
-export class Driver extends Query{
+export class Cars extends Query{
     constructor(BindView=[],creation=false){
       super("id");//we set the primary key of the tab
       // this.db=this.super.db;
       this.model=BindView.model;
       this.content=BindView.container;//the state variable to contain the data
       this.agent=null;
-      this.colQuery="names,sex,created_at";
+      this.colQuery="marque,plaque,color,created_at";
       /*col to send fro creating the table client for the first time*/
-      this.colCreation="id integer primary key not null, names text,sex text,created_at text";
+      this.colCreation="id integer primary key not null, marque text,plaque text,color text,created_at text";
 
       this.conf();
 
@@ -26,7 +24,7 @@ export class Driver extends Query{
     conf(){
       //Higuration for SQL request
 
-     super.tab("driver",this.colCreation).newTable(()=>{
+     super.tab("cars",this.colCreation).newTable(()=>{
                        super.fields(this.colQuery)
                    },()=>{super.fields(this.colQuery)});
 
@@ -36,16 +34,16 @@ export class Driver extends Query{
 
 
     index(onSucc,onNodata){
-      super.all((drivers)=>{
+      super.all((cars)=>{
         if (onSucc) {
-           onSucc.call(this,drivers)
+           onSucc.call(this,cars)
         }
-          this.model.setState({[this.content]:drivers});
-        },(drivers)=>{
+          this.model.setState({[this.content]:cars});
+        },(cars)=>{
           if (onNodata) {
              onNodata.call(this,[])
           }
-           this.model.setState({[this.content]:drivers});
+           this.model.setState({[this.content]:cars});
       });
     }
 
@@ -54,15 +52,18 @@ export class Driver extends Query{
 
         var model=this.model;
          val.reset();
-         val.add(["required"],model.state.name,"nameValid");
-         val.add(["required"],model.state.sex,"sexValid");
+
+         val.add(["required"],model.state.marque,"marqueValid");
+         val.add(["required"],model.state.plaque,"plaqueValid");
+         val.add(["required"],model.state.color,"colorValid");
+
 
 
          if (val.validate(this.model)) {
-             var driver=model.state;
+             var car=model.state;
              var date=new Date();
 
-             var data=[driver.name,driver.sex,H.now(true)];
+             var data=[car.marque,car.plaque,car.color,H.now()];
 
                //we insert new info of the agent
                super.insert(data,()=>{
@@ -81,15 +82,14 @@ export class Driver extends Query{
     }
 
     show(id,onSucc,onErr){
-       return super.keyValue(id).getByKey((driver)=>{
+       return super.keyValue(id).getByKey((car)=>{
 
             if (this.content!=undefined) {
-              this.model.setState({[this.content]:driver});
+              this.model.setState({[this.content]:car});
             }
 
             if (onSucc) {
-
-                onSucc.call(this,driver);
+                onSucc.call(this,car);
             }
 
        },()=>{
@@ -98,26 +98,28 @@ export class Driver extends Query{
          }
 
          if (onErr) {
-             onErr.call(this,"driver not found");
+             onErr.call(this,"car not found");
          }
-          H.Toast("no driver is registered",'danger');
+          H.Toast("no car is registered",'danger');
        });
     }
+
 
     edit(id,onSucc,onErr){
                 var model=this.model;
                  val.reset();
 
-                 val.add(["required"],model.state.name,"nameValid");
-                 val.add(["required"],model.state.sex,"sexValid");
+                 val.add(["required"],model.state.marque,"marqueValid");
+                 val.add(["required"],model.state.plaque,"plaqueValid");
+                 val.add(["required"],model.state.color,"colorValid");
 
 
 
                  if (val.validate(this.model)) {
-                     var driver=model.state;
+                     var car=model.state;
                      var date=new Date();
 
-                     var data=[driver.name,driver.sex,driver.driver.created_at];
+                     var data=[car.marque,car.plaque,car.color,car.car.created_at];
 
                        //we insert new info of the agent
                        super.keyValue(id).update(data,()=>{
@@ -146,7 +148,7 @@ export class Driver extends Query{
     destroyEl(id,onSucc,onErr){
 
         super.keyValue(id).destroy(()=>{
-             io.destroyEl(id,undefined,undefined,true);
+
              if (onSucc) {
                 onSucc.call(this);
              }

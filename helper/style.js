@@ -46,6 +46,7 @@ export var globalStyle={
 
 export var style=StyleSheet.create({
    app_layout:{backgroundColor: globalStyle.transp_color3,flex:1},
+   noBack:{backgroundColor: "white",flex:1},
    app_color:{color:globalStyle.app_color},
    text_color:{color:globalStyle.text_color},
    white_color:{color:globalStyle.white_color},
@@ -171,6 +172,16 @@ export var style=StyleSheet.create({
 
      // display: "none",
    },
+   defAvatar:{
+
+       borderTopRightRadius: 15,
+       borderBottomRightRadius: 15,
+       borderTopLeftRadius: 15,
+       borderBottomLeftRadius: 15,
+       height: "100px",
+       width: "100px"
+   }
+   ,
    clientCotation:{
 
      borderColor:globalStyle.app_color,

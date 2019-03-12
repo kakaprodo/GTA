@@ -17,14 +17,13 @@ export default class CreateDriver extends Component {
         loading:true,
         name:"",
         sex:"",
-
         nameValid:"",
         sexValid:"",
 
 
       }
 
-
+    driver=new Driver({model:this});
   }
 
   static navigationOptions=({navigation})=>{
@@ -47,18 +46,15 @@ export default class CreateDriver extends Component {
   }
 
   register(){
-    driver=new Driver({model:this});
+
      driver.create((driver)=>{
         // H.goTo(this,H.path.login);
-<<<<<<< HEAD
-        H.Toast("successfully",undefined,undefined)
-     },(msg="error occured")=>{
-        H.Toast(msg,'danger',undefined)
-=======
-        H.Toast("successfully",undefined,undefined,'top')
+        H.resetModel(['2','3'],this);
+        H.refreshPage(this.props);
+        H.Toast("successfully")
      },(msg="error occured")=>{
         H.Toast(msg,'danger')
->>>>>>> 9e23d593c5c0ba7b29331619cf1b86919e0eeb8d
+
      });
   }
 
@@ -92,7 +88,7 @@ export default class CreateDriver extends Component {
                            <Item style={H.style.inputField} floatingLabel>
                             <Label style={H.style.label}>Driver names :</Label>
                             <Input
-
+                              value={state.name}
                               onChangeText={(name)=>{H.fieldChange(this,name,"name","nameValid")}}
                             />
 

@@ -23,7 +23,8 @@ export class ValidationMsg{
               return msg;
              }
 
-             return H.replacePararam(msg,placeholders)
+            msg=H.replacePararam(msg,placeholders);
+            return {rule:signleRule,msg:msg}
           }
           else{
             alert("No validation message for :"+signleRule);

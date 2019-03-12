@@ -13,6 +13,7 @@ export class Validation extends ValidationMsg{
       this.checkAll=false;
       this.allValidation=[];
       this.testMsg="";
+      this.result=[];
     }
 
     setMsg(msg){
@@ -74,8 +75,10 @@ export class Validation extends ValidationMsg{
                //this.msg.push({rule:rules[j],msg:msg,key:this.allValidation[i].key});
 
                //we are assigning msg error to all keys in the state of the model where the class is called
-               model.setState({[currentValidation.key]:msg});
+               model.setState({[currentValidation.key]:msg.msg});
+              this.msg.push({"msg":msg});
                result={success:false,msg:this.msg};
+               this.result=result;
 
             }
           }
