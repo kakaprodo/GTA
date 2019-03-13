@@ -14,6 +14,12 @@ export class Validation extends ValidationMsg{
       this.allValidation=[];
       this.testMsg="";
       this.result=[];
+      this.model=null;
+    }
+
+    setModel(model){
+        this.model=model;
+        return this;
     }
 
     setMsg(msg){
@@ -24,15 +30,14 @@ export class Validation extends ValidationMsg{
        return this.testMsg;
     }
 
-    me(){
-      return this;
-    }
+
     reset(){
       this.msg=[];//msg to return in case the validation was false
       this.error=false;
       this.checkAll=false;
       this.allValidation=[];
-
+      this.model=null;
+      return this;
     }
 
     /*
@@ -46,13 +51,20 @@ export class Validation extends ValidationMsg{
     add(ruleNames=[],value,key){
 
        this.allValidation.push({name:ruleNames,value:value,key:key});
+       return this;
+    }
+
+    addRule(ruleNames=['required'],fieldAffected){//new version
+       var state=this.model.state;
+       this.allValidation.push({name:ruleNames,value:state[fieldAffected],key:fieldAffected+'Valid',field:fieldAffected});
+       return this;
     }
 
     checkAll(){
        this.checkAll=true;
     }
 
-    validate(model){
+    validate(model=this.model){
        var result={success:true,msg:{}};
        var allValidations=this.allValidation;
        for (var i = 0; i < allValidations.length; i++) {
@@ -76,9 +88,10 @@ export class Validation extends ValidationMsg{
 
                //we are assigning msg error to all keys in the state of the model where the class is called
                model.setState({[currentValidation.key]:msg.msg});
-              this.msg.push({"msg":msg});
+               this.msg.push({"msg":msg.msg,rule:msg.rule,field:currentValidation.field});
                result={success:false,msg:this.msg};
                this.result=result;
+               console.log(result);
 
             }
           }

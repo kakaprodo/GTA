@@ -124,6 +124,19 @@ export default class ShowDriver extends Component {
                                </Left>
                                <Body>
 
+                                 <Text>{driver.names}</Text>
+                                 <Text note>Name</Text>
+                               </Body>
+                               <Right></Right>
+                          </ListItem>
+                         <ListItem icon>
+                               <Left>
+                                 <Button style={H.style.headers}>
+                                   <Icon active name="person" />
+                                 </Button>
+                               </Left>
+                               <Body>
+
                                  <Text>{driver.sex}</Text>
                                  <Text note>Sex</Text>
                                </Body>

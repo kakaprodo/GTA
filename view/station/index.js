@@ -1,32 +1,30 @@
 import React, { Component } from 'react';
-import { Header,Container, Content, Form, Item, Input, Label,Text,Button,Icon,H2,H3,Body,Title,
-  Card, CardItem ,Image,Thumbnail,List,ListItem, Left, Right, Switch} from 'native-base';
+import { Header,Container, Content, Form, Item, Input,Subtitle, Label,Text,Button,Icon,H2,H3,Body,Title,
+  Card, CardItem ,Image,Thumbnail,List,ListItem, Left, Right, Tabs,Tab,TabHeading} from 'native-base';
 
 import { StyleSheet, View,ScrollView,Platform,BackHandler } from 'react-native';
 import {AppLayout,AppLoading} from "../app_layout"
 
-import {Cars} from "../../controller/cars"
+import {Station} from "../../controller/station"
 
-var car;
+var station;
 
 let listener=null;
 
 
 
 
-export default class Allcars extends Component {
+export default class Allstations extends Component {
   constructor(props){
       super(props);
       this.state={
       loading:true,
-
       refreshing:true,
-
-
-      cars:[],
+      allstation:[],
+      total:0
     }
     H.setModel("current",this);
-    car=new Cars({model:this,container:"cars"});
+    station=new Station({model:this,container:"allstation"});
 
   }
 
@@ -50,23 +48,26 @@ export default class Allcars extends Component {
      H.initIcon(this);
      this.init();
 
+
   }
 
   init(){
 
-    car.index();
+    station.index();
   }
 
-  delcar(veh){
-      car.destroyEl(veh.id,()=>{this.init()});
+  delstation(stationin){
+      station.destroyEl(stationin.id,()=>{this.init()});
   }
+
+
 
 
 
   render() {
 
     var state=this.state;
-     var cars=state.cars;
+     var stations=state.stations;
 
 
 
@@ -94,46 +95,39 @@ export default class Allcars extends Component {
                        </Button>
                      </Left>
                      <Body>
-                       <Title style={H.style.title}>All cars</Title>
+                       <Title style={H.style.title}>All stations</Title>
                      </Body>
                      <Right>
                        <Button transparent>
                          <Icon name='search' />
                        </Button>
 
-                       <Button onPress={()=>{this.init()}} transparent>
-                         <Icon name='refresh' />
-                       </Button>
-
-
-                       <Button onPress={()=>{H.goTo(this,H.path.create_car,{init:()=>{this.init()}})}} transparent>
+                       <Button onPress={()=>{H.goTo(this,H.path.create_station,{init:()=>{this.init()}})}} transparent>
                          <Text>New</Text>
 
                        </Button>
                      </Right>
                    </Header>
-                   <Content  style={H.style.content}>
-
-
-
-
+                   <Content  padder style={H.style.content}>
                      <List style={{marginLeft:-3}}>
-                        {cars.map((item,index) => {
+                        {state.allstation.map((item,index) => {
 
                           return <ListItem button
-                                    onPress={()=>{H.goTo(this,"show_car",{id:item.id})}}
+                                    onPress={()=>{H.goTo(this,"show_station",{id:item.id})}}
                                     avatar key={index}>
                                     <Left>
-                                      <Text></Text>
-                                      <Thumbnail square source={require('../../assets/img/cars.jpeg')} />
+                                      <Button transparent>
+                                        <Icon style={{color:H.randomColor()}} name='pint' />
+                                      </Button>
                                     </Left>
                                     <Body  >
-                                      <Text>{item.marque}</Text>
-                                      <Text note>Plaque : {item.plaque} / code :{item.id}</Text>
-                                      <Text note>Created : {item.created_at}</Text>
+
+                                      <Text> {item.station_name}</Text>
+                                      <Text note>Dette : 50 </Text>
+
                                     </Body>
                                     <Right>
-                                      <Button onPress={()=>{this.delcar(item)}} transparent>
+                                      <Button onPress={()=>{this.delstation(item)}} transparent>
                                           <Icon style={{fontSize: 30,color:"#b71c1c"}}  name="trash" />
                                       </Button>
 
@@ -142,7 +136,7 @@ export default class Allcars extends Component {
                         })}
 
 
-                    </List>
+                      </List>
                   </Content>
 
             </AppLayout>

@@ -16,6 +16,7 @@ import AllCars from "./cars/"
 import CreateCar from "./cars/create"
 import ShowCar from "./cars/show"
 import EditCar from "./cars/edit"
+import SaveEntretien from "./cars/save_entretien"
 
 import AllMission from "./missions/"
 import CreateMission from "./missions/create"
@@ -24,8 +25,38 @@ import EditMission from "./missions/edit"
 import SaveCarb from "./missions/save_carburant"
 import SavePerd from "./missions/save_perdieme"
 
+import AllMach from "./machindano/"
+import CreateMash from "./machindano/create"
+
+import AllFss from "./fournisseur/"
+import CreateFss from "./fournisseur/create"
+
+import AllStation from "./station/"
+import CreateStation from "./station/create"
+import ShowStation from "./station/show"
+import SaveStMvm from "./station/save_station_mvm"
+
 
 var AllScreen=createStackNavigator({
+
+  'stations':{screen:AllStation},
+  'create_station':{screen:CreateStation  },
+  'show_station':{screen:ShowStation},
+  'save_station_mvm':{screen:SaveStMvm},
+
+  'fournisseurs':{screen:AllFss},
+  'create_fournisseur':{screen:CreateFss  },
+
+
+
+  'cars':{screen:AllCars},
+  'create_car':{screen:CreateCar },
+  'show_car':{screen:ShowCar},
+  'edit_car':{screen:EditCar},
+  'save_entretien':{screen:SaveEntretien},
+
+  'mashindanos':{screen:AllMach},
+  'create_mashindano':{screen:CreateMash  },
 
   'missions':{screen:AllMission},
   'create_mission':{screen:CreateMission },
@@ -45,10 +76,7 @@ var AllScreen=createStackNavigator({
 
 
 
-  'cars':{screen:AllCars},
-  'create_car':{screen:CreateCar },
-  'show_car':{screen:ShowCar},
-  'edit_car':{screen:EditCar},
+
 
   // 'demo':{screen:Demo},
 

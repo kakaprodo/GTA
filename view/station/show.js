@@ -5,17 +5,17 @@ import { Header,Container, Content, Form, Item, Input,Subtitle, Label,Text,Butto
 import { StyleSheet, View,ScrollView,Platform,BackHandler } from 'react-native';
 import {AppLayout,AppLoading} from "../app_layout"
 
-import {Cars} from "../../controller/cars"
-import ShowEntr from "./show_entretien"
+import {Station} from "../../controller/station"
+import ShowMvm from "./show_station_mvm"
 
-var car;
+var station;
 
 let listener=null;
 
 
 
 
-export default class Showcar extends Component {
+export default class ShowStation extends Component {
   constructor(props){
       super(props);
       this.state={
@@ -24,10 +24,10 @@ export default class Showcar extends Component {
       refreshing:true,
 
 
-      car:null,
+      station:null,
     }
     H.setModel("current",this);
-    car=new Cars({model:this,container:"car"});
+    station=new Station({model:this,container:"station"});
 
   }
 
@@ -49,31 +49,28 @@ export default class Showcar extends Component {
 
   componentWillMount() {
      H.initIcon(this);
+
      this.init();
 
   }
 
   init(){
     var id=H.getParam(this.props,"id")
-    car.show(id,undefined,()=>{H.goBack(this.props)});
+    station.show(id,undefined,()=>{H.goBack(this.props)});
   }
 
- componentWillReceiveProps(nextProps){
-      this.props=nextProps;
-      this.setState({id:H.getParam(nextProps,"id")});
-      this.init();
- }
+
 
   render() {
 
     var state=this.state;
-     var car=state.car;
+     var station=state.station;
 
 
 
 
 
-    if (state.loading || car==null ) {
+    if (state.loading || station==null ) {
       return <AppLoading />
     }
 
@@ -90,14 +87,14 @@ export default class Showcar extends Component {
 
                   <Header style={H.style.base_headers}>
                      <Left>
-                         <Thumbnail small source={require('../../assets/img/car1.jpeg')} />
+                         <Icon style={{color:'white'}} name="pint" />
                      </Left>
                      <Body>
-                       <Title style={H.style.title}>{car.marque}</Title>
+                       <Title style={H.style.title}>{station.station_name}</Title>
 
                      </Body>
                      <Right>
-                       <Button transparent onPress={()=>{H.goTo(this,H.path.edit_car,{id:car.id,init:()=>{this.init()}})}}>
+                       <Button transparent onPress={()=>{H.goTo(this,H.path.edit_station,{id:station.id,init:()=>{this.init()}})}}>
                           <Text>Edit</Text>
                        </Button>
                      </Right>
@@ -107,49 +104,22 @@ export default class Showcar extends Component {
 
                      <ScrollView>
                        <CardItem header>
-                          <Text> Car informations</Text>
+                          <Text> station informations</Text>
                        </CardItem>
                        <List>
                          <ListItem icon>
                                <Left>
                                  <Button style={H.style.headers}>
-                                   <Icon active name="car" />
+                                   <Icon active name="pint" />
                                  </Button>
                                </Left>
                                <Body>
 
-                                 <Text>{car.marque}</Text>
-                                 <Text note>Marque</Text>
+                                 <Text>{station.station_name}</Text>
+                                 <Text note>Statation name</Text>
                                </Body>
                                <Right></Right>
                           </ListItem>
-                         <ListItem icon>
-                               <Left>
-                                 <Button style={H.style.headers}>
-                                   <Icon active name="key" />
-                                 </Button>
-                               </Left>
-                               <Body>
-
-                                 <Text>{car.plaque}</Text>
-                                 <Text note>Plaque</Text>
-                               </Body>
-                               <Right></Right>
-                          </ListItem>
-
-                          <ListItem icon>
-                                <Left>
-                                  <Button style={H.style.headers}>
-                                    <Icon active name="color-fill" />
-                                  </Button>
-                                </Left>
-                                <Body>
-
-                                  <Text>{car.color}</Text>
-                                  <Text note>Color</Text>
-                                </Body>
-                                <Right></Right>
-                           </ListItem>
 
                            <ListItem icon>
                                  <Left>
@@ -159,37 +129,38 @@ export default class Showcar extends Component {
                                  </Left>
                                  <Body>
 
-                                   <Text>{car.created_at}</Text>
-                                   <Text note>Creation date of the car</Text>
+                                   <Text>{station.created_at}</Text>
+                                   <Text note>Creation date of the station</Text>
                                  </Body>
                                  <Right></Right>
                             </ListItem>
                           </List>
 
                           <CardItem header>
-                             <Text> Entretiens du véhicule</Text>
+                             <Text> Station mouvements</Text>
                           </CardItem>
 
 
                           <Tabs tabBarUnderlineStyle={H.style.headers}>
                                   <Tab  heading={
                                             <TabHeading style={{backgroundColor: 'white'}}>
-                                              <Text style={H.style.green_color}>THIS MONTH</Text>
+                                              <Text style={H.style.green_color}>CONSOMMATION</Text>
                                             </TabHeading>
                                          }
                                        >
-                                       <ShowEntr {...this.props} car={car} forMonth={true} />
 
+                                      <ShowMvm station={station} paid={false} {...this.props} />
 
                                   </Tab>
 
                                     <Tab  heading={
                                               <TabHeading style={{backgroundColor: 'white'}}>
-                                                <Text style={H.style.green_color}>ALL</Text>
+                                                <Text style={H.style.green_color}>REMBOURSEMENT</Text>
                                               </TabHeading>
                                            }
                                          >
-                                         <ShowEntr {...this.props} car={car} forMonth={false} />
+                                         <ShowMvm station={station} paid={true} {...this.props} />
+
 
                                     </Tab>
                                 </Tabs>

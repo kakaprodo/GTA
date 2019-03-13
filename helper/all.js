@@ -293,7 +293,7 @@ export var CONF={
      return desc;
 
   },
-  getTotal(data=[],col){
+  getTotal(data=[],col='montant'){
      var total=0;
 
      for (var i = 0; i <data.length; i++) {
@@ -303,13 +303,45 @@ export var CONF={
      return total;
 
   },
- refreshPage(props,funcToCall='init'){
+  dateSameMonth(date1,date2){
+       date1=(date1.split(" ")[0]).split("/");
+       var monthYear1=date1[1]+"/"+date1[2];
+
+       date2=(date2.split(" ")[0]).split("/");
+       var monthYear2=date2[1]+"/"+date2[2];
+
+       if (monthYear1==monthYear2) {
+         return true
+       }
+       return false;
+
+  }
+  ,
+  getForThisMonth(data){
+
+     data=data.filter((item) => {//prodo
+         return this.dateSameMonth(item.created_at,this.now());
+     })
+     return data;
+  }
+  ,
+ refreshPage(props,funcToCall='init',param){
 
        var initFunc=H.getParam(props,funcToCall);
        if (initFunc!=undefined) {
-           return initFunc();
+           return initFunc(param);
        }
 
+  },
+  fieldsAndData(arr=[]){
+    var fields=Object.keys(arr).toString();
+    var data=[];
+    var j=0;
+     for (var i in arr) {
+       data[j]=(arr[i]);
+       j++;
+     }
+    return {data:data,fields:fields};
   }
 
 

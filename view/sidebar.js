@@ -14,12 +14,12 @@ export default class SideBar extends Component {
       menus:[{name:"Drivers",icon:"person",onPress:()=>{H.goTo(H.currentM(),"drivers",null,true)}},
             {name:"Cars setting",icon:"car",onPress:()=>{H.goTo(H.currentM(),"cars",null,true)}},
             {name:"Missions",icon:"send",onPress:()=>{H.goTo(H.currentM(),"missions",null,true)}},
-            {name:"Carburants",icon:"train",onPress:()=>{H.goTo(H.currentM(),"regit",null,true)}},
-            {name:"Entretiens",icon:"shuffle",onPress:()=>{H.goTo(H.currentM(),"regit",null,true)}},
-            {name:"Mashindano",icon:"nutrition",onPress:()=>{H.goTo(H.currentM(),"regit",null,true)}},
-            {name:"Perdiemes",icon:"cog",onPress:()=>{H.goTo(H.currentM(),"regit",null,true)}},
-            {name:"Fournisseurs",icon:"logo-tux",onPress:()=>{H.goTo(H.currentM(),"regit",null,true)}},
-            {name:"Station",icon:"pint",onPress:()=>{H.goTo(H.currentM(),"regit",null,true)}}
+            {name:"Carburants",icon:"train",onPress:()=>{H.goTo(H.currentM(),"carburants",null,true)}},
+            {name:"Entretiens",icon:"shuffle",onPress:()=>{H.goTo(H.currentM(),"entretiens",null,true)}},
+            {name:"Mashindano",icon:"nutrition",onPress:()=>{H.goTo(H.currentM(),"mashindanos",null,true)}},
+            {name:"Perdiemes",icon:"cog",onPress:()=>{H.goTo(H.currentM(),"perdiemes",null,true)}},
+            {name:"Fournisseurs",icon:"logo-tux",onPress:()=>{H.goTo(H.currentM(),"fournisseurs",null,true)}},
+            {name:"Station",icon:"pint",onPress:()=>{H.goTo(H.currentM(),"stations",null,true)}}
 
            ]
     }

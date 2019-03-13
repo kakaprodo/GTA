@@ -61,11 +61,9 @@ export default class EditCar extends Component {
     var id=this.state.id;
      car.edit(id,(car)=>{
          //H.goBack(this.props);
-         H.Toast("successfully")
         H.resetModel(['2','3','4'],this);
         this.init();
-        H.refreshPage(this.props);
-
+        H.Toast("successfully")
      },(msg="error occured")=>{
         H.Toast(msg,'danger')
 

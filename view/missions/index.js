@@ -139,11 +139,6 @@ export default class Allmissions extends Component {
                         })}
 
 
-
-
-
-
-
                       </List>
                   </Content>
 
