@@ -34,6 +34,7 @@ import CreateFss from "./fournisseur/create"
 import AllStation from "./station/"
 import CreateStation from "./station/create"
 import ShowStation from "./station/show"
+import EditStation from "./station/edit"
 import SaveStMvm from "./station/save_station_mvm"
 
 
@@ -42,6 +43,7 @@ var AllScreen=createStackNavigator({
   'stations':{screen:AllStation},
   'create_station':{screen:CreateStation  },
   'show_station':{screen:ShowStation},
+  'edit_station':{screen:EditStation},
   'save_station_mvm':{screen:SaveStMvm},
 
   'fournisseurs':{screen:AllFss},

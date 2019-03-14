@@ -311,6 +311,7 @@ export class Query extends Con{
              tx.executeSql(`DELETE FROM ${this.table} where ${this.keyName}=? `, [this.keyValue],()=>{
                this.response.msg="successfully done";
                this.response.error=false;
+               H.Toast("successfully done");
                if (onSucc) {
                   onSucc.call(rm);
                }
@@ -364,5 +365,57 @@ export class Query extends Con{
      return this;
    }
 
+   setKeyValue(value){
+      this.keyValue=value;
+      return this;
+   }
+
+
+
+   join(data,resp,table){
+       var finalData=[];
+       var dataLength=data.length;
+       var counter=0;
+       var md=this;
+       // console.log(dataLength);
+
+       var joinningData=function(){
+
+         new Promise((resolve,reject)=>{
+            var current =data[counter];
+
+
+            md.setKeyValue(current.id).belongsTo(table,md.keyName,(allMvm)=>{
+
+                 current.mvm=allMvm
+                 finalData[counter]=current;
+
+                 resolve(counter);
+
+
+
+             },()=>{
+               current.mvm=[];
+               finalData[counter]=current;
+               resolve(counter);
+             });
+         }).then((number)=>{//number est le compteur
+             if ((number+1)==dataLength) {
+                if (resp) {
+                      
+                      resp.call(md,finalData);
+                }
+             }
+             else{
+               counter++;
+               joinningData();
+             }
+         });
+       }
+
+       joinningData();
+
+
+ }
 
 }

@@ -53,7 +53,15 @@ export default class Allstations extends Component {
 
   init(){
 
-    station.index();
+    station.index((data)=>{
+            var total=0;
+           for (var i = 0; i < data.length; i++) {
+                  total=total+H.getTotal(data[i].mvm,"quantite",{is_paid:0})
+           }
+           this.setState({total:total});
+    },()=>{
+        this.setState({total:0});
+    });
   }
 
   delstation(stationin){
@@ -79,8 +87,7 @@ export default class Allstations extends Component {
 
 
 
-
-
+    var total=0;
     return (
 
 
@@ -102,6 +109,10 @@ export default class Allstations extends Component {
                          <Icon name='search' />
                        </Button>
 
+                       <Button onPress={()=>{this.init()}} transparent>
+                         <Icon name='refresh' />
+                       </Button>
+
                        <Button onPress={()=>{H.goTo(this,H.path.create_station,{init:()=>{this.init()}})}} transparent>
                          <Text>New</Text>
 
@@ -110,7 +121,13 @@ export default class Allstations extends Component {
                    </Header>
                    <Content  padder style={H.style.content}>
                      <List style={{marginLeft:-3}}>
+                          <CardItem header>
+                             <Text>Total consommation :          <Text style={H.style.green_color}>{state.total}</Text></Text>
+                          </CardItem>
                         {state.allstation.map((item,index) => {
+
+                          var consommation=H.getTotal(item.mvm,'quantite',{is_paid:0});
+
 
                           return <ListItem button
                                     onPress={()=>{H.goTo(this,"show_station",{id:item.id})}}
@@ -123,7 +140,7 @@ export default class Allstations extends Component {
                                     <Body  >
 
                                       <Text> {item.station_name}</Text>
-                                      <Text note>Dette : 50 </Text>
+                                      <Text note>Consommation: {consommation} </Text>
 
                                     </Body>
                                     <Right>
@@ -133,7 +150,10 @@ export default class Allstations extends Component {
 
                                     </Right>
                                   </ListItem>
-                        })}
+                        })
+
+
+                      }
 
 
                       </List>

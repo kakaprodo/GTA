@@ -30,6 +30,15 @@ export class StationMvm extends Query{
 
     }
 
+    with(data,resp){
+
+        super.join(data,(finalData)=>{
+            //this.model.setState({[this.content]:finalData});
+            if (resp) {
+               resp.call(this,finalData);
+            }
+        });
+    }
     station_mvm(id,index=undefined,onSucc,onErr){
        super.keyValue(id).belongsTo("station","station_id",(allMvm)=>{
 

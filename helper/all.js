@@ -50,6 +50,7 @@ export var CONF={
     Client:null,
     defaultRedirection:"/login",
     allInputRef:[],
+    iconLoaded:false,
     randomColor(){return rColor()},
     currentM(){
       return Models.current;
@@ -99,14 +100,22 @@ export var CONF={
       }
 
     },
-    initIcon:async(model)=>{//this function helps to load icons in expo
+    initIcon:async(model,once)=>{//this function helps to load icons in expo
 
 
-      await Font.loadAsync({
-        Roboto: require("../Fonts/Roboto.ttf"),
-        Roboto_medium: require("../Fonts/Roboto_medium.ttf")
-      });
-      model.setState({ loading: false });
+       if (model.state.loading==true) {
+         await Font.loadAsync({
+           Roboto: Images.icon.Roboto,
+           Roboto_medium: Images.icon.Roboto_medium
+         });
+
+         model.setState({ loading: false });
+       }
+
+
+        //model.setState({ loading: false });
+
+
     },
     strReplace(str,search,replacement="+"){
        if (this.isEmpty(str)) {
@@ -293,11 +302,41 @@ export var CONF={
      return desc;
 
   },
-  getTotal(data=[],col='montant'){
+  arrKeys(arr=[]){
+     return Object.keys(arr);
+  },
+  arrValues(arr=[]){
+     return Object.values(arr);
+  },
+  fieldMach(data,fieldToCheck){
+      var resp=true;
+      var fields=this.arrKeys(fieldToCheck);
+      var values=this.arrValues(fieldToCheck);
+      for (var i = 0; i <fields.length; i++) {
+          if (data[fields[i]]!=values[i]) {
+             resp=false;
+             break;
+          }
+      }
+    return resp;
+  }
+
+  ,
+  getTotal(data=[],col='montant',fieldToCheck){
      var total=0;
 
      for (var i = 0; i <data.length; i++) {
-       total=total+parseInt(data[i][col]);
+        if (fieldToCheck) {
+
+            if (this.fieldMach(data[i],fieldToCheck)) {
+               total=total+parseInt(data[i][col]);
+            }
+
+        }
+        else{
+          total=total+parseInt(data[i][col]);
+        }
+
      }
 
      return total;
@@ -329,6 +368,7 @@ export var CONF={
 
        var initFunc=H.getParam(props,funcToCall);
        if (initFunc!=undefined) {
+
            return initFunc(param);
        }
 

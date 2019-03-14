@@ -23,6 +23,13 @@ export var Images={
         driver5:require("./d5.jpeg"),
         driver6:require("./d6.jpeg"),
 
+      },
+      back:{
+          app_layout:require('./back/whatsap.jpeg')
+      },
+      icon:{
+        Roboto: require("../../Fonts/Roboto.ttf"),
+        Roboto_medium: require("../../Fonts/Roboto_medium.ttf")
       }
 
 }

@@ -30,6 +30,7 @@ export var pathRouter={
     stations:"stations",
     create_station:"create_station",
     show_station:'show_station',
+    edit_station:"edit_station",
     save_station_mvm:"save_station_mvm",
 
     fournisseurs:"fournisseurs",

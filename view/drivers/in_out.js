@@ -67,9 +67,12 @@ export default class DriverIO extends Component {
 
      io.create((io)=>{
         // H.goTo(this,H.path.login);
+         H.Toast("successfully")
          H.resetModel(['2','3','4','5'],this);
-          H.refreshPage(this.props);
-          H.Toast("successfully")
+
+          var OperatioType=H.getParam(this.props,"depot");//this will allow to refresh only the concerning compnent
+          H.refreshPage(...[this.props,,OperatioType]);
+
        },(msg="error occured")=>{
         H.Toast(msg,'danger')
 
@@ -102,7 +105,7 @@ export default class DriverIO extends Component {
                            <Item style={H.style.inputField} floatingLabel>
                             <Label style={H.style.label}>Motif of operation :</Label>
                             <Input
-
+                              value={state.motif}
                               onChangeText={(name)=>{H.fieldChange(this,name,"motif","motifValid")}}
                             />
 

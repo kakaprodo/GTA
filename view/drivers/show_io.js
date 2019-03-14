@@ -23,14 +23,15 @@ export default class ShowIO extends Component {
       loading:true,
       id:null,
       refreshing:true,
-      operation_io:[],
+      input:[],
+      output:[],
       is_input:false,
       driver:null,
       total:0,
     }
 
 
-    io=new IO({model:this,container:"operation_io"});
+    io=new IO({model:this});
 
   }
 
@@ -47,10 +48,13 @@ export default class ShowIO extends Component {
 
   }
 
-  init(){
+  init(isOperation){
     var props=this.props;
     var driver=props.driver;
     var is_input=props.isdepot;
+
+   
+
     this.setState({driver:driver,is_input:is_input});
     io.driver(driver.id,(operation)=>{
        var total=0;
@@ -62,8 +66,8 @@ export default class ShowIO extends Component {
                       return oper.is_input==is_input;
                   })
         var descOrder=H.descOrder(op);
-
-        this.setState({operation_io:descOrder,total:total});
+        var content=is_input?"input":"output";
+        this.setState({[content]:descOrder,total:total});
     },()=>{});
 
   }
@@ -98,8 +102,8 @@ export default class ShowIO extends Component {
                                      <View>
 
 
-                                         {state.operation_io.map((item,index) => {
-                                                var opNumb=state.operation_io.length-(index);
+                                         {state[state.is_input?"input":"output"].map((item,index) => {
+                                                var opNumb=state[state.is_input?"input":"output"].length-(index);
                                                  return <Card key={index}>
                                                            <CardItem header style={{backgroundColor: '#ccc',height: 50}}>
                                                              <Text>Operation {opNumb}</Text>

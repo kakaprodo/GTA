@@ -5,25 +5,9 @@ import { StyleSheet, Text, View,ImageBackground,StatusBar  } from 'react-native'
 import {Spinner} from "native-base"
 
 
-import { Platform } from "react-native";
-import Icons from "react-native-vector-icons/Ionicons";
+// import { Platform } from "react-native";
+// import Icons from "react-native-vector-icons/Ionicons";
 
-
-
-export class Icon extends React.Component{
-   constructor({ name, ...props }){
-        super(props);
-        this.state={
-            name:name
-        }
-   }
-   render(){
-     return <Icons
-       name={Platform.OS === "ios" ? `ios-${this.state.name}` : `md-${this.state.name}`}
-       {...this.props}
-     />
-   }
-}
 
 
 
@@ -47,7 +31,7 @@ export class AppLayout extends React.Component{
      }
 
      return ( <ImageBackground
-                   source={require('../assets/img/back/whatsap.jpeg')}
+                   source={H.img.back.app_layout}
                    imageStyle={{resizeMode: 'stretch'}}
                    style={{width: '100%', height: '100%'}}
                    >
@@ -64,16 +48,7 @@ export class AppLayout extends React.Component{
 export class AppLoading extends React.Component{
 
   render(){
-     return <AppLayout >
-               <View style={H.style.spinner}><Spinner color={H.globalStyle.green_color} /></View>
-           </AppLayout>
-  }
-}
-
-export class KeyBoardHandler extends React.Component{
-
-  render(){
-     return <AppLayout >
+     return <AppLayout {...this.props} >
                <View style={H.style.spinner}><Spinner color={H.globalStyle.green_color} /></View>
            </AppLayout>
   }

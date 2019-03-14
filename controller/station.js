@@ -2,8 +2,9 @@
 /*Controller for client*/
 import {Query} from "./query"
 import {Validation as Valid} from "../helper/validation"
+import {StationMvm} from "./station_mvm"
 var val=new Valid();
-
+var mvm;
 export class Station extends Query{
     constructor(BindView=[],keyName='id'){
       super(keyName);//we set the primary key of the tab
@@ -16,6 +17,7 @@ export class Station extends Query{
       this.colCreation="id integer primary key not null,station_name,created_at text";
 
       this.conf();
+      mvm=new StationMvm(BindView,"station_id");
 
 
 
@@ -35,11 +37,15 @@ export class Station extends Query{
           super.all((ios)=>{
               ios=isDesc?H.descOrder(ios):ios;
 
-              if (onSucc) {
-                 onSucc.call(this,ios)
-              }
+               mvm.with(ios,(finalDataJoined)=>{
+                 //console.log(finalDataJoined);
+                 this.model.setState({[this.content]:finalDataJoined});
+                 if (onSucc) {
+                    onSucc.call(this,finalDataJoined)
+                 }
+               });
 
-              this.model.setState({[this.content]:ios});
+
             },(ios)=>{
               if (onNodata) {
                  onNodata.call(this,[])
@@ -141,7 +147,7 @@ export class Station extends Query{
     destroyEl(id,onSucc,onErr,noAlert=false){
 
         super.keyValue(id).destroy(()=>{
-
+               mvm.destroyEl(...[id,,,true]);
              if (onSucc) {
                 onSucc.call(this);
              }

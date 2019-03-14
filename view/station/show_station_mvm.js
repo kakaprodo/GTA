@@ -49,14 +49,17 @@ export default class ShowStM extends Component {
 
   }
 
-  init(isChange=false){
+  init(isChange){
     var props=this.props;
     var station=props.station;
     var isPaid=props.paid;
 
-    if (isChange && isPaid) {
-      return;
-    }
+   if (isChange!=undefined) {
+     if (isChange && isPaid) {
+       return;
+     }
+   }
+
 
 
     this.setState({station:station});
