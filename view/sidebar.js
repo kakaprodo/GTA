@@ -11,15 +11,18 @@ export default class SideBar extends Component {
       loading:true,
       user:[],
       routes:[],
-      menus:[{name:"Drivers",icon:"person",onPress:()=>{H.goTo(H.currentM(),"drivers",null,true)}},
-            {name:"Cars setting",icon:"car",onPress:()=>{H.goTo(H.currentM(),"cars",null,true)}},
-            {name:"Missions",icon:"send",onPress:()=>{H.goTo(H.currentM(),"missions",null,true)}},
-            {name:"Carburants",icon:"train",onPress:()=>{H.goTo(H.currentM(),"carburants",null,true)}},
-            {name:"Entretiens",icon:"shuffle",onPress:()=>{H.goTo(H.currentM(),"entretiens",null,true)}},
-            {name:"Mashindano",icon:"nutrition",onPress:()=>{H.goTo(H.currentM(),"mashindanos",null,true)}},
-            {name:"Perdiemes",icon:"cog",onPress:()=>{H.goTo(H.currentM(),"perdiemes",null,true)}},
-            {name:"Fournisseurs",icon:"logo-tux",onPress:()=>{H.goTo(H.currentM(),"fournisseurs",null,true)}},
-            {name:"Station",icon:"pint",onPress:()=>{H.goTo(H.currentM(),"stations",null,true)}}
+      menus:[{name:"Home",icon:"home",onPress:()=>{H.goTo(H.currentM(),H.path.dashboard,null,true)}},
+            {name:"Drivers",icon:"person",onPress:()=>{H.goTo(H.currentM(),H.path.drivers,null,true)}},
+            {name:"Cars setting",icon:"car",onPress:()=>{H.goTo(H.currentM(),H.path.cars,null,true)}},
+            {name:"Missions",icon:"send",onPress:()=>{H.goTo(H.currentM(),H.path.missions,null,true)}},
+            {name:"Carburants",icon:"train",onPress:()=>{H.goTo(H.currentM(),H.path.carburants,null,true)}},
+            {name:"Entretiens",icon:"shuffle",onPress:()=>{H.goTo(H.currentM(),H.path.entretiens,null,true)}},
+            {name:"Mashindano",icon:"nutrition",onPress:()=>{H.goTo(H.currentM(),H.path.mashindanos,null,true)}},
+            {name:"Perdiemes",icon:"cog",onPress:()=>{H.goTo(H.currentM(),H.path.perdiemes,null,true)}},
+            {name:"Fournisseurs",icon:"logo-tux",onPress:()=>{H.goTo(H.currentM(),H.path.fournisseurs,null,true)}},
+            {name:"Station",icon:"pint",onPress:()=>{H.goTo(H.currentM(),H.path.stations,null,true)}},
+            {name:"Repport",icon:"logo-wordpress",onPress:()=>{H.goTo(H.currentM(),H.path.repports,null,true)}},
+
 
            ]
     }

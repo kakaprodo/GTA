@@ -274,12 +274,23 @@ export var CONF={
     Models.sidebar.setState({user:this.User});
     this.drawer._root.open()
   },
-  now(full=false){
+  now(full=false,format){
     var date=new Date()
+    var result;
     if (full) {
-      return date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear()+" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
+      result=date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear()+" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
     }
-    return date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear();
+    result=date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear();
+
+    if (format!=undefined) {
+      if (format=="my") {
+        var dateArr=result.split("/");
+        result=dateArr[1]+"/"+dateArr[2];
+      }
+
+    }
+
+    return result;
   },
   getRandomInt(min, max) {
       min = Math.ceil(min);
@@ -293,15 +304,41 @@ export var CONF={
        return props.navigation.goBack();
   },
   descOrder(data=[]){
-     var desc=[];
-
-     for (var i = data.length-1; i >=0; i--) {
-       desc.push(data[i])
-     }
-
+     var desc=data.reverse();
      return desc;
 
   },
+  getFields(data=[]){
+    var fields=H.arrKeys(data);
+    var fieldString=fields.toString();
+    var values=H.arrValues(data);
+    var nbRow=fields.length;
+    var tagPrepare=nbRow>0?"?":null;//preparation query for insert specially
+    var colUpdate="";//preparation of query for update
+    var selectQuery="";
+    for (var i = 1; i < nbRow; i++) {
+        tagPrepare=tagPrepare+",?";
+    }
+
+    for (var i = 0; i < nbRow; i++) {
+           const remainerInLoop=nbRow-1;
+           colUpdate=colUpdate+(fields[i]+((remainerInLoop==i)?"=?":"=?,"));
+    }
+
+    for (var i = 0; i < nbRow; i++) {
+           const remainerInLoop=nbRow-1;
+           selectQuery=selectQuery+(fields[i]+((remainerInLoop==i)?"=?":"=? and "));
+    }
+
+   return {fields:fields,
+           fieldString:fieldString,
+           values:values,
+           tagPrepare:tagPrepare,
+           colUpdate:colUpdate,
+           selectQuery:selectQuery};
+
+  }
+  ,
   arrKeys(arr=[]){
      return Object.keys(arr);
   },
@@ -319,14 +356,19 @@ export var CONF={
           }
       }
     return resp;
+  },
+  filterAll(data,fieldToCheck){
+     data=data.filter((item) => {
+         return this.fieldMach(item,fieldToCheck);
+     })
+     return data;
   }
-
   ,
   getTotal(data=[],col='montant',fieldToCheck){
      var total=0;
 
      for (var i = 0; i <data.length; i++) {
-        if (fieldToCheck) {
+        if (fieldToCheck!=undefined) {
 
             if (this.fieldMach(data[i],fieldToCheck)) {
                total=total+parseInt(data[i][col]);

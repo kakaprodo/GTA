@@ -38,7 +38,23 @@ import EditStation from "./station/edit"
 import SaveStMvm from "./station/save_station_mvm"
 
 
+import AllFourn from "./fournisseur/"
+import CreateFourn from "./fournisseur/create"
+import ShowFourn from "./fournisseur/show"
+import EditFourn from "./fournisseur/edit"
+import SaveFssMvm from "./fournisseur/save_fss_mvm"
+
+import AllRepport from "./repport/"
+
+
 var AllScreen=createStackNavigator({
+   'repports':{screen:AllRepport},
+
+  'fournisseurs':{screen:AllFourn},
+  'create_fournisseur':{screen:CreateFourn  },
+  'show_fournisseur':{screen:ShowFourn},
+  'edit_fournisseur':{screen:EditFourn},
+  'save_fss_mvm':{screen:SaveFssMvm},
 
   'stations':{screen:AllStation},
   'create_station':{screen:CreateStation  },

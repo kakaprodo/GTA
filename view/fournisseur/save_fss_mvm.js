@@ -4,36 +4,38 @@ import { Container, Content, Form, Item, Input, Label,Text,Button,Icon,H2, Picke
 import { StyleSheet, View,ScrollView,KeyboardAvoidingView,BackHandler,Platform } from 'react-native';
 import {AppLayout,AppLoading} from "../app_layout"
 
-import {IO} from "../../controller/driver_io"
+import {FournMvm} from "../../controller/fss_mvm"
 
-var io;
+var mvm;
 
 let listener=null;
 
 
-export default class DriverIO extends Component {
+export default class SaveFourn extends Component {
 
   constructor(props){
       super(props);
+
       this.state={
         loading:true,
-        montant:"",
         motif:"",
-        is_input:"",
-        driver_id:"",
-        montantValid:"",
+        montant:"",
+        is_paid:"",
+        fss_id:"",
         motifValid:"",
-        isiValid:"",
-        driver:[]
+        montantValid:"",
+        is_paidValid:"",
+        fss_idValid:"",
+        fourn:"",
 
      }
 
-    io=new IO({model:this});
+    mvm=new FournMvm({model:this});
   }
 
   static navigationOptions=({navigation})=>{
 
-     let headerTitle="Dépot/Retrait";
+     let headerTitle="supply mouvement";
      let headerStyle=H.style.headers;
      let headerTitleStyle=H.style.title;
      return {headerTitle,headerStyle,headerTitleStyle};
@@ -56,22 +58,20 @@ export default class DriverIO extends Component {
 
   init(){
 
-           var driver=H.getParam(this.props,"driver");
-           var is_input=H.getParam(this.props,"depot")?1:0;
-
+           var fourn=H.getParam(this.props,"fourn");
+           var isPaid=H.getParam(this.props,"is_paid");
+           
            //io.destroyAll();
-           this.setState({driver_id:driver.id,driver:driver,is_input:is_input});
+           this.setState({fss_id:fourn.id,fourn:fourn,is_paid:isPaid?1:0});
   }
 
   register(){
 
-     io.create((io)=>{
+     mvm.create((io)=>{
         // H.goTo(this,H.path.login);
-         H.Toast("successfully")
-         H.resetModel(['2','3','4','5'],this);
-
-          var OperatioType=H.getParam(this.props,"depot");//this will allow to refresh only the concerning compnent
-          H.refreshPage(...[this.props,,OperatioType]);
+          H.Toast("successfully")
+          H.resetModel(['2','3','4','5'],this);
+          H.refreshPage(this.props);
 
        },(msg="error occured")=>{
         H.Toast(msg,'danger')
@@ -97,13 +97,13 @@ export default class DriverIO extends Component {
            <KeyboardAvoidingView behavior='padding' style={{flex:1,padding: 10,justifyContent: 'center'}}>
 
                <View style={{flex:40}}>
-                <Text style={[H.style.center,H.style.white_color]}>Registration of {state.is_input?"input":"output"} operation of the driver :{state.driver.names} </Text>
+                <Text style={[H.style.center,H.style.white_color]}>Debt Registration in the firm :{state.fourn.maison} </Text>
 
                    <Form >
                       <View>
 
                            <Item style={H.style.inputField} floatingLabel>
-                            <Label style={H.style.label}>Motif of operation :</Label>
+                            <Label style={H.style.label}>Motif :</Label>
                             <Input
                               value={state.motif}
                               onChangeText={(name)=>{H.fieldChange(this,name,"motif","motifValid")}}
@@ -126,6 +126,7 @@ export default class DriverIO extends Component {
                          </Item>
                          {H.invalid(this,"montantValid")?<Text style={H.style.error_color}>{this.state.montantValid}</Text>:<Text></Text>}
                     </View>
+
 
 
 

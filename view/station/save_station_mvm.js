@@ -11,7 +11,7 @@ var mvm;
 let listener=null;
 
 
-export default class DriverIO extends Component {
+export default class SaveSt extends Component {
 
   constructor(props){
       super(props);
@@ -20,7 +20,7 @@ export default class DriverIO extends Component {
         loading:true,
         beneficaire:"",
         quantite:"",
-        is_paid:0,
+        is_paid:"",
         station_id:"",
         car_id:"",
         beneficaireValid:"",
@@ -61,9 +61,10 @@ export default class DriverIO extends Component {
   init(){
 
            var station=H.getParam(this.props,"station");
+           var isPaid=H.getParam(this.props,"is_paid");
 
            //io.destroyAll();
-           this.setState({station_id:station.id,station:station});
+           this.setState({station_id:station.id,station:station,is_paid:isPaid?1:0});
   }
 
   register(){

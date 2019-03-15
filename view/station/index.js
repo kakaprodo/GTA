@@ -127,6 +127,7 @@ export default class Allstations extends Component {
                         {state.allstation.map((item,index) => {
 
                           var consommation=H.getTotal(item.mvm,'quantite',{is_paid:0});
+                          var colorStyle=consommation>0?H.style.green_color:{};
 
 
                           return <ListItem button
@@ -140,7 +141,7 @@ export default class Allstations extends Component {
                                     <Body  >
 
                                       <Text> {item.station_name}</Text>
-                                      <Text note>Consommation: {consommation} </Text>
+                                      <Text note>Consommation: <Text note style={colorStyle}>{consommation}</Text> </Text>
 
                                     </Body>
                                     <Right>

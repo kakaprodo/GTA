@@ -5,17 +5,17 @@ import { Header,Container, Content, Form, Item, Input,Subtitle, Label,Text,Butto
 import { StyleSheet, View,ScrollView,Platform,BackHandler } from 'react-native';
 import {AppLayout,AppLoading} from "../app_layout"
 
-import {Station} from "../../controller/station"
-import ShowMvm from "./show_station_mvm"
+import {Fournisseur} from "../../controller/fournisseur"
+import ShowMvm from "./show_fss_mvm"
 
-var station;
+var fourn;
 
 let listener=null;
 
 
 
 
-export default class ShowStation extends Component {
+export default class Showfourn extends Component {
   constructor(props){
       super(props);
       this.state={
@@ -24,10 +24,10 @@ export default class ShowStation extends Component {
       refreshing:true,
 
 
-      station:null,
+      fourn:null,
     }
     H.setModel("current",this);
-    station=new Station({model:this,container:"station"});
+    fourn=new Fournisseur({model:this,container:"fourn"});
 
   }
 
@@ -56,7 +56,7 @@ export default class ShowStation extends Component {
 
   init(){
     var id=H.getParam(this.props,"id")
-    station.show(id,undefined,()=>{H.goBack(this.props)});
+    fourn.show(...[id,,()=>{H.goBack(this.props)}]);
   }
 
 
@@ -64,13 +64,13 @@ export default class ShowStation extends Component {
   render() {
 
     var state=this.state;
-     var station=state.station;
+     var fourn=state.fourn;
 
 
 
 
 
-    if (state.loading || station==null ) {
+    if (state.loading || fourn==null ) {
       return <AppLoading />
     }
 
@@ -90,11 +90,11 @@ export default class ShowStation extends Component {
                          <Icon style={{color:'white'}} name="pint" />
                      </Left>
                      <Body>
-                       <Title style={H.style.title}>{station.station_name}</Title>
+                       <Title style={H.style.title}>{fourn.maison}</Title>
 
                      </Body>
                      <Right>
-                       <Button transparent onPress={()=>{H.goTo(this,H.path.edit_fournisseur,{id:station.id,init:()=>{this.init()}})}}>
+                       <Button transparent onPress={()=>{H.goTo(this,H.path.edit_fournisseur,{id:fourn.id,init:()=>{this.init()}})}}>
                           <Text>Edit</Text>
                        </Button>
                      </Right>
@@ -104,19 +104,19 @@ export default class ShowStation extends Component {
 
                      <ScrollView>
                        <CardItem header>
-                          <Text> station informations</Text>
+                          <Text> Supply informations</Text>
                        </CardItem>
                        <List>
                          <ListItem icon>
                                <Left>
                                  <Button style={H.style.headers}>
-                                   <Icon active name="pint" />
+                                   <Icon active name="home" />
                                  </Button>
                                </Left>
                                <Body>
 
-                                 <Text>{station.station_name}</Text>
-                                 <Text note>Statation name</Text>
+                                 <Text>{fourn.maison}</Text>
+                                 <Text note>Firm name(nom de la maison)</Text>
                                </Body>
                                <Right></Right>
                           </ListItem>
@@ -129,37 +129,37 @@ export default class ShowStation extends Component {
                                  </Left>
                                  <Body>
 
-                                   <Text>{station.created_at}</Text>
-                                   <Text note>Creation date of the station</Text>
+                                   <Text>{fourn.created_at}</Text>
+                                   <Text note>Creation date of the supply</Text>
                                  </Body>
                                  <Right></Right>
                             </ListItem>
                           </List>
 
                           <CardItem header>
-                             <Text> Station mouvements</Text>
+                             <Text> Supply mouvements</Text>
                           </CardItem>
 
 
                           <Tabs tabBarUnderlineStyle={H.style.headers}>
                                   <Tab  heading={
                                             <TabHeading style={{backgroundColor: 'white'}}>
-                                              <Text style={H.style.green_color}>CONSOMMATION</Text>
+                                              <Text style={H.style.green_color}>DETTES</Text>
                                             </TabHeading>
                                          }
                                        >
 
-                                      <ShowMvm station={station} paid={0} {...this.props} />
+                                      <ShowMvm fourn={fourn} paid={false} {...this.props} />
 
                                   </Tab>
 
                                     <Tab  heading={
                                               <TabHeading style={{backgroundColor: 'white'}}>
-                                                <Text style={H.style.green_color}>REMBOURSEMENT</Text>
+                                                <Text style={H.style.green_color}>PAIEMENT</Text>
                                               </TabHeading>
                                            }
                                          >
-                                         <ShowMvm station={station} paid={1} {...this.props} />
+                                         <ShowMvm fourn={fourn} paid={true} {...this.props} />
 
 
                                     </Tab>

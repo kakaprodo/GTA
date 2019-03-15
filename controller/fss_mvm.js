@@ -4,7 +4,7 @@ import {Query} from "./query"
 import {Validation as Valid} from "../helper/validation"
 var val=new Valid();
 
-export class StationMvm extends Query{
+export class FournMvm extends Query{
     constructor(BindView=[],keyName='id'){
       super(keyName);//we set the primary key of the tab
       // this.db=this.super.db;
@@ -28,6 +28,16 @@ export class StationMvm extends Query{
                        super.fields(this.colQuery)
                    },()=>{super.fields(this.colQuery)});
 
+    }
+
+    with(data,resp){
+
+        super.join(data,(finalData)=>{
+            //this.model.setState({[this.content]:finalData});
+            if (resp) {
+               resp.call(this,finalData);
+            }
+        });
     }
 
     fss_mvm(id,index=undefined,onSucc,onErr){
@@ -59,8 +69,24 @@ export class StationMvm extends Query{
        });
     }
 
+    paiement(id,data=[],onSucc,onErr){
+        var fieldDt=H.fieldsAndData(data);
+      //  console.log(fieldDt);
+        super.keyValue(id).fields(fieldDt.fields).update(fieldDt.data,()=>{
+           this.conf();
+          if (onSucc) {
+             onSucc.call(this)
+          }
+        },()=>{
+           this.conf();
+          if (onErr) {
+             onErr.call(this)
+          }
+        });
+    }
 
- index(onSucc,onNodata,isDesc=false){
+
+    index(onSucc,onNodata,isDesc=false){
           super.all((ios)=>{
               ios=isDesc?H.descOrder(ios):ios;
 
@@ -76,6 +102,7 @@ export class StationMvm extends Query{
                this.model.setState({[this.content]:ios});
           });
         }
+
 
   create(onSucc,onErr){
 

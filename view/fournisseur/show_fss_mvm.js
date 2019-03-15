@@ -6,7 +6,7 @@ import { StyleSheet, View,ScrollView,Platform,BackHandler } from 'react-native';
 import {AppLayout,AppLoading} from "../app_layout"
 
 // import {Driver} from "../../controller/driver"
-import {StationMvm} from "../../controller/station_mvm"
+import {FournMvm} from "../../controller/fss_mvm"
 
 var mvm;
 let listener=null;
@@ -16,7 +16,7 @@ let listener=null;
 
 
 
-export default class ShowStM extends Component {
+export default class ShowFssM extends Component {
   constructor(props){
       super(props);
       this.state={
@@ -25,14 +25,16 @@ export default class ShowStM extends Component {
       refreshing:true,
       mvms:[],
       total:0,
-      station:null,
-      is_paid:""
+      fourn:null,
+      is_paid:"",
+      dettes:[],
+      paiements:[],
 
 
     }
 
 
-    mvm=new StationMvm({model:this});
+    mvm=new FournMvm({model:this});
 
   }
 
@@ -51,28 +53,22 @@ export default class ShowStM extends Component {
 
   init(isChange){
     var props=this.props;
-    var station=props.station;
+    var fourn=props.fourn;
     var isPaid=props.paid;
-
-   if (isChange!=undefined) {
-     if (isChange && isPaid) {
-       return;
-     }
-   }
+    var content=isPaid==0?"dettes":"paiements";
 
 
 
-    this.setState({station:station});
-    mvm.station_mvm(...[station.id,,(mvms)=>{
+
+    this.setState({fourn:fourn});
+    mvm.fss_mvm(...[fourn.id,,(mvms)=>{
 
 
-        mvms= mvms.filter((oper) => {
-                    return oper.is_paid==isPaid;
-        })
+        mvms=H.filterAll(mvms,{is_paid:isPaid});
         var descOrder=H.descOrder(mvms);
-         var total=H.getTotal(descOrder,'quantite');
+        var total=H.getTotal(descOrder,'montant');
 
-        this.setState({mvms:descOrder,total:total,is_paid:isPaid});
+        this.setState({[content]:descOrder,total:total,is_paid:isPaid});
     },()=>{}]);
 
   }
@@ -83,7 +79,7 @@ export default class ShowStM extends Component {
 
   paiement(mvmS,index){
 
-      mvm.remboursement(mvmS.id,{is_paid:1},()=>{
+      mvm.paiement(mvmS.id,{is_paid:1},()=>{
              this.init();
 
       });
@@ -102,15 +98,16 @@ export default class ShowStM extends Component {
                              <View>
                                      <ListItem style={{marginBottom: 10}}>
                                        <Body>
-                                          <Text>Total : {state.total} quantity</Text>
+                                          <Text>Total dette : {state.total} Um</Text>
                                        </Body>
 
-                                        <Right>
+                                       <Right>
 
-                                             <Button onPress={()=>{H.goTo(this,H.path.save_station_mvm,{station:state.station,is_paid:state.is_paid,init:()=>{this.init()}})}} success small rounded>
+                                             <Button onPress={()=>{H.goTo(this,H.path.save_fss_mvm,{fourn:state.fourn,is_paid:state.is_paid,init:()=>{this.init()}})}} success small rounded>
                                                 <Text>New</Text>
                                              </Button>
                                         </Right>
+
 
 
                                      </ListItem>
@@ -119,8 +116,8 @@ export default class ShowStM extends Component {
                                      <View>
 
 
-                                         {state.mvms.map((item,index) => {
-                                                var opNumb=state.mvms.length-(index);
+                                         {state[state.is_paid==1?"paiements":"dettes"].map((item,index) => {
+                                                var opNumb=state[state.is_paid==1?"paiements":"dettes"].length-(index);
                                                  return <Card key={index}>
                                                            <CardItem header style={{backgroundColor: '#ccc',height: 50}}>
                                                              <Text>Operation {opNumb}</Text>
@@ -138,9 +135,8 @@ export default class ShowStM extends Component {
                                                             <View style={{padding:10,marginBottom:10}} >
 
 
-                                                             <Text style={{fontSize: 13,marginBottom:5}}>beneficaire : {item.beneficaire}</Text>
-                                                             <Text style={{fontSize: 13,marginBottom:5}}>Quantity : {item.quantite}</Text>
-                                                             <Text onPress={()=>{H.goTo(this,H.path.show_car,{id:item.car_id})}} style={{fontSize: 13,marginBottom:5}}>Code car :{item.car_id}</Text>
+                                                             <Text style={{fontSize: 13,marginBottom:5}}>Motif : {item.motif}</Text>
+                                                             <Text style={{fontSize: 13,marginBottom:5}}>Montant : {item.montant} Um</Text>
                                                              <Text style={{fontSize: 13,marginBottom:5}}>Date : {item.created_at}</Text>
                                                            </View>
                                                           </Card>

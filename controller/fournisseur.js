@@ -2,6 +2,8 @@
 /*Controller for client*/
 import {Query} from "./query"
 import {Validation as Valid} from "../helper/validation"
+import {FournMvm} from "./fss_mvm"//fournisseur
+var mvm;
 var val=new Valid();
 
 export class Fournisseur extends Query{
@@ -14,7 +16,7 @@ export class Fournisseur extends Query{
       this.colQuery="maison,created_at";
       /*col to send fro creating the table client for the first time*/
       this.colCreation="id integer primary key not null,motif text,maison text,created_at text";
-
+     mvm=new FournMvm(BindView,"fss_id");
       this.conf();
 
 
@@ -32,61 +34,27 @@ export class Fournisseur extends Query{
 
 
 
+    index(onSucc,onNodata,isDesc=false){
+           super.all((ios)=>{
+               ios=isDesc?H.descOrder(ios):ios;
+
+                mvm.with(ios,(finalDataJoined)=>{
+                  //console.log(finalDataJoined);
+                  this.model.setState({[this.content]:finalDataJoined});
+                  if (onSucc) {
+                     onSucc.call(this,finalDataJoined)
+                  }
+                });
 
 
-
-
-
-       index(onSucc,onNodata,isDesc=false){
-          super.all((ios)=>{
-              ios=isDesc?H.descOrder(ios):ios;
-
-              if (onSucc) {
-                 onSucc.call(this,ios)
-              }
-
-              this.model.setState({[this.content]:ios});
-            },(ios)=>{
-              if (onNodata) {
-                 onNodata.call(this,[])
-              }
-               this.model.setState({[this.content]:ios});
-          });
-        }
-
-  create(onSucc,onErr){
-
-            var model=this.model;
-             val.reset().setModel(model)
-             .addRule(["required"],'maison');
-
-
-
-
-             if (val.validate()) {
-
-                 var data=super.getData(this.model);
-
-                   //we insert new info of the agent
-                   super.insert(data,()=>{
-                       if (onSucc) {
-                         onSucc.call(this,data);
-                       }
-                   },()=>{
-                     if (onErr) {
-                         onErr.call(this,"Input error");
-                     }
-                   });
-             }
-             else{
-               //console.log(val.result);
-               if (onErr) {
-                   onErr.call(this,"Input error");
+             },(ios)=>{
+               if (onNodata) {
+                  onNodata.call(this,[])
                }
+                this.model.setState({[this.content]:ios});
+           });
+         }
 
-             }
-
-        }
 
         show(id,onSucc,onErr){
            return super.keyValue(id).getByKey((fournisseur)=>{
@@ -110,6 +78,40 @@ export class Fournisseur extends Query{
               H.Toast("no fournisseur is registered",'danger');
            });
         }
+
+        create(onSucc,onErr){
+
+                  var model=this.model;
+                  val.reset().setModel(model)
+                  .addRule(...[,'maison']);
+
+
+
+                   if (val.validate()) {
+
+                       var data=super.getData(this.model);
+
+                         //we insert new info of the agent
+                         super.insert(data,()=>{
+                             if (onSucc) {
+                               onSucc.call(this,data);
+                             }
+                         },()=>{
+                           if (onErr) {
+                               onErr.call(this,"Input error");
+                           }
+                         });
+                   }
+                   else{
+                     //console.log(val.result);
+                     if (onErr) {
+                         onErr.call(this,"Input error");
+                     }
+
+                   }
+
+              }
+
 
         edit(id,onSucc,onErr){
                     var model=this.model;
@@ -148,7 +150,7 @@ export class Fournisseur extends Query{
     destroyEl(id,onSucc,onErr,noAlert=false){
 
         super.keyValue(id).destroy(()=>{
-
+              mvm.destroyEl(...[id,,,true]);
              if (onSucc) {
                 onSucc.call(this);
              }

@@ -5,27 +5,26 @@ import { Header,Container, Content, Form, Item, Input,Subtitle, Label,Text,Butto
 import { StyleSheet, View,ScrollView,Platform,BackHandler } from 'react-native';
 import {AppLayout,AppLoading} from "../app_layout"
 
-import {Mashindano} from "../../controller/machindano"
+import {Fournisseur} from "../../controller/fournisseur"
 
-var mash;
+var fourn;
 
 let listener=null;
 
 
 
 
-export default class Allmashindanos extends Component {
+export default class Allfourns extends Component {
   constructor(props){
       super(props);
       this.state={
       loading:true,
       refreshing:true,
-      dataOfMonth:[],
-      allMash:[],
+      allfourn:[],
       total:0
     }
     H.setModel("current",this);
-    mash=new Mashindano({model:this,container:"allMash"});
+    fourn=new Fournisseur({model:this,container:"allfourn"});
 
   }
 
@@ -54,66 +53,29 @@ export default class Allmashindanos extends Component {
 
   init(){
 
-    mash.index(...[(mashs)=>{
-          var dataForMonth=H.getForThisMonth(mashs);
-          this.setState({dataOfMonth:dataForMonth});
-    },,true]);
+    fourn.index((data)=>{
+            var total=0;
+           for (var i = 0; i < data.length; i++) {
+                  total=total+H.getTotal(data[i].mvm,"montant",{is_paid:0})
+           }
+           this.setState({total:total});
+    },()=>{
+        this.setState({total:0});
+    });
   }
 
-  delmashindano(mashind){
-      mash.destroyEl(mashind.id,()=>{this.init()});
+  delfourn(fournin){
+      fourn.destroyEl(fournin.id,()=>{this.init()});
   }
 
-  ListMash(isForMonth=true){
-      var state=this.state;
-      var mashindanos=isForMonth?state.dataOfMonth:state.allMash;
-      var total=H.getTotal(mashindanos);
-      return (
-      <View>
-        <Card>
-           <CardItem header style={{height: 50}}>
-              <Text>Total mashindano: {total} Um</Text>
-           </CardItem>
-         </Card>
 
-
-        <List style={{marginLeft:-3}}>
-           {mashindanos.map((item,index) => {
-               var opNumb=mashindanos.length-(index);
-
-              return <Card key={index}>
-                             <CardItem header style={{backgroundColor: '#ccc',height: 50}}>
-                               <Text>Operation {opNumb}</Text>
-                               <Button onPress={()=>{this.delmashindano(item)}} style={{position: 'absolute',right: 5,top:10}} danger small>
-                                 <Icon name="trash" />
-                               </Button>
-                             </CardItem>
-
-                              <View style={{padding:10,marginBottom:10}} >
-
-
-                               <Text style={{fontSize: 13,marginBottom:5}}>Bénéficiaire :{item.beneficiaire}</Text>
-                               <Text style={{fontSize: 13,marginBottom:5}}>Montant : {item.montant} UM</Text>
-                               <Text style={{fontSize: 13,marginBottom:5}}>Maison : {item.maison}</Text>
-                               <Text style={{fontSize: 13,marginBottom:5}}>Date : {item.created_at}</Text>
-                             </View>
-                      </Card>
-           })}
-
-
-       </List>
-      </View>
-
-
-      );
-  }
 
 
 
   render() {
 
     var state=this.state;
-     var mashindanos=state.mashindanos;
+     var fourns=state.fourns;
 
 
 
@@ -125,8 +87,7 @@ export default class Allmashindanos extends Component {
 
 
 
-
-
+    var total=0;
     return (
 
 
@@ -141,43 +102,61 @@ export default class Allmashindanos extends Component {
                        </Button>
                      </Left>
                      <Body>
-                       <Title style={H.style.title}>All mashindano</Title>
+                       <Title onPress={()=>{H.openDrawer()}} style={H.style.title}>All supplies</Title>
                      </Body>
                      <Right>
                        <Button transparent>
                          <Icon name='search' />
                        </Button>
 
-                       <Button onPress={()=>{H.goTo(this,H.path.create_mashindano,{init:()=>{this.init()}})}} transparent>
+                       <Button onPress={()=>{this.init()}} transparent>
+                         <Icon name='refresh' />
+                       </Button>
+
+                       <Button onPress={()=>{H.goTo(this,H.path.create_fournisseur,{init:()=>{this.init()}})}} transparent>
                          <Text>New</Text>
 
                        </Button>
                      </Right>
                    </Header>
                    <Content  padder style={H.style.content}>
+                     <List style={{marginLeft:-3}}>
+                          <CardItem header>
+                             <Text>Total dettes :          <Text style={H.style.green_color}>{state.total} Um</Text></Text>
+                          </CardItem>
+                        {state.allfourn.map((item,index) => {
 
-                     <Tabs tabBarUnderlineStyle={H.style.headers}>
-                         <Tab heading={
-                                   <TabHeading style={{backgroundColor: 'white'}}>
-                                     <Text style={H.style.green_color}>THIS MONTH</Text>
-                                   </TabHeading>
-                                }
-                              >
-                              {this.ListMash(true)}
-                         </Tab>
+                          var dette=H.getTotal(item.mvm,'montant',{is_paid:0});
+                          var colorStyle=dette>0?H.style.green_color:{};
 
-                         <Tab heading={
-                                   <TabHeading style={{backgroundColor: 'white'}}>
-                                     <Text style={H.style.green_color}>ALL</Text>
-                                   </TabHeading>
-                                }
-                              >
-                              {this.ListMash(false)}
-                         </Tab>
+                          return <ListItem button
+                                    onPress={()=>{H.goTo(this,"show_fournisseur",{id:item.id})}}
+                                    avatar key={index}>
+                                    <Left>
+                                      <Button transparent>
+                                        <Icon style={{color:H.randomColor()}} name='pint' />
+                                      </Button>
+                                    </Left>
+                                    <Body  >
 
-                     </Tabs>
+                                      <Text> {item.maison}</Text>
+                                      <Text note>Dette: <Text note style={colorStyle}>{dette} Um </Text></Text>
+
+                                    </Body>
+                                    <Right>
+                                      <Button onPress={()=>{this.delfourn(item)}} transparent>
+                                          <Icon style={{fontSize: 30,color:"#b71c1c"}}  name="trash" />
+                                      </Button>
+
+                                    </Right>
+                                  </ListItem>
+                        })
 
 
+                      }
+
+
+                      </List>
                   </Content>
 
             </AppLayout>

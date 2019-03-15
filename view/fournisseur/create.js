@@ -1,35 +1,38 @@
 import React, { Component } from 'react';
 import { Container, Content, Form, Item, Input, Label,Text,Button,Icon,H2, Picker ,Textarea} from 'native-base';
 
-import { StyleSheet, View,ScrollView,KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, View,ScrollView,KeyboardAvoidingView,BackHandler,Platform } from 'react-native';
 import {AppLayout,AppLoading} from "../app_layout"
 
-import {Mashindano} from "../../controller/machindano"
-
-var mash;
+import {Fournisseur} from "../../controller/fournisseur"
 
 
-export default class Createmashindano extends Component {
+var fourn;
+
+
+let listener=null;
+
+
+export default class Createfourn extends Component {
 
   constructor(props){
       super(props);
       this.state={
         loading:true,
-        beneficiaire:"",
-        montant:"",
-        organisation:"",
-        beneficiaireValid:"",
-        organisationValid:"",
-        montantValid:"",
-
-      }
+        maison:"",
+        maisonValid:"",
 
 
-    mash=new Mashindano({model:this});
+
+     }
+
+    fourn=new Fournisseur({model:this});
+
   }
 
   static navigationOptions=({navigation})=>{
-     let headerTitle="New mashindano";
+
+     let headerTitle="New Supply";
      let headerStyle=H.style.headers;
      let headerTitleStyle=H.style.title;
      return {headerTitle,headerStyle,headerTitleStyle};
@@ -39,23 +42,23 @@ export default class Createmashindano extends Component {
 
 
 
-  componentWillMount() {
-     H.initIcon(this);
-  }
+
 
   componentDidMount(){
+    H.initIcon(this);
+
 
   }
 
-  register(){
+register(){
 
-     mash.create((mashindano)=>{
+     fourn.create((fourn)=>{
         // H.goTo(this,H.path.login);
-        H.resetModel(['2','3','4'],this);
+            H.Toast("successfully")
+           H.resetModel(['2'],this);
+          H.refreshPage(this.props)
 
-        H.Toast("successfully")
-        H.refreshPage(this.props)
-     },(msg="error occured")=>{
+       },(msg="error occured")=>{
         H.Toast(msg,'danger')
 
      });
@@ -75,59 +78,27 @@ export default class Createmashindano extends Component {
     return (
 
        <AppLayout>
-
-           <KeyboardAvoidingView behavior='padding' style={{flex:1,padding: 10,justifyContent: 'center'}}>
+         <ScrollView>
+           <KeyboardAvoidingView behavior='padding' style={{flex:1,padding: 10}}>
 
                <View style={{flex:40}}>
-                <Text style={[H.style.center,H.style.white_color]}>Registration of a new mashindano : </Text>
-
+                  <Text style={[H.style.center,H.style.white_color]}>Registration of a new supply </Text>
                    <Form >
                       <View>
 
                            <Item style={H.style.inputField} floatingLabel>
-                            <Label style={H.style.label}>Nom du Bénéficiaire :</Label>
+                            <Label style={H.style.label}>Nom de la maison(firm) :</Label>
                             <Input
-                               value={state.beneficiaire}
-                              onChangeText={(name)=>{H.fieldChange(this,name,"beneficiaire","beneficiaireValid")}}
+                              value={state.maison}
+
+                              onChangeText={(name)=>{H.fieldChange(this,name,"maison","maisonValid")}}
                             />
 
-
                           </Item>
-                          {H.invalid(this,"beneficiaireValid")?<Text style={H.style.error_color}>{this.state.beneficiaireValid}</Text>:<Text></Text>}
+                          {H.invalid(this,"maisonValid")?<Text style={H.style.error_color}>{this.state.maisonValid}</Text>:<Text></Text>}
                      </View>
 
-
-                     <View>
-
-                          <Item style={H.style.inputField} floatingLabel>
-                           <Label style={H.style.label}>organisation:</Label>
-                           <Input
-                            value={state.organisation}
-                             onChangeText={(name)=>{H.fieldChange(this,name,"organisation","organisationValid")}}
-                           />
-
-
-                         </Item>
-                         {H.invalid(this,"organisationValid")?<Text style={H.style.error_color}>{this.state.organisationValid}</Text>:<Text></Text>}
-                     </View>
-
-                     <View>
-
-                          <Item style={H.style.inputField} floatingLabel>
-                           <Label style={H.style.label}>Montant :</Label>
-                           <Input
-                            value={state.montant}
-                            keyboardType="numeric"
-                             onChangeText={(name)=>{H.fieldChange(this,name,"montant","montantValid")}}
-                           />
-
-
-                         </Item>
-                         {H.invalid(this,"montantValid")?<Text style={H.style.error_color}>{this.state.montantValid}</Text>:<Text></Text>}
-                    </View>
-
-
-                        <Button onPress={()=>{this.register()}} success small full rounded iconRight>
+                     <Button onPress={()=>{this.register()}} success small full rounded iconRight>
                           <Text style={H.style.textBtn}>Save</Text>
                           <Icon style={{fontSize: 17,...H.style.textBtn}} name="save" />
                        </Button>
@@ -136,6 +107,7 @@ export default class Createmashindano extends Component {
 
                   </View>
               </KeyboardAvoidingView>
+            </ScrollView>
 
 
         </AppLayout>

@@ -35,10 +35,14 @@ export var pathRouter={
 
     fournisseurs:"fournisseurs",
     create_fournisseur:"create_fournisseur",
-    show_fss:'show_fss',
+    show_fournisseur:'show_fournisseur',
+    edit_fournisseur:'edit_fournisseur',
     save_fss_mvm:"save_fss_mvm",
 
     save_entretien:"save_entretien",
+
+    repports:"repports",
+    show_repport:"show_repport",
 
 
 

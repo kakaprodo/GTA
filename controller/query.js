@@ -45,6 +45,12 @@ export class Query extends Con{
           data[i]=isCreation?H.now(true):(state[this.table]!=undefined?state[this.table].created_at:H.now());
        }
 
+       if (colName=="mois_annee") {
+          var dateArr=H.now().split("/");
+          var mois_annee=dateArr[1]+"/"+dateArr[2];
+          data[i]=isCreation?mois_annee:(state[this.table]!=undefined?state[this.table].mois_annee:mois_annee);
+       }
+
      }
 
      return data;
@@ -152,7 +158,7 @@ export class Query extends Con{
                                      this.inAction=false;
                                   }
                                 },(err)=>{
-                                console.log(ins);
+                                 this.inAction=false;
                                   if (onErr) {
                                      onErr.call(md);
                                   }
@@ -273,7 +279,7 @@ export class Query extends Con{
               },()=>{
                 this.response.msg="successfully done";
                 this.response.error=false;
-
+                this.inAction=false;
                 if (onSucc) {
                    onSucc.call(rm);
                 }
@@ -402,7 +408,7 @@ export class Query extends Con{
          }).then((number)=>{//number est le compteur
              if ((number+1)==dataLength) {
                 if (resp) {
-                      
+
                       resp.call(md,finalData);
                 }
              }
@@ -417,5 +423,112 @@ export class Query extends Con{
 
 
  }
+
+
+
+ save(data,toCall,onErr,table) {
+     let md=this;
+
+    if (this.inAction) {
+      return console.log('wait for previous process...');;
+    }
+
+
+    var getFields=H.getFields(data);
+    var table=table!=undefined?table:this.table;
+    this.inAction=true;
+     this.db.transaction(
+       tx => {
+         //console.log(`insert into ${this.table} (${this.col}) values (${this.tagPrepare})`);
+         var ins=tx.executeSql(`insert into ${table} (${getFields.fields}) values (${getFields.tagPrepare})`,
+                              getFields.values,
+                              ()=>{
+                                this.response.msg="successfully done";
+                                this.response.error=false;
+                                if (toCall) {
+
+                                   toCall.call(md);
+                                   this.inAction=false;
+                                }
+                              },(err)=>{
+
+                                if (onErr) {
+                                   onErr.call(md);
+                                }
+                                this.response.msg=err;
+                                this.response.error=true;
+                                this.inAction=false;
+
+                              }
+                            );
+       });
+    return this;
+  }
+
+
+  exist(data,dataExist,noData,table){
+
+      let md=this;
+      var getFields=H.getFields(data);
+      var table=table!=undefined?table:this.table;
+
+      this.db.transaction(tx=>{
+        tx.executeSql(`select * from ${table} where ${getFields.selectQuery} limit 1`,getFields.values, (_, { rows:{_array} }) =>{
+          this.item=_array;
+          //console.log(rows)
+
+            if (this.item.length!=0) {
+              dataExist.call(md,this.item[0]);
+            }
+            else{
+               if (noData) {
+                  noData.call(md);
+               }
+
+            }
+
+         }
+        );
+      });
+      return this;
+
+  }
+
+  updateFast(data,onSucc,onErr,table){
+
+      if (this.inAction) {
+        return console.log('wait for previous process...');
+      }
+      this.inAction=true;
+      var getFields=H.getFields(data);
+      var table=table!=undefined?table:this.table;
+
+      var rm=this;
+
+      this.db.transaction(
+               tx => {
+                 tx.executeSql(`update ${table} set ${getFields.colUpdate} where ${this.keyName}=?`, getFields.values);
+                },
+                (err)=>{
+                  this.response.msg=err;
+                  this.response.error=true;
+
+                  if (onErr) {
+                     onErr.call(rm);
+                     this.inAction=false;
+                  }
+               },()=>{
+                 this.response.msg="successfully done";
+                 this.response.error=false;
+                  this.inAction=false;
+                 if (onSucc) {
+                    onSucc.call(rm);
+                 }
+
+               });
+
+         return this;
+  }
+
 
 }

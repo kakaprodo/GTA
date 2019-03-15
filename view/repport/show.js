@@ -5,29 +5,30 @@ import { Header,Container, Content, Form, Item, Input,Subtitle, Label,Text,Butto
 import { StyleSheet, View,ScrollView,Platform,BackHandler } from 'react-native';
 import {AppLayout,AppLoading} from "../app_layout"
 
-import {Station} from "../../controller/station"
-import ShowMvm from "./show_station_mvm"
+import {Driver} from "../../controller/driver"
+import ShowIO from "./show_io"
 
-var station;
+
+var driver;
 
 let listener=null;
 
 
 
 
-export default class ShowStation extends Component {
+export default class ShowDriver extends Component {
   constructor(props){
       super(props);
       this.state={
       loading:true,
       id:null,
       refreshing:true,
-
-
-      station:null,
+      picNum:0,
+      driver:null,
     }
     H.setModel("current",this);
-    station=new Station({model:this,container:"station"});
+    driver=new Driver({model:this,container:"driver"});
+
 
   }
 
@@ -47,30 +48,39 @@ export default class ShowStation extends Component {
      return {header};
   }
 
-  componentWillMount() {
+  componentDidMount() {
      H.initIcon(this);
-
-     this.init();
-
+      this.init();
   }
 
   init(){
     var id=H.getParam(this.props,"id")
-    station.show(id,undefined,()=>{H.goBack(this.props)});
+    var picNum=H.getParam(this.props,"pic")
+
+    driver.show(id,()=>{},()=>{H.goBack(this.props)});
+
+    this.setState({id:id,refreshing:!this.state.refreshing});
+    if (picNum!=undefined) {
+        this.setState({picNum:picNum});
+    }
   }
 
-
+ // componentWillReceiveProps(nextProps){
+ //      this.props=nextProps;
+ //      this.setState({id:H.getParam(nextProps,"id")});
+ //      this.init();
+ // }
 
   render() {
 
     var state=this.state;
-     var station=state.station;
+     var driver=state.driver;
 
 
 
 
 
-    if (state.loading || station==null ) {
+    if (state.loading || driver==null ) {
       return <AppLoading />
     }
 
@@ -86,40 +96,66 @@ export default class ShowStation extends Component {
           <AppLayout noBack={true}>
 
                   <Header style={H.style.base_headers}>
-                     <Left>
-                         <Icon style={{color:'white'}} name="pint" />
-                     </Left>
+                    <Left>
+                        <Thumbnail small source={H.img.drivers['driver'+state.picNum]} />
+                    </Left>
                      <Body>
-                       <Title style={H.style.title}>{station.station_name}</Title>
+                       <Title style={H.style.title}>{driver.names}</Title>
 
                      </Body>
-                     <Right>
-                       <Button transparent onPress={()=>{H.goTo(this,H.path.edit_fournisseur,{id:station.id,init:()=>{this.init()}})}}>
-                          <Text>Edit</Text>
-                       </Button>
-                     </Right>
+                      <Right>
 
+                        <Button transparent onPress={()=>{H.goTo(this,H.path.edit_driver,{id:driver.id,init:()=>{this.init()}})}}>
+                           <Text>Edit</Text>
+                        </Button>
+                      </Right>
                    </Header>
                    <Content padder style={H.style.content}>
-
                      <ScrollView>
                        <CardItem header>
-                          <Text> station informations</Text>
+                          <Text> Driver informations</Text>
                        </CardItem>
                        <List>
                          <ListItem icon>
                                <Left>
                                  <Button style={H.style.headers}>
-                                   <Icon active name="pint" />
+                                   <Icon active name="person" />
                                  </Button>
                                </Left>
                                <Body>
 
-                                 <Text>{station.station_name}</Text>
-                                 <Text note>Statation name</Text>
+                                 <Text>{driver.names}</Text>
+                                 <Text note>Name</Text>
                                </Body>
                                <Right></Right>
                           </ListItem>
+                         <ListItem icon>
+                               <Left>
+                                 <Button style={H.style.headers}>
+                                   <Icon active name="person" />
+                                 </Button>
+                               </Left>
+                               <Body>
+
+                                 <Text>{driver.sex}</Text>
+                                 <Text note>Sex</Text>
+                               </Body>
+                               <Right></Right>
+                          </ListItem>
+
+                          <ListItem icon>
+                                <Left>
+                                  <Button style={H.style.headers}>
+                                    <Icon active name="key" />
+                                  </Button>
+                                </Left>
+                                <Body>
+
+                                  <Text>Code :{driver.id}</Text>
+                                  <Text note>Identification of driver</Text>
+                                </Body>
+                                <Right></Right>
+                           </ListItem>
 
                            <ListItem icon>
                                  <Left>
@@ -129,43 +165,39 @@ export default class ShowStation extends Component {
                                  </Left>
                                  <Body>
 
-                                   <Text>{station.created_at}</Text>
-                                   <Text note>Creation date of the station</Text>
+                                   <Text>{driver.created_at}</Text>
+                                   <Text note>Creation date of the driver</Text>
                                  </Body>
                                  <Right></Right>
                             </ListItem>
                           </List>
 
                           <CardItem header>
-                             <Text> Station mouvements</Text>
+                             <Text> Input and Output operations</Text>
                           </CardItem>
 
 
                           <Tabs tabBarUnderlineStyle={H.style.headers}>
                                   <Tab  heading={
                                             <TabHeading style={{backgroundColor: 'white'}}>
-                                              <Text style={H.style.green_color}>CONSOMMATION</Text>
+                                              <Text style={H.style.green_color}>DEPOT</Text>
                                             </TabHeading>
                                          }
                                        >
 
-                                      <ShowMvm station={station} paid={0} {...this.props} />
-
+                                       <ShowIO {...this.props} isdepot={true} driver={driver}/>
                                   </Tab>
 
                                     <Tab  heading={
                                               <TabHeading style={{backgroundColor: 'white'}}>
-                                                <Text style={H.style.green_color}>REMBOURSEMENT</Text>
+                                                <Text style={H.style.green_color}>RETRAIT</Text>
                                               </TabHeading>
                                            }
                                          >
-                                         <ShowMvm station={station} paid={1} {...this.props} />
-
-
+                                         <ShowIO {...this.props} isdepot={false} driver={driver}/>
                                     </Tab>
                                 </Tabs>
                       </ScrollView>
-
                   </Content>
 
             </AppLayout>
