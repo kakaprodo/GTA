@@ -16,7 +16,9 @@ export class Driver extends Query{
       this.colQuery="names,sex,created_at";
       /*col to send fro creating the table client for the first time*/
       this.colCreation="id integer primary key not null, names text,sex text,created_at text";
-
+      this.colSearch="names,id";
+      this.colAlias={id:'Code',names:'Names'};
+      this.modelName="driver";
       this.conf();
 
 
@@ -36,16 +38,21 @@ export class Driver extends Query{
 
 
     index(onSucc,onNodata){
-      super.all((drivers)=>{
+      super.all((ios)=>{
+
         if (onSucc) {
-           onSucc.call(this,drivers)
+           onSucc.call(this,ios)
         }
-          this.model.setState({[this.content]:drivers});
-        },(drivers)=>{
+        if (this.content!=undefined) {
+           this.model.setState({[this.content]:ios});
+        }
+        },(ios)=>{
           if (onNodata) {
              onNodata.call(this,[])
           }
-           this.model.setState({[this.content]:drivers});
+          if (this.content!=undefined) {
+             this.model.setState({[this.content]:ios});
+          }
       });
     }
 

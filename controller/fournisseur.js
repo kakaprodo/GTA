@@ -14,6 +14,9 @@ export class Fournisseur extends Query{
       this.content=BindView.container;//the state variable to contain the data
       this.agent=null;
       this.colQuery="maison,created_at";
+      this.colSearch="maison";
+      this.colAlias={maison:'Firm name'};
+      this.modelName="fournisseur";
       /*col to send fro creating the table client for the first time*/
       this.colCreation="id integer primary key not null,motif text,maison text,created_at text";
      mvm=new FournMvm(BindView,"fss_id");
@@ -40,7 +43,10 @@ export class Fournisseur extends Query{
 
                 mvm.with(ios,(finalDataJoined)=>{
                   //console.log(finalDataJoined);
-                  this.model.setState({[this.content]:finalDataJoined});
+
+                  if (this.content!=undefined) {
+                     this.model.setState({[this.content]:finalDataJoined});
+                  }
                   if (onSucc) {
                      onSucc.call(this,finalDataJoined)
                   }
@@ -51,7 +57,9 @@ export class Fournisseur extends Query{
                if (onNodata) {
                   onNodata.call(this,[])
                }
-                this.model.setState({[this.content]:ios});
+               if (this.content!=undefined) {
+                  this.model.setState({[this.content]:ios});
+               }
            });
          }
 

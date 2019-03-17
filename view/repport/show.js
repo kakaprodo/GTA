@@ -5,29 +5,24 @@ import { Header,Container, Content, Form, Item, Input,Subtitle, Label,Text,Butto
 import { StyleSheet, View,ScrollView,Platform,BackHandler } from 'react-native';
 import {AppLayout,AppLoading} from "../app_layout"
 
-import {Driver} from "../../controller/driver"
-import ShowIO from "./show_io"
-
-
-var driver;
+import {Repport} from "../../controller/repport"
 
 let listener=null;
 
 
 
 
-export default class ShowDriver extends Component {
+export default class Showrepport extends Component {
   constructor(props){
       super(props);
       this.state={
       loading:true,
       id:null,
       refreshing:true,
-      picNum:0,
-      driver:null,
+      repport:null,
     }
     H.setModel("current",this);
-    driver=new Driver({model:this,container:"driver"});
+    repport=new Repport({model:this,container:"repport"});
 
 
   }
@@ -54,39 +49,39 @@ export default class ShowDriver extends Component {
   }
 
   init(){
-    var id=H.getParam(this.props,"id")
-    var picNum=H.getParam(this.props,"pic")
+    var rep=H.getParam(this.props,"repport");
+    var id=rep.id;
+    this.setState({repport:rep});
 
-    driver.show(id,()=>{},()=>{H.goBack(this.props)});
+     repport.repportHandler("update",()=>{
 
-    this.setState({id:id,refreshing:!this.state.refreshing});
-    if (picNum!=undefined) {
-        this.setState({picNum:picNum});
-    }
+       repport.show(id,()=>{},()=>{H.goBack(this.props)});
+     },rep)
+
+
+
+    this.setState({id:id});
+
   }
 
- // componentWillReceiveProps(nextProps){
- //      this.props=nextProps;
- //      this.setState({id:H.getParam(nextProps,"id")});
- //      this.init();
- // }
 
   render() {
 
     var state=this.state;
-     var driver=state.driver;
+     var repport=state.repport;
 
 
 
 
 
-    if (state.loading || driver==null ) {
+    if (state.loading || repport==null ) {
       return <AppLoading />
     }
 
 
 
-
+     var repportFields=H.arrKeys(repport);
+     var repportVal=H.arrValues(repport);
 
     return (
 
@@ -97,106 +92,55 @@ export default class ShowDriver extends Component {
 
                   <Header style={H.style.base_headers}>
                     <Left>
-                        <Thumbnail small source={H.img.drivers['driver'+state.picNum]} />
+                      <Button onPress={()=>{H.openDrawer()}} transparent>
+                        <Icon name='logo-wordpress' />
+                      </Button>
                     </Left>
                      <Body>
-                       <Title style={H.style.title}>{driver.names}</Title>
+                       <Title style={H.style.title}> {H.formatMonthYear(repport.mois_annee)}</Title>
 
                      </Body>
                       <Right>
 
-                        <Button transparent onPress={()=>{H.goTo(this,H.path.edit_driver,{id:driver.id,init:()=>{this.init()}})}}>
-                           <Text>Edit</Text>
+                        <Button transparent onPress={()=>{this.init()}}>
+                            <Icon name="refresh" />
                         </Button>
                       </Right>
                    </Header>
                    <Content padder style={H.style.content}>
                      <ScrollView>
                        <CardItem header>
-                          <Text> Driver informations</Text>
+                          <Text> Repport informations :{H.formatMonthYear(repport.mois_annee)}</Text>
                        </CardItem>
                        <List>
-                         <ListItem icon>
-                               <Left>
-                                 <Button style={H.style.headers}>
-                                   <Icon active name="person" />
-                                 </Button>
-                               </Left>
-                               <Body>
+                         {repportFields.map((item,index) => {
+                             if (item!="id" && item!="mois_annee") {
 
-                                 <Text>{driver.names}</Text>
-                                 <Text note>Name</Text>
-                               </Body>
-                               <Right></Right>
-                          </ListItem>
-                         <ListItem icon>
-                               <Left>
-                                 <Button style={H.style.headers}>
-                                   <Icon active name="person" />
-                                 </Button>
-                               </Left>
-                               <Body>
+                                  var colorStyle={};
+                                   if (item=='resultat_net') {colorStyle={color:'#00695c'}}
+                                   if (item=='resultat_brut') {colorStyle={color:"#0277bd"}}
+                                   if (item=='dime') {colorStyle={color:"#00838f"}}
+                               return <ListItem key={index} icon>
+                                     <Left>
+                                       <Button style={H.style.headers}>
+                                         <Icon active name="logo-euro" />
+                                       </Button>
+                                     </Left>
+                                     <Body>
 
-                                 <Text>{driver.sex}</Text>
-                                 <Text note>Sex</Text>
-                               </Body>
-                               <Right></Right>
-                          </ListItem>
+                                       <Text style={colorStyle}>{repportVal[index]} Um</Text>
+                                       <Text note>{H.strReplace(item.toUpperCase(),"_"," ")}</Text>
+                                     </Body>
+                                     <Right></Right>
+                                </ListItem>
+                             }
+                             return;
 
-                          <ListItem icon>
-                                <Left>
-                                  <Button style={H.style.headers}>
-                                    <Icon active name="key" />
-                                  </Button>
-                                </Left>
-                                <Body>
+                         })
 
-                                  <Text>Code :{driver.id}</Text>
-                                  <Text note>Identification of driver</Text>
-                                </Body>
-                                <Right></Right>
-                           </ListItem>
+                         }
 
-                           <ListItem icon>
-                                 <Left>
-                                   <Button style={H.style.headers}>
-                                     <Icon active name="calendar" />
-                                   </Button>
-                                 </Left>
-                                 <Body>
-
-                                   <Text>{driver.created_at}</Text>
-                                   <Text note>Creation date of the driver</Text>
-                                 </Body>
-                                 <Right></Right>
-                            </ListItem>
-                          </List>
-
-                          <CardItem header>
-                             <Text> Input and Output operations</Text>
-                          </CardItem>
-
-
-                          <Tabs tabBarUnderlineStyle={H.style.headers}>
-                                  <Tab  heading={
-                                            <TabHeading style={{backgroundColor: 'white'}}>
-                                              <Text style={H.style.green_color}>DEPOT</Text>
-                                            </TabHeading>
-                                         }
-                                       >
-
-                                       <ShowIO {...this.props} isdepot={true} driver={driver}/>
-                                  </Tab>
-
-                                    <Tab  heading={
-                                              <TabHeading style={{backgroundColor: 'white'}}>
-                                                <Text style={H.style.green_color}>RETRAIT</Text>
-                                              </TabHeading>
-                                           }
-                                         >
-                                         <ShowIO {...this.props} isdepot={false} driver={driver}/>
-                                    </Tab>
-                                </Tabs>
+                        </List>
                       </ScrollView>
                   </Content>
 

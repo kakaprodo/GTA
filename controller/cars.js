@@ -12,6 +12,9 @@ export class Cars extends Query{
       this.content=BindView.container;//the state variable to contain the data
       this.agent=null;
       this.colQuery="marque,plaque,color,created_at";
+      this.colSearch="id,marque,plaque,color";
+      this.colAlias={id:'Code',marque:"Marque",plaque:"Plaque",color:"Color"};
+      this.modelName="car";
       /*col to send fro creating the table client for the first time*/
       this.colCreation="id integer primary key not null, marque text,plaque text,color text,created_at text";
 

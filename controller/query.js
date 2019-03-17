@@ -494,7 +494,7 @@ export class Query extends Con{
 
   }
 
-  updateFast(data,onSucc,onErr,table){
+  updateFast(id,data,onSucc,onErr,table){
 
       if (this.inAction) {
         return console.log('wait for previous process...');
@@ -504,7 +504,9 @@ export class Query extends Con{
       var table=table!=undefined?table:this.table;
 
       var rm=this;
-
+      getFields.values.push(id);//we insert the id of the concerned repport
+      data.id=id;
+  
       this.db.transaction(
                tx => {
                  tx.executeSql(`update ${table} set ${getFields.colUpdate} where ${this.keyName}=?`, getFields.values);
@@ -514,7 +516,7 @@ export class Query extends Con{
                   this.response.error=true;
 
                   if (onErr) {
-                     onErr.call(rm);
+                     onErr.call(rm,data);
                      this.inAction=false;
                   }
                },()=>{
@@ -522,7 +524,7 @@ export class Query extends Con{
                  this.response.error=false;
                   this.inAction=false;
                  if (onSucc) {
-                    onSucc.call(rm);
+                    onSucc.call(rm,data);
                  }
 
                });

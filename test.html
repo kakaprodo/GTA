@@ -39,10 +39,61 @@
     //     var number=getRandomInt(...[,1,10]);
     //      // document.write(number)+"<br>";
     //      console.log(...[2]);
-     var a="12,3,4"
-     var ok=a.split(',')
-     ok.a=4;
-     console.log(ok);
+
+
+    var round=function(number,AfterComa){
+       var numberArr=number.toString().split(".");
+
+           number=numberArr[0]+(numberArr[1]!=undefined?"."+numberArr[1].substring(0,AfterComa):"");
+           return parseFloat(number);
+    }
+
+
+
+    var number=[{name:"promesse",id:1},
+                 {name:"kakakprodo",id:1},
+                 {name:"doctor",id:1},
+                 {name:"elijah",id:1},
+                 {name:"enice",id:1},
+                 {name:"salem",id:1},
+                 {name:"mama",id:1},
+                 {name:"papa",id:1},
+                 {name:"vicky",id:2},
+                ];
+    var ok=[1];
+
+   var search=function(value,col=['id']){
+     number=number.filter((item) => {
+
+             var result=[];
+
+
+             for (var i = 0; i < col.length; i++) {
+                var fieldTocheck=item[col[i]];
+                if (fieldTocheck!=undefined) {
+                    var checker=value.toString().match(fieldTocheck.toString());
+                      if (checker!=null) {
+                        result[i]=checker;
+                        //console.log(item);
+                      }
+
+                 }
+
+
+             }
+             return result.length>0;
+
+
+
+     })
+      return number;
+   }
+   var col="name,id";
+      col=col.split(",");
+   var a="1 2a";
+   //    console.log(typeof a=="number");
+  // console.log(a.toString().match(2));
+   console.log(search("i 2 enice kakakprodo",col));
 
       </script>
 </html>

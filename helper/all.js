@@ -278,9 +278,9 @@ export var CONF={
     var date=new Date()
     var result;
     if (full) {
-      result=date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear()+" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
+      result=date.getDate()+"/"+(date.getMonth()+1)+"/"+date.getFullYear()+" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
     }
-    result=date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear();
+    result=date.getDate()+"/"+(date.getMonth()+1)+"/"+date.getFullYear();
 
     if (format!=undefined) {
       if (format=="my") {
@@ -292,6 +292,13 @@ export var CONF={
 
     return result;
   },
+  round(number,AfterComa){
+        var numberArr=number.toString().split(".");
+
+        number=numberArr[0]+(numberArr[1]!=undefined?"."+numberArr[1].substring(0,AfterComa):"");
+        return parseFloat(number);
+  }
+  ,
   getRandomInt(min, max) {
       min = Math.ceil(min);
       max = Math.floor(max);
@@ -362,6 +369,55 @@ export var CONF={
          return this.fieldMach(item,fieldToCheck);
      })
      return data;
+  },
+  formatMonthYear(mothYear){
+       var res=mothYear.split("/");
+       return this.monthName(res[0])+" "+res[1];
+  }
+  ,
+  monthName(number){
+      number=parseInt(number)
+      switch (number) {
+          case 1:
+            return "January";
+          break;
+          case 2:
+              return "Febrary";
+            break;
+          case 3:
+              return "March";
+            break;
+          case 4:
+              return "April";
+            break;
+          case 5:
+            return "May";
+          break;
+          case 6:
+              return "Jun";
+            break;
+          case 7:
+              return "Juilly";
+            break;
+          case 8:
+              return "August";
+            break;
+          case 9:
+              return "September";
+            break;
+          case 10:
+              return "October";
+            break;
+          case 11:
+              return "November";
+              break;
+          case 12:
+              return "December";
+            break;
+
+        default:return ;
+
+      }
   }
   ,
   getTotal(data=[],col='montant',fieldToCheck){
@@ -384,19 +440,34 @@ export var CONF={
      return total;
 
   },
-  dateSameMonth(date1,date2){
+  dateSameMonth(date1,date2,date2IsReady=false){
        date1=(date1.split(" ")[0]).split("/");
        var monthYear1=date1[1]+"/"+date1[2];
 
-       date2=(date2.split(" ")[0]).split("/");
-       var monthYear2=date2[1]+"/"+date2[2];
+
+
+       if (date2IsReady) {
+           monthYear2=date2;
+       }
+       else{
+         date2=(date2.split(" ")[0]).split("/");
+         var monthYear2=date2[1]+"/"+date2[2];
+       }
 
        if (monthYear1==monthYear2) {
          return true
        }
        return false;
 
+  },
+  forTargetMonth(data,TargetMonth){
+
+    data=data.filter((item) => {//prodo
+        return this.dateSameMonth(item.created_at,TargetMonth,true);
+    })
+    return data;
   }
+
   ,
   getForThisMonth(data){
 
@@ -424,7 +495,42 @@ export var CONF={
        j++;
      }
     return {data:data,fields:fields};
+  },
+  alias(table,key){
+     return table[key]==undefined?key:table[key];
   }
+  ,
+  searchData(data,value,col=['id']){
+
+     if (this.isEmpty(value)) {
+       return [];
+     }
+
+    data=data.filter((item) => {
+
+            var result=[];
+
+
+            for (var i = 0; i < col.length; i++) {
+               var fieldTocheck=item[col[i]];
+               if (fieldTocheck!=undefined) {
+                   value=value.toString().toLowerCase();
+                   fieldTocheck=fieldTocheck.toString().toLowerCase()
+                   var checker=fieldTocheck.match(value);
+
+                     if (checker!=null) {
+                       result[i]=checker;
+                       //console.log(item);
+                     }
+
+                }
+
+
+            }
+            return result.length>0;
+      })
+    return data;
+  },
 
 
 

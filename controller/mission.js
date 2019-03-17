@@ -9,14 +9,17 @@ var perd=new Perd(undefined,'mission_id');
 var val=new Valid();
 
 export class Mission extends Query{
-    constructor(BindView=[],creation=false){
-      super("id");//we set the primary key of the tab
+    constructor(BindView=[],keyName="id"){
+      super(keyName);//we set the primary key of the tab
       // this.db=this.super.db;
       this.model=BindView.model;
       this.content=BindView.container;//the state variable to contain the data
       this.agent=null;
       this.colQuery="chef_mission,organisation,duree,driver_id,car_id,terrain_visite,"+
                     "prix_loc,montant_maison,created_at";
+      this.colSearch="id,chef_mission,organisation";
+      this.colAlias={id:"Mission n°",chef_mission:"Chef mission",organisation:"Organisation"};
+      this.modelName="mission";
       /*col to send fro creating the table client for the first time*/
       this.colCreation="id integer primary key not null,"+
                        "chef_mission text,organisation text,"+
@@ -44,17 +47,33 @@ export class Mission extends Query{
 
 
 
-    index(onSucc,onNodata){
+    index(onSucc,onNodata,isDesc){
       super.all((missions)=>{
-        if (onSucc) {
-           onSucc.call(this,missions)
-        }
-          this.model.setState({[this.content]:missions});
+            missions=isDesc?missions.reverse():missions;
+            missions=missions.map(mission => {
+                    var total_maison=mission.montant_maison*mission.duree;
+                    var total_location=mission.prix_loc*mission.duree;
+                    mission.total_maison=total_maison;
+                    mission.total_location=total_location;
+                    return mission;
+            });
+
+            if (onSucc) {
+
+               onSucc.call(this,missions)
+            }
+
+          if (this.content!=undefined) {
+             this.model.setState({[this.content]:missions});
+          }
+
         },(missions)=>{
           if (onNodata) {
              onNodata.call(this,[])
           }
-           this.model.setState({[this.content]:missions});
+          if (this.content!=undefined) {
+             this.model.setState({[this.content]:missions});
+          }
       });
     }
 
@@ -99,6 +118,10 @@ export class Mission extends Query{
 
     show(id,onSucc,onErr){
        return super.keyValue(id).getByKey((mission)=>{
+             var total_maison=mission.montant_maison*mission.duree;
+             var total_location=mission.prix_loc*mission.duree;
+             mission.total_maison=total_maison;
+             mission.total_location=total_location;
 
             if (this.content!=undefined) {
               this.model.setState({[this.content]:mission});

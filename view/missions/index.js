@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Header,Container, Content, Form, Item, Input, Label,Text,Button,Icon,H2,H3,Body,Title,
-  Card, CardItem ,Image,Thumbnail,List,ListItem, Left, Right, Switch} from 'native-base';
+  Card, CardItem ,Image,Thumbnail,List,ListItem, Left, Right, Switch,Tabs,Tab,TabHeading} from 'native-base';
 
 import { StyleSheet, View,ScrollView,Platform,BackHandler } from 'react-native';
 import {AppLayout,AppLoading} from "../app_layout"
@@ -20,6 +20,8 @@ export default class Allmissions extends Component {
       this.state={
       loading:true,
       missions:[],
+      dataOfMonth:[],
+      total:0,
 
 
     }
@@ -51,8 +53,53 @@ export default class Allmissions extends Component {
 
   init(){
 
-    mission.index();
+    mission.index(...[(missions)=>{
+      var dataForMonth=H.getForThisMonth(missions);
+      this.setState({dataOfMonth:dataForMonth});
+    },,true]);
   }
+
+  Listentr(isForMonth=true){
+    var state=this.state;
+    var entries=isForMonth?state.dataOfMonth:state.missions;
+    var total=H.getTotal(entries,"total_maison");
+
+    return <View>
+         <List style={{marginLeft:-3}}>
+           <CardItem header>
+              <Text>Montant maison total : {total}</Text>
+           </CardItem>
+           {entries.map((item,index) => {
+
+             return <ListItem button
+                       onPress={()=>{H.goTo(this,"show_mission",{id:item.id})}}
+                       avatar key={index}>
+                       <Left>
+                         <Button transparent>
+                           <Icon style={{color:H.randomColor()}} name='navigate' />
+                         </Button>
+                       </Left>
+                       <Body  >
+                     <Text >Mission n° : {item.id}</Text>
+                     <Text note>Total montant: {item.total_maison} Um</Text>
+                     <Text note>Organisation : {item.organisation}</Text>
+
+                   </Body>
+                   <Right>
+                     <Button onPress={()=>{this.delmission(item)}} transparent>
+                         <Icon style={{fontSize: 30,color:"#b71c1c"}}  name="trash" />
+                     </Button>
+
+                   </Right>
+                 </ListItem>
+           })}
+
+
+         </List>
+      </View>
+  }
+
+
 
   delmission(chauffeur){
       mission.destroyEl(chauffeur.id,()=>{this.init()});
@@ -94,7 +141,7 @@ export default class Allmissions extends Component {
                        <Title style={H.style.title}>All missions</Title>
                      </Body>
                      <Right>
-                       <Button transparent>
+                       <Button onPress={()=>{H.goTo(this,H.path.search,{model:mission})}} transparent>
                          <Icon name='search' />
                        </Button>
 
@@ -109,37 +156,31 @@ export default class Allmissions extends Component {
                    </Header>
                    <Content padder style={H.style.content}>
 
+                     <Tabs tabBarUnderlineStyle={H.style.headers}>
+                         <Tab heading={
+                                   <TabHeading style={{backgroundColor: 'white'}}>
+                                     <Text style={H.style.green_color}>THIS MONTH</Text>
+                                   </TabHeading>
+                                }
+                              >
+                              {this.Listentr(true)}
+                         </Tab>
+
+                         <Tab heading={
+                                   <TabHeading style={{backgroundColor: 'white'}}>
+                                     <Text style={H.style.green_color}>ALL</Text>
+                                   </TabHeading>
+                                }
+                              >
+                              {this.Listentr(false)}
+                         </Tab>
+
+                     </Tabs>
 
 
 
-                     <List style={{marginLeft:-3}}>
-                        {missions.map((item,index) => {
-
-                          return <ListItem button
-                                    onPress={()=>{H.goTo(this,"show_mission",{id:item.id})}}
-                                    avatar key={index}>
-                                    <Left>
-                                      <Button transparent>
-                                        <Icon style={{color:H.randomColor()}} name='navigate' />
-                                      </Button>
-                                    </Left>
-                                    <Body  >
-
-                                      <Text>Chef : {item.chef_mission}</Text>
-                                      <Text note>Organisation : {item.organisation}</Text>
-                                      <Text note>Mission n° : {item.id}</Text>
-                                    </Body>
-                                    <Right>
-                                      <Button onPress={()=>{this.delmission(item)}} transparent>
-                                          <Icon style={{fontSize: 30,color:"#b71c1c"}}  name="trash" />
-                                      </Button>
-
-                                    </Right>
-                                  </ListItem>
-                        })}
 
 
-                      </List>
                   </Content>
 
             </AppLayout>
@@ -147,4 +188,8 @@ export default class Allmissions extends Component {
 
     );
   }
+
+
+
+
 }

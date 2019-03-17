@@ -105,7 +105,7 @@ export default class AllDrivers extends Component {
                        <Title style={H.style.title}>All drivers</Title>
                      </Body>
                      <Right>
-                       <Button transparent>
+                       <Button onPress={()=>{H.goTo(this,H.path.search,{model:driver})}} transparent>
                          <Icon name='search' />
                        </Button>
 

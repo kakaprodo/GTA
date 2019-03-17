@@ -105,7 +105,7 @@ export default class Allstations extends Component {
                        <Title style={H.style.title}>All stations</Title>
                      </Body>
                      <Right>
-                       <Button transparent>
+                       <Button onPress={()=>{H.goTo(this,H.path.search,{model:station})}} transparent>
                          <Icon name='search' />
                        </Button>
 

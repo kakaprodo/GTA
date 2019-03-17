@@ -72,7 +72,7 @@ export default class CreateDriver extends Component {
     return (
 
        <AppLayout>
-
+         <ScrollView>
            <KeyboardAvoidingView behavior='padding' style={{flex:1,padding: 10,justifyContent: 'center'}}>
                <View style={{flex:20,justifyContent: 'center'}}>
 
@@ -131,7 +131,7 @@ export default class CreateDriver extends Component {
 
                   </View>
               </KeyboardAvoidingView>
-
+            </ScrollView>
 
         </AppLayout>
 

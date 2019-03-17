@@ -45,10 +45,33 @@ import EditFourn from "./fournisseur/edit"
 import SaveFssMvm from "./fournisseur/save_fss_mvm"
 
 import AllRepport from "./repport/"
+import ShowRepport from "./repport/show"
+
+import AllCarb from "./carburant/"
+import AllPerd from "./perdieme/"
+import AllEntr from "./entretien/"
+
+import Search from "./research"
 
 
 var AllScreen=createStackNavigator({
+    'dashboard':{screen:Dashboard },
+     'login':{screen:Login },
+     'regit':{screen:Regit },
+
+
+
+
+    'search':{screen:Search},
+
+
+    'carburants':{screen:AllCarb},
+    'entretiens':{screen:AllEntr},
+    'perdiemes':{screen:AllPerd},
+
+
    'repports':{screen:AllRepport},
+   'show_repport':{screen:ShowRepport},
 
   'fournisseurs':{screen:AllFourn},
   'create_fournisseur':{screen:CreateFourn  },
@@ -100,9 +123,7 @@ var AllScreen=createStackNavigator({
 
 
 
-  'login':{screen:Login },
-  'dashboard':{screen:Dashboard },
-  'regit':{screen:Regit },
+
 
 
 });

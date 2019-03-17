@@ -97,7 +97,7 @@ export default class Allcars extends Component {
                        <Title style={H.style.title}>All cars</Title>
                      </Body>
                      <Right>
-                       <Button transparent>
+                       <Button onPress={()=>{H.goTo(this,H.path.search,{model:car})}} transparent>
                          <Icon name='search' />
                        </Button>
 

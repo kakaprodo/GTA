@@ -12,6 +12,9 @@ export class Mashindano extends Query{
       this.content=BindView.container;//the state variable to contain the data
       this.agent=null;
       this.colQuery="beneficiaire,organisation,montant,created_at";
+      this.colSearch="beneficiaire,organisation,montant";
+      this.colAlias={beneficiaire:"Beneficiaire",organisation:"Org",montant:"Montant"};
+      this.modelName="mashindano";
       /*col to send fro creating the table client for the first time*/
       this.colCreation="id integer primary key not null,beneficiaire text,organisation text,"+
                        "montant text,created_at text";
@@ -39,12 +42,16 @@ export class Mashindano extends Query{
              onSucc.call(this,ios)
           }
 
-          this.model.setState({[this.content]:ios});
+          if (this.content!=undefined) {
+             this.model.setState({[this.content]:ios});
+          }
         },(ios)=>{
           if (onNodata) {
              onNodata.call(this,[])
           }
-           this.model.setState({[this.content]:ios});
+          if (this.content!=undefined) {
+             this.model.setState({[this.content]:ios});
+          }
       });
     }
 

@@ -1,6 +1,7 @@
 /*registration of all path of the app*/
 
 export var pathRouter={
+    search:"search",
     login:"login",
     regit:"regit",
     dashboard:"dashboard",
@@ -39,7 +40,12 @@ export var pathRouter={
     edit_fournisseur:'edit_fournisseur',
     save_fss_mvm:"save_fss_mvm",
 
+    entretiens:"entretiens",
     save_entretien:"save_entretien",
+
+    carburants:"carburants",
+    perdiemes:"perdiemes",
+
 
     repports:"repports",
     show_repport:"show_repport",

@@ -105,7 +105,7 @@ export default class Allfourns extends Component {
                        <Title onPress={()=>{H.openDrawer()}} style={H.style.title}>All supplies</Title>
                      </Body>
                      <Right>
-                       <Button transparent>
+                       <Button onPress={()=>{H.goTo(this,H.path.search,{model:fourn})}} transparent>
                          <Icon name='search' />
                        </Button>
 

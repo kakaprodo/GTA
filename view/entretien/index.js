@@ -5,27 +5,28 @@ import { Header,Container, Content, Form, Item, Input,Subtitle, Label,Text,Butto
 import { StyleSheet, View,ScrollView,Platform,BackHandler } from 'react-native';
 import {AppLayout,AppLoading} from "../app_layout"
 
-import {Mashindano} from "../../controller/machindano"
+import {Entretien} from "../../controller/entretien"
 
-var mash;
+var entr;
 
 let listener=null;
 
 
 
 
-export default class Allmashindanos extends Component {
+export default class Allentr extends Component {
   constructor(props){
       super(props);
       this.state={
       loading:true,
       refreshing:true,
       dataOfMonth:[],
-      allMash:[],
+      allentr:[],
+      dataOfMonth:[],
       total:0
     }
     H.setModel("current",this);
-    mash=new Mashindano({model:this,container:"allMash"});
+    entr=new Entretien({model:this,container:"allentr"});
 
   }
 
@@ -54,37 +55,37 @@ export default class Allmashindanos extends Component {
 
   init(){
 
-    mash.index(...[(mashs)=>{
-          var dataForMonth=H.getForThisMonth(mashs);
+    entr.index(...[(entrs)=>{
+          var dataForMonth=H.getForThisMonth(entrs);
           this.setState({dataOfMonth:dataForMonth});
     },,true]);
   }
 
-  delmashindano(mashind){
-      mash.destroyEl(mashind.id,()=>{this.init()});
+  delentr(entrind){
+      entr.destroyEl(entrind.id,()=>{this.init()});
   }
 
-  ListMash(isForMonth=true){
+  Listentr(isForMonth=true){
       var state=this.state;
-      var mashindanos=isForMonth?state.dataOfMonth:state.allMash;
-      var total=H.getTotal(mashindanos);
+      var entrindanos=isForMonth?state.dataOfMonth:state.allentr;
+      var total=H.getTotal(entrindanos,"montant");
       return (
       <View>
         <Card>
            <CardItem header style={{height: 50}}>
-              <Text>Total mashindano: {total} Um</Text>
+              <Text>Total entretien: {total} Um</Text>
            </CardItem>
          </Card>
 
 
         <List style={{marginLeft:-3}}>
-           {mashindanos.map((item,index) => {
-               var opNumb=mashindanos.length-(index);
+           {entrindanos.map((item,index) => {
+               var opNumb=entrindanos.length-(index);
 
               return <Card key={index}>
                              <CardItem header style={{backgroundColor: '#ccc',height: 50}}>
-                               <Text>Operation {opNumb}</Text>
-                               <Button onPress={()=>{this.delmashindano(item)}} style={{position: 'absolute',right: 5,top:10}} danger small>
+                               <Text>N° {opNumb}</Text>
+                               <Button onPress={()=>{this.delentr(item)}} style={{position: 'absolute',right: 5,top:10}} danger small>
                                  <Icon name="trash" />
                                </Button>
                              </CardItem>
@@ -92,9 +93,11 @@ export default class Allmashindanos extends Component {
                               <View style={{padding:10,marginBottom:10}} >
 
 
-                               <Text style={{fontSize: 13,marginBottom:5}}>Bénéficiaire :{item.beneficiaire}</Text>
-                               <Text style={{fontSize: 13,marginBottom:5}}>Montant : {item.montant} UM</Text>
-                               <Text style={{fontSize: 13,marginBottom:5}}>Organisation : {item.organisation}</Text>
+                               <Text style={{fontSize: 13,marginBottom:5}}>Motif :{item.motif}</Text>
+                               <Text style={{fontSize: 13,marginBottom:5}}>Montant :{item.montant}</Text>
+
+
+                                <Text onPress={()=>{H.goTo(this,H.path.show_car,{id:item.car_id})}} style={{fontSize: 13,paddingTop:10,paddingBottom:10}}>Sur vehicule n°: {H.round(item.car_id)} </Text>
                                <Text style={{fontSize: 13,marginBottom:5}}>Date : {item.created_at}</Text>
                              </View>
                       </Card>
@@ -113,11 +116,6 @@ export default class Allmashindanos extends Component {
   render() {
 
     var state=this.state;
-     var mashindanos=state.mashindanos;
-
-
-
-
 
     if (state.loading ) {
       return <AppLoading />
@@ -141,17 +139,14 @@ export default class Allmashindanos extends Component {
                        </Button>
                      </Left>
                      <Body>
-                       <Title style={H.style.title}>All mashindano</Title>
+                       <Title style={H.style.title}>Entretiens</Title>
                      </Body>
                      <Right>
-                       <Button onPress={()=>{H.goTo(this,H.path.search,{model:mash})}} transparent>
-                         <Icon name='search' />
+                       <Button onPress={()=>{this.init()}} transparent>
+                         <Icon name='refresh' />
                        </Button>
 
-                       <Button onPress={()=>{H.goTo(this,H.path.create_mashindano,{init:()=>{this.init()}})}} transparent>
-                         <Text>New</Text>
 
-                       </Button>
                      </Right>
                    </Header>
                    <Content  padder style={H.style.content}>
@@ -163,7 +158,7 @@ export default class Allmashindanos extends Component {
                                    </TabHeading>
                                 }
                               >
-                              {this.ListMash(true)}
+                              {this.Listentr(true)}
                          </Tab>
 
                          <Tab heading={
@@ -172,7 +167,7 @@ export default class Allmashindanos extends Component {
                                    </TabHeading>
                                 }
                               >
-                              {this.ListMash(false)}
+                              {this.Listentr(false)}
                          </Tab>
 
                      </Tabs>

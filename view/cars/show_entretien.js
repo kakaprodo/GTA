@@ -90,7 +90,7 @@ export default class ShowEntr extends Component {
                                        </Body>
                                        {state.isForMonth?
                                          <Right>
-                                           <Button onPress={()=>{H.goTo(this,H.path.save_entretien,{car:state.car,init:()=>{this.init()}})}} success small rounded>
+                                           <Button style={{fontSize: 10}} onPress={()=>{H.goTo(this,H.path.save_entretien,{car:state.car,init:()=>{this.init()}})}} success small >
                                               <Text>New</Text>
                                            </Button>
                                          </Right>:

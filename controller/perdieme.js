@@ -51,15 +51,19 @@ export class Perdieme extends Query{
 
     index(onSucc,onNodata){
       super.all((Perdiemes)=>{
-        if (onSucc) {
-           onSucc.call(this,Perdiemes)
-        }
-          this.model.setState({[this.content]:Perdiemes});
+            if (onSucc) {
+               onSucc.call(this,Perdiemes)
+            }
+            if (this.content!=undefined) {
+               this.model.setState({[this.content]:Perdiemes});
+            }
         },(Perdiemes)=>{
           if (onNodata) {
              onNodata.call(this,[])
           }
-           this.model.setState({[this.content]:Perdiemes});
+          if (this.content!=undefined) {
+             this.model.setState({[this.content]:Perdiemes});
+          }
       });
     }
 

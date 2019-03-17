@@ -13,6 +13,9 @@ export class Station extends Query{
       this.content=BindView.container;//the state variable to contain the data
       this.agent=null;
       this.colQuery="station_name,created_at";
+      this.colSearch="station_name";
+      this.colAlias={station_name:'Station name'};
+      this.modelName="station";
       /*col to send fro creating the table client for the first time*/
       this.colCreation="id integer primary key not null,station_name,created_at text";
 
@@ -39,7 +42,9 @@ export class Station extends Query{
 
                mvm.with(ios,(finalDataJoined)=>{
                  //console.log(finalDataJoined);
-                 this.model.setState({[this.content]:finalDataJoined});
+                 if (this.content!=undefined) {
+                    this.model.setState({[this.content]:finalDataJoined});
+                 }
                  if (onSucc) {
                     onSucc.call(this,finalDataJoined)
                  }
@@ -50,7 +55,9 @@ export class Station extends Query{
               if (onNodata) {
                  onNodata.call(this,[])
               }
+              if (this.content!=undefined) {
                this.model.setState({[this.content]:ios});
+             }
           });
         }
 

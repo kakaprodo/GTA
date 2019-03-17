@@ -22,7 +22,7 @@ export default class Allrepports extends Component {
 
       refreshing:true,
 
-
+      total:0,
       repports:[],
     }
     H.setModel("current",this);
@@ -50,12 +50,15 @@ export default class Allrepports extends Component {
      H.initIcon(this);
      this.init();
 
+
    }
 
   init(){
     repport.repportHandler("save",(data)=>{
-          console.log(data);
-          repport.index();
+          repport.index(...[(allRepport)=>{
+                 //console.log(allRepport);
+                this.setState({total:H.getTotal(allRepport,"resultat_net")})
+          },,true]);
     });
 
   }
@@ -100,7 +103,7 @@ export default class Allrepports extends Component {
                        <Title style={H.style.title}>All repports</Title>
                      </Body>
                      <Right>
-                       <Button transparent>
+                       <Button onPress={()=>{H.goTo(this,H.path.search,{model:repport})}} transparent>
                          <Icon name='search' />
                        </Button>
                        <Button onPress={()=>{this.init()}} transparent>
@@ -116,17 +119,20 @@ export default class Allrepports extends Component {
 
 
                      <List style={{marginLeft:-3}}>
+                         <CardItem header>
+                            <Text>Total resultat net : {state.total} Um</Text>
+                         </CardItem>
                         {repports.map((item,index) => {
                           let NumImg=H.getRandomInt(1,6);
                           return <ListItem button
-                                    onPress={()=>{H.goTo(this,"show_repport",{id:item.id})}}
+                                    onPress={()=>{H.goTo(this,H.path.show_repport,{repport:item})}}
                                     avatar key={index}>
                                     <Left>
                                        <Icon style={{color:H.randomColor()}} name="logo-wordpress" />
                                     </Left>
                                     <Body  >
-                                      <Text>Repport of :{item.mois_annee} </Text>
-                                      <Text note>Resultat net : {item.rn}</Text>
+                                      <Text>Repport of :{H.formatMonthYear(item.mois_annee)} </Text>
+                                      <Text note>Resultat net :  <Text style={H.style.green_color} note>{item.resultat_net} Um</Text></Text>
 
                                     </Body>
 

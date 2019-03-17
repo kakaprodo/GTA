@@ -25,11 +25,16 @@ export var Images={
 
       },
       back:{
-          app_layout:require('./back/whatsap.jpeg')
+          // app_layout:require('./back/whatsap.jpeg')
+          app_layout:require('./an_back.jpeg')
+
       },
       icon:{
         Roboto: require("../../Fonts/Roboto.ttf"),
         Roboto_medium: require("../../Fonts/Roboto_medium.ttf")
+      },
+      search:{
+          ok:require("./search.png"),
       }
 
 }

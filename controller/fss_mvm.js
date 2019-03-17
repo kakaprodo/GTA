@@ -94,12 +94,16 @@ export class FournMvm extends Query{
                  onSucc.call(this,ios)
               }
 
-              this.model.setState({[this.content]:ios});
+              if (this.content!=undefined) {
+                 this.model.setState({[this.content]:ios});
+              }
             },(ios)=>{
               if (onNodata) {
                  onNodata.call(this,[])
               }
-               this.model.setState({[this.content]:ios});
+              if (this.content!=undefined) {
+                 this.model.setState({[this.content]:ios});
+              }
           });
         }
 

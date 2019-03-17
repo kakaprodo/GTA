@@ -86,7 +86,7 @@ export default class Login extends Component {
                     <Item style={H.style.inputField}  floatingLabel>
                       <Label style={H.style.label}>Email :</Label>
                       <Input
-
+                        value={state.email}
                         keyboardType="email-address"
                         onChangeText={(email) => H.fieldChange(this,email,"email","emailValid")}
                        />
@@ -100,7 +100,7 @@ export default class Login extends Component {
                   <Item style={H.style.inputField} floatingLabel>
                     <Label style={H.style.label}>Password :</Label>
                     <Input
-
+                        value={state.password}
                       secureTextEntry={true}
                       onChangeText={(password) =>  H.fieldChange(this,password,"password","passValid")}
                      />
