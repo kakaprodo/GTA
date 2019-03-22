@@ -51,13 +51,13 @@ export default class SideBar extends Component {
                 justifyContent: 'center',
                 alignItems: 'center',
                 backgroundColor: H.globalStyle.transp_color5}}>
-                 <Thumbnail   source={require('../assets/img/2.jpeg')} />
+                 <Thumbnail   source={H.img.users.user1} />
                  <Title style={H.style.app_color}>{user.names}</Title>
                  <Subtitle style={H.style.green_color}>{user.email}</Subtitle>
               </View>
 
               <Thumbnail  square style={{height: 200,width:"100%",flex:1,padding:0}}
-                source={require('../assets/img/back/covor2.jpeg')} />
+                source={H.img.back.coverSideBar} />
             </CardItem>
 
            </Card>

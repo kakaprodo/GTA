@@ -26,7 +26,8 @@ export var Images={
       },
       back:{
           // app_layout:require('./back/whatsap.jpeg')
-          app_layout:require('./an_back.jpeg')
+          app_layout:require('./an_back.jpeg'),
+          coverSideBar:require('./back/covor2.jpeg')
 
       },
       icon:{
@@ -35,6 +36,9 @@ export var Images={
       },
       search:{
           ok:require("./search.png"),
+      },
+      other:{
+         cloud:require("./cloud.jpeg"),
       }
 
 }

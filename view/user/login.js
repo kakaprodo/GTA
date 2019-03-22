@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Content, Form, Item, Input, Label,Text,Button,Icon,H2, Picker ,Textarea} from 'native-base';
 
-import { StyleSheet, View,KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, View,KeyboardAvoidingView ,BackHandler} from 'react-native';
 import {AppLayout,AppLoading} from "../app_layout"
 import {User} from "../../controller/user"
 
@@ -42,13 +42,21 @@ export default class Login extends Component {
   }
 
   componentDidMount(){
-
+     // BackHandler.addEventListener('hardwareBackPress',()=>{
+     //      var init=H.getParam(this.props,"init");
+     //      if (init!=undefined) {
+     //        init();
+     //      }
+     //
+     //        console.log('ok');
+     // });
   }
 
   login(){
 
     user.login((user)=>{
        H.resetModel(['2','3'],this);
+       H.isLoggedIn=true;
        H.goTo(this,H.path.dashboard,{user:user});
        H.Toast("successfully")
     },(msg="error occured")=>{

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "skill1",
-    "slug": "skill1",
+    "name": "Gta fk management",
+    "slug": "gta-fk-management",
     "privacy": "public",
     "sdkVersion": "31.0.0",
     "platforms": [
@@ -24,6 +24,7 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "description": "An application to handle all operation of the company gta fk management"
   }
 }

@@ -52,12 +52,17 @@ import AllPerd from "./perdieme/"
 import AllEntr from "./entretien/"
 
 import Search from "./research"
+import Backup from "./backup"
 
 
 var AllScreen=createStackNavigator({
+
     'dashboard':{screen:Dashboard },
+    'backup':{screen:Backup},
+    'regit':{screen:Regit },
+
      'login':{screen:Login },
-     'regit':{screen:Regit },
+
 
 
 

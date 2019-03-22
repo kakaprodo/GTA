@@ -51,6 +51,10 @@ export var CONF={
     defaultRedirection:"/login",
     allInputRef:[],
     iconLoaded:false,
+    logOut(){
+        this.isLoggedIn=false;
+        this.goTo(this.currentM(),this.path.login);
+    },
     randomColor(){return rColor()},
     currentM(){
       return Models.current;
@@ -271,8 +275,14 @@ export var CONF={
     this.drawer._root.close()
   },
   openDrawer(){
-    Models.sidebar.setState({user:this.User});
-    this.drawer._root.open()
+    if (!this.isLoggedIn) {
+        this.logOut();
+    }
+    else{
+      Models.sidebar.setState({user:this.User});
+      this.drawer._root.open()
+    }
+
   },
   now(full=false,format){
     var date=new Date()

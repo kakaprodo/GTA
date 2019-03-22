@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header,Container, Content, Form, Item, Input, Label,Text,Button,Icon,H2,H3,Body,Title, Picker ,Textarea,Left,Right} from 'native-base';
+import { Header,Container, Content, Form,ActionSheet, Item, Input, Label,Text,Button,Icon,H2,H3,Body,Title, Picker ,Textarea,Left,Right} from 'native-base';
 
 import { StyleSheet, View,ScrollView,KeyboardAvoidingView } from 'react-native';
 import {AppLayout,AppLoading} from "./app_layout"
@@ -36,11 +36,24 @@ export default class Dashboard extends Component {
      let header=null;
      return {header};
   }
+  init(){
+    H.isLoggedIn=true;
+    if (!H.isLoggedIn) {
+        H.logOut();
+    }
+    user.show();
+  }
 
   componentWillMount() {
-     H.initIcon(this);
-     user.show();
+
+    this.init();
+
+    H.initIcon(this);
+
+
   }
+
+
 
 
 
@@ -53,6 +66,7 @@ export default class Dashboard extends Component {
       return <AppLoading />
     }
 
+   var optionBtn=["Change my account","Backup","Logout"];
 
     return (
 
@@ -71,9 +85,47 @@ export default class Dashboard extends Component {
                        <Title style={H.style.title}>Welcome</Title>
                      </Body>
                      <Right>
-                       <Button transparent>
-                         <Icon name='more' />
-                       </Button>
+
+                       <Button
+                           onPress={() =>{
+                             if (!H.isLoggedIn) {
+                                 H.logOut();
+                             }
+                             else{
+                               ActionSheet.show(
+                                 {
+                                   options: optionBtn,
+                                   cancelButtonIndex: 3,
+                                   destructiveButtonIndex: 2,
+                                   title: "General setting"
+                                 },
+                                 buttonIndex => {
+
+                                    switch (buttonIndex) {
+                                      case 0:
+                                            H.goTo(this,H.path.regit)
+                                        break;
+                                      case 1:
+                                          H.goTo(this,H.path.backup)
+
+                                        break;
+                                    case 2:
+
+                                        H.logOut();
+
+                                      break;
+                                     default:return;
+
+                                    }
+                                 }
+                               )
+
+                             }
+                           }}
+
+                           transparent>
+                             <Icon name='more' />
+                         </Button>
                      </Right>
                    </Header>
                    <Content padder style={H.style.content}>

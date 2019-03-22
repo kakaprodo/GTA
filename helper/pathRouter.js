@@ -50,6 +50,8 @@ export var pathRouter={
     repports:"repports",
     show_repport:"show_repport",
 
+    backup:"backup",
+
 
 
 

@@ -72,8 +72,9 @@ export default class Regit extends Component {
 
        <AppLayout>
 
-           <KeyboardAvoidingView behavior='padding' style={{flex:1,padding: 10,justifyContent: 'center'}}>
-                 <View>
+         <ScrollView>
+           <KeyboardAvoidingView behavior='padding' style={{padding: 10}} >
+                 <View >
                    <H2 style={[H.style.center,H.style.app_color]}>{H.appLongName}</H2>
                   <Text style={[H.style.center,H.style.white_color,{fontSize: 13}]}>Register your identity then access to the system with freedom</Text>
                    <Form >
@@ -114,7 +115,7 @@ export default class Regit extends Component {
                         <Item style={H.style.inputField} floatingLabel>
                           <Label style={H.style.label}>Password :</Label>
                           <Input
-
+                            autoComplete={false}
                             onChangeText={(password) =>  H.fieldChange(this,password,"password","passValid")}
                            />
 
@@ -130,10 +131,12 @@ export default class Regit extends Component {
                        </Button>
 
                     </Form>
+                    <View style={{height: 300}}></View>
 
                   </View>
-              </KeyboardAvoidingView>
 
+              </KeyboardAvoidingView>
+            </ScrollView>
 
         </AppLayout>
 

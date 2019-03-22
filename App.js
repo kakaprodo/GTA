@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+
 import AllScreen from "./view/container";
 import {AppLoading} from "./view/app_layout"
 import {CONF} from "./helper/all"
@@ -22,9 +23,12 @@ export default class App extends React.Component {
     };
   }
 
+
+
   componentWillMount(){
      H.initIcon(this,true)
   }
+
 
 
 
@@ -35,6 +39,7 @@ export default class App extends React.Component {
        }
 
        return <AllScreen/>
+
 
 
 
