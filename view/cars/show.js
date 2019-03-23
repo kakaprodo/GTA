@@ -55,7 +55,9 @@ export default class Showcar extends Component {
 
   init(){
     var id=H.getParam(this.props,"id")
-    car.show(id,undefined,()=>{H.goBack(this.props)});
+    car.show(id,()=>{
+        car.resetteCar(id);
+    },()=>{H.goBack(this.props)});
   }
 
  componentWillReceiveProps(nextProps){

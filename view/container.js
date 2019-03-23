@@ -24,6 +24,7 @@ import ShowMission from "./missions/show"
 import EditMission from "./missions/edit"
 import SaveCarb from "./missions/save_carburant"
 import SavePerd from "./missions/save_perdieme"
+import SaveMissionCar from "./missions/save_mission_car"
 
 import AllMach from "./machindano/"
 import CreateMash from "./machindano/create"
@@ -110,6 +111,7 @@ var AllScreen=createStackNavigator({
   'edit_mission':{screen:EditMission},
   'save_carb':{screen:SaveCarb},
   'save_perd':{screen:SavePerd},
+  'save_mission_car':{screen:SaveMissionCar},
 
 
 

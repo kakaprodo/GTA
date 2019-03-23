@@ -25,6 +25,10 @@ export class Query extends Con{
 
    }
 
+   db(){
+     return this.db;
+   }
+
    init(){
      this.constructor();
    }
@@ -378,6 +382,9 @@ export class Query extends Con{
 
 
 
+
+
+
    join(data,resp,table){
        var finalData=[];
        var dataLength=data.length;
@@ -506,7 +513,7 @@ export class Query extends Con{
       var rm=this;
       getFields.values.push(id);//we insert the id of the concerned repport
       data.id=id;
-  
+
       this.db.transaction(
                tx => {
                  tx.executeSql(`update ${table} set ${getFields.colUpdate} where ${this.keyName}=?`, getFields.values);

@@ -7,6 +7,7 @@ import {AppLayout,AppLoading} from "../app_layout"
 
 import {Mission} from "../../controller/mission"
 
+import ShowMissionCar from "./show_mission_car"
 import ShowCarb from "./show_carb"
 import ShowPerd from "./show_perd"
 
@@ -25,7 +26,7 @@ export default class Showmission extends Component {
       id:null,
       refreshing:true,
 
-
+      modelMission:[],
       mission:null,
     }
     H.setModel("current",this);
@@ -59,6 +60,7 @@ export default class Showmission extends Component {
 
   init(){
     var id=H.getParam(this.props,"id")
+    this.setState({modelMission:mission})
     mission.show(id,undefined,()=>{H.goBack(this.props)});
   }
 
@@ -71,6 +73,8 @@ export default class Showmission extends Component {
   render() {
 
     var state=this.state;
+    var modelMission=state.modelMission;
+    
      var mission=state.mission;
 
 
@@ -157,45 +161,7 @@ export default class Showmission extends Component {
                                       <Right></Right>
                                  </ListItem>
 
-
-
-                                 <ListItem onPress={()=>{H.goTo(this,H.path.show_driver,{id:mission.driver_id})}} icon>
-                                       <Left>
-                                         <Button style={H.style.headers}>
-                                           <Icon active name="aperture" />
-                                         </Button>
-                                       </Left>
-                                       <Body>
-                                         <Text>Driver code :{mission.driver_id}</Text>
-                                         <Text note>Click to see about driver</Text>
-
-                                         </Body>
-                                       <Right>
-                                           <Icon style={H.style.green_color} name="arrow-forward" />
-
-                                       </Right>
-                                  </ListItem>
-
-
-
-                                  <ListItem onPress={()=>{H.goTo(this,H.path.show_car,{id:mission.car_id})}} icon>
-                                        <Left>
-                                          <Button style={H.style.headers}>
-                                            <Icon active name="aperture" />
-                                          </Button>
-                                        </Left>
-                                        <Body>
-                                          <Text >Code of car :{mission.driver_id}</Text>
-                                          <Text note>Click to see about car</Text>
-
-                                          </Body>
-                                          <Right>
-                                              <Icon style={H.style.green_color} name="arrow-forward" />
-
-                                          </Right>
-                                   </ListItem>
-
-                                 <ListItem icon>
+                                <ListItem icon>
                                        <Left>
                                          <Button style={H.style.headers}>
                                            <Icon active name="analytics" />
@@ -211,51 +177,11 @@ export default class Showmission extends Component {
                                   </ListItem>
 
 
-                                  <ListItem icon>
-                                        <Left>
-                                          <Button style={H.style.headers}>
-                                            <Icon active name="logo-euro" />
-                                          </Button>
-                                        </Left>
-                                        <Body>
 
-                                          <Text >{mission.prix_loc} UM</Text>
-                                          <Text note>Prix de location</Text>
 
-                                        </Body>
-                                        <Right></Right>
-                                   </ListItem>
-
-                                   <ListItem icon>
-                                         <Left>
-                                           <Button style={H.style.headers}>
-                                             <Icon active name="logo-euro" />
-                                           </Button>
-                                         </Left>
-                                         <Body>
-
-                                           <Text >{mission.montant_maison} UM</Text>
-                                           <Text note>Montant maison</Text>
-
-                                         </Body>
-                                         <Right></Right>
-                                    </ListItem>
-
-                                    <ListItem icon>
-                                          <Left>
-                                            <Button style={H.style.headers}>
-                                              <Icon active name="calendar" />
-                                            </Button>
-                                          </Left>
-                                          <Body>
-
-                                            <Text >{mission.created_at}</Text>
-                                            <Text note>Created on </Text>
-
-                                          </Body>
-                                          <Right></Right>
-                                     </ListItem>
                             </List>
+
+                            <ShowMissionCar {...this.props} modelMission={modelMission} mission={state.mission} />
 
 
 

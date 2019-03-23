@@ -21,6 +21,7 @@ export var pathRouter={
     create_mission:'create_mission',
     edit_mission:'edit_mission',
     show_mission:"show_mission",
+    save_mission_car:"save_mission_car",
 
     save_perd:"save_perd",
     save_carb:"save_carb",

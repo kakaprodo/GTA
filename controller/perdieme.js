@@ -11,9 +11,9 @@ export class Perdieme extends Query{
       this.model=BindView.model;
       this.content=BindView.container;//the state variable to contain the data
       this.agent=null;
-      this.colQuery="montant,mission_id,created_at";
+      this.colQuery="montant,driver_id,created_at";
       /*col to send fro creating the table client for the first time*/
-      this.colCreation="id integer primary key not null, montant text,mission_id text,created_at text";
+      this.colCreation="id integer primary key not null, montant text,driver_id text,created_at text";
 
       this.conf();
 

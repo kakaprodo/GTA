@@ -50,6 +50,29 @@ export class Cars extends Query{
       });
     }
 
+    resetteCar(carId,onSucc,onErr){
+      var md=this;
+      super.db().transaction(tx=>{
+        tx.executeSql(`select mission.*,mission_car.* from mission_car inner join
+                       mission on mission.id=mission_car.mission_id where car_id=?
+                      `, [carId], (_, { rows:{_array} }) =>{
+          var item=_array;
+
+            console.log(item);
+            if (item.length!=0) {
+              onSucc.call(md,item);
+            }
+            else{
+              onSucc.call(md,[]);
+            }
+
+         }
+        );
+      });
+
+
+    }
+
 
     create(onSucc,onErr){
 

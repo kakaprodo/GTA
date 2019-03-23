@@ -132,90 +132,34 @@ export default class Createmission extends Component {
                     <View>
 
                          <Item style={H.style.inputField} floatingLabel>
-                          <Label style={H.style.label}>Duree de la mission :</Label>
+                          <Label style={H.style.label}>Terrain visité :</Label>
                           <Input
-                            keyboardType="numeric"
-                            value={state.duree}
-                            onChangeText={(name)=>{H.fieldChange(this,name,"duree","dureeValid")}}
+                            value={state.terrain_visite}
+                            onChangeText={(name)=>{H.fieldChange(this,name,"terrain_visite","tvValid")}}
                           />
 
                         </Item>
-                        {H.invalid(this,"dureeValid")?<Text style={H.style.error_color}>{this.state.dureeValid}</Text>:<Text></Text>}
+                        {H.invalid(this,"tvValid")?<Text style={H.style.error_color}>{this.state.tvValid}</Text>:<Text></Text>}
                    </View>
 
                    <View>
 
                         <Item style={H.style.inputField} floatingLabel>
-                         <Label style={H.style.label}>Code du chauffeur de la mission :</Label>
+                         <Label style={H.style.label}>Duree de la mission :</Label>
                          <Input
-                          keyboardType="numeric"
-                           value={state.driver_id}
-                           onChangeText={(name)=>{H.fieldChange(this,name,"driver_id","dValid")}}
+                           keyboardType="numeric"
+                           value={state.duree}
+                           onChangeText={(name)=>{H.fieldChange(this,name,"duree","dureeValid")}}
                          />
 
                        </Item>
-                       {H.invalid(this,"dValid")?<Text style={H.style.error_color}>{this.state.dValid}</Text>:<Text></Text>}
+                       {H.invalid(this,"dureeValid")?<Text style={H.style.error_color}>{this.state.dureeValid}</Text>:<Text></Text>}
                   </View>
 
-                  <View>
-
-                       <Item style={H.style.inputField} floatingLabel>
-                        <Label style={H.style.label}>Code du véhicule de la mission :</Label>
-                        <Input
-                          keyboardType="numeric"
-                          value={state.car_id}
-                          onChangeText={(name)=>{H.fieldChange(this,name,"car_id","cValid")}}
-                        />
-
-                      </Item>
-                      {H.invalid(this,"cValid")?<Text style={H.style.error_color}>{this.state.cValid}</Text>:<Text></Text>}
-                 </View>
-
-                 <View>
-
-                      <Item style={H.style.inputField} floatingLabel>
-                       <Label style={H.style.label}>Terrain visité :</Label>
-                       <Input
-                         value={state.terrain_visite}
-                         onChangeText={(name)=>{H.fieldChange(this,name,"terrain_visite","tvValid")}}
-                       />
-
-                     </Item>
-                     {H.invalid(this,"plValid")?<Text style={H.style.error_color}>{this.state.plValid}</Text>:<Text></Text>}
-                </View>
-
-                 <View>
-
-                      <Item style={H.style.inputField} floatingLabel>
-                       <Label style={H.style.label}>Prix de location :</Label>
-                       <Input
-                         keyboardType="numeric"
-                         value={state.prix_loc}
-                         onChangeText={(name)=>{H.fieldChange(this,name,"prix_loc","plValid")}}
-                       />
-
-                     </Item>
-                     {H.invalid(this,"plValid")?<Text style={H.style.error_color}>{this.state.plValid}</Text>:<Text></Text>}
-                </View>
-
-                <View>
-
-                     <Item style={H.style.inputField} floatingLabel>
-                      <Label style={H.style.label}>Montant maison :</Label>
-                      <Input
-                        keyboardType="numeric"
-                        value={state.montant_maison}
-                        onChangeText={(name)=>{H.fieldChange(this,name,"montant_maison","mmValid")}}
-                      />
-
-                    </Item>
-                    {H.invalid(this,"mmValid")?<Text style={H.style.error_color}>{this.state.mmValid}</Text>:<Text></Text>}
-               </View>
 
 
 
-
-                        <Button onPress={()=>{this.editmission()}} success small full rounded iconRight>
+                   <Button onPress={()=>{this.editmission()}} success small full rounded iconRight>
                           <Text style={H.style.textBtn}>Save change</Text>
                           <Icon style={{fontSize: 17,...H.style.textBtn}} name="save" />
                        </Button>
