@@ -90,7 +90,7 @@ export class Repport extends Query{
          var id=currentRepport.id;
 
          //we check if the repport is for this month in order to update it other wise,it will not be updateDirec
-          if (currentRepport.mois_annee==H.now(...[,'my'])) {
+          if (currentRepport.mois_annee!=H.now(...[,'my'])) {//it will not be updated
               resp.call(this,currentRepport);
               //H.Toast("Month expired");
               return;

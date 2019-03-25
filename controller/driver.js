@@ -3,7 +3,9 @@
 import {Query} from "./query"
 import {Validation as Valid} from "../helper/validation"
 import {IO} from "./driver_io"
+import {Perdieme} from "./perdieme"
 var io=new IO(undefined,'driver_id');
+var perd=new Perdieme();
 var val=new Valid();
 
 export class Driver extends Query{
@@ -35,7 +37,19 @@ export class Driver extends Query{
     }
 
 
-
+    driver_perdieme(id,onSucc){
+        perd.driver(id,(perdiemes)=>{
+            perdiemes=H.getForThisMonth(perdiemes);
+            var montant=H.getTotal(perdiemes,'montant');
+            if (onSucc) {
+               onSucc.call(this,{montant:montant})
+            }
+        },()=>{
+            if (onSucc) {
+               onSucc.call(this,{montant:0})
+            }
+        });
+    }
 
     index(onSucc,onNodata){
       super.all((ios)=>{

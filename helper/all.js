@@ -51,10 +51,18 @@ export var CONF={
     defaultRedirection:"/login",
     allInputRef:[],
     iconLoaded:false,
+    initModel:null,
     logOut(){
         this.isLoggedIn=false;
         this.goTo(this.currentM(),this.path.login);
     },
+    initModel(){
+        if (this.initModel!=undefined){
+            return this.initModel();
+        }
+       return ;
+    }
+    ,
     randomColor(){return rColor()},
     currentM(){
       return Models.current;

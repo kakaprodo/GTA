@@ -21,7 +21,9 @@ export default class SavePerd extends Component {
         loading:true,
         montant:"",
         mValid:"",
+        diValid:"",
         mission_id:"",
+        driver_id:"",
         driver:[]
 
 
@@ -34,7 +36,7 @@ export default class SavePerd extends Component {
 
   static navigationOptions=({navigation})=>{
 
-     let headerTitle="Perdieme";
+     let headerTitle="Save perdieme";
      let headerStyle=H.style.headers;
      let headerTitleStyle=H.style.title;
      return {headerTitle,headerStyle,headerTitleStyle};
@@ -55,20 +57,19 @@ export default class SavePerd extends Component {
   init(){
 
            var mission=H.getParam(this.props,"mission");
-           var driver_id=mission.driver_id;
-
+           var driver_id=H.getParam(this.props,"driver_id");
+           this.setState({mission:mission,mission_id:mission.id,driver_id:driver_id});
            driver.show(driver_id);
-
-          this.setState({mission_id:mission.id});
   }
 
   register(){
 
      perd.create((perd)=>{
         // H.goTo(this,H.path.login);
+           H.Toast("successfully")
            H.resetModel(['2'],this);
-          H.refreshPage(this.props)
-          H.Toast("successfully")
+          H.initModel()
+
        },(msg="error occured")=>{
         H.Toast(msg,'danger')
 

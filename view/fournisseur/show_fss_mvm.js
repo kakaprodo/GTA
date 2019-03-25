@@ -57,7 +57,9 @@ export default class ShowFssM extends Component {
     var isPaid=props.paid;
     var content=isPaid==0?"dettes":"paiements";
 
-
+    if (isPaid==1) {
+       H.initModel=()=>{this.init()};
+    }
 
 
     this.setState({fourn:fourn});
@@ -80,7 +82,10 @@ export default class ShowFssM extends Component {
   paiement(mvmS,index){
 
       mvm.paiement(mvmS.id,{is_paid:1},()=>{
+             H.Toast('Debt paid');
              this.init();
+             //we inititialse for debt paid
+             H.initModel();
 
       });
   }

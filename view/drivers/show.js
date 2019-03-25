@@ -25,6 +25,7 @@ export default class ShowDriver extends Component {
       refreshing:true,
       picNum:0,
       driver:null,
+      montant_perdieme:0,
     }
     H.setModel("current",this);
     driver=new Driver({model:this,container:"driver"});
@@ -57,9 +58,13 @@ export default class ShowDriver extends Component {
     var id=H.getParam(this.props,"id")
     var picNum=H.getParam(this.props,"pic")
 
-    driver.show(id,()=>{},()=>{H.goBack(this.props)});
+    driver.show(id,()=>{
+        driver.driver_perdieme(id,(perdF)=>{
+              this.setState({montant_perdieme:perdF.montant})
+        });
+    },()=>{H.goBack(this.props)});
 
-    this.setState({id:id,refreshing:!this.state.refreshing});
+    this.setState({id:id});
     if (picNum!=undefined) {
         this.setState({picNum:picNum});
     }
@@ -170,6 +175,27 @@ export default class ShowDriver extends Component {
                                  </Body>
                                  <Right></Right>
                             </ListItem>
+                          </List>
+
+                          <List>
+
+                          <CardItem header>
+                             <Text> Perdiemes</Text>
+                          </CardItem>
+
+                            <ListItem icon>
+                                  <Left>
+                                    <Button style={H.style.headers}>
+                                      <Icon active name="logo-euro" />
+                                    </Button>
+                                  </Left>
+                                  <Body>
+
+                                    <Text>{state.montant_perdieme} Um</Text>
+                                    <Text note>Montant du mois</Text>
+                                  </Body>
+                                  <Right></Right>
+                             </ListItem>
                           </List>
 
                           <CardItem header>

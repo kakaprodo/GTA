@@ -37,6 +37,7 @@ export default class Showperd extends Component {
   componentDidMount() {
      //H.initIcon(this);
       this.init();
+      H.initModel=()=>{this.init()};//we register a function call when a concerned activity of this model will be touched
      //  if (Platform.OS == "android" && listener == null) {
      //    listener = BackHandler.addEventListener("hardwareBackPress", () => {
      //       this.init();
@@ -80,9 +81,7 @@ export default class Showperd extends Component {
                                           <Text>Total amount : {state.total} Um</Text>
                                        </Body>
                                        <Right>
-                                         <Button onPress={()=>{H.goTo(this,H.path.save_perd,{mission:state.mission,init:()=>{this.init()}})}} success small rounded>
-                                            <Text>New</Text>
-                                         </Button>
+
                                        </Right>
                                      </ListItem>
 
@@ -105,6 +104,7 @@ export default class Showperd extends Component {
 
 
                                                              <Text style={{fontSize: 13,marginBottom:5}}>Montant:{item.montant} Um</Text>
+                                                             <Text onPress={()=>{H.goTo(this,H.path.show_driver,{id:item.driver_id})}} style={{fontSize: 13,paddingBottom:5,paddingTop:5,...H.style.green_color}}>Driver code :{item.driver_id}</Text>
                                                              <Text style={{fontSize: 13,marginBottom:5}}>Date :{item.created_at}</Text>
                                                            </View>
                                                           </Card>

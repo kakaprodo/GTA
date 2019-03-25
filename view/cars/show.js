@@ -22,6 +22,8 @@ export default class Showcar extends Component {
       loading:true,
       id:null,
       refreshing:true,
+      montant_maison:"",
+      prix_loc:"",
 
 
       car:null,
@@ -56,7 +58,13 @@ export default class Showcar extends Component {
   init(){
     var id=H.getParam(this.props,"id")
     car.show(id,()=>{
-        car.resetteCar(id);
+        car.resetteCar(id,(recet)=>{
+
+            this.setState(recet)
+        },(recet)=>{
+
+            this.setState(recet)
+        });
     },()=>{H.goBack(this.props)});
   }
 
@@ -166,6 +174,27 @@ export default class Showcar extends Component {
                                  </Body>
                                  <Right></Right>
                             </ListItem>
+                          </List>
+
+                          <List>
+
+                          <CardItem header>
+                             <Text> Recette du véhicule</Text>
+                          </CardItem>
+
+                            <ListItem icon>
+                                  <Left>
+                                    <Button style={H.style.headers}>
+                                      <Icon active name="logo-euro" />
+                                    </Button>
+                                  </Left>
+                                  <Body>
+
+                                    <Text>{state.montant_maison} Um</Text>
+                                    <Text note>Recette du mois</Text>
+                                  </Body>
+                                  <Right></Right>
+                             </ListItem>
                           </List>
 
                           <CardItem header>

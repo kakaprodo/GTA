@@ -5,15 +5,16 @@ import {Validation as Valid} from "../helper/validation"
 var val=new Valid();
 
 export class MissionCar extends Query{
+
     constructor(BindView=[],keyName='id'){
       super(keyName);//we set the primary key of the tab
       // this.db=this.super.db;
       this.model=BindView.model;
       this.content=BindView.container;//the state variable to contain the data
       this.agent=null;
-      this.colQuery="car_id,mission_id,driver_id,prix_loc,montant_maison,created_at";
+      this.colQuery="car_id,mission_id,driver_id,prix_loc,montant_maison,loc_duree,created_at";
       /*col to send fro creating the table client for the first time*/
-      this.colCreation="id integer primary key not null,car_id text,mission_id text,driver_id text,prix_loc text,montant_maison text,created_at text";
+      this.colCreation="id integer primary key not null,car_id text,mission_id text,driver_id text,prix_loc text,montant_maison text,loc_duree text,created_at text";
 
       this.conf();
 
@@ -23,8 +24,7 @@ export class MissionCar extends Query{
 
     conf(){
       //Higuration for SQL request
-
-     super.tab("mission_car",this.colCreation).newTable(()=>{
+      super.tab("mission_car",this.colCreation).newTable(()=>{
                        super.fields(this.colQuery)
                    },()=>{super.fields(this.colQuery)});
 
@@ -39,6 +39,32 @@ export class MissionCar extends Query{
             }
         });
     }
+
+    affected_car(id,onSucc,onErr){
+       super.keyValue(id.toString()).belongsTo("cars","car_id",(allMvm)=>{
+
+         if (this.model!=undefined) {
+            this.model.setState({[this.content]:allMvm})
+         }
+
+
+           if (onSucc) {
+              onSucc.call(this,allMvm);
+           }
+       },()=>{
+
+           if (this.content) {
+              this.model.setState({[this.content]:[]})
+           }
+
+
+           if (onErr) {
+              onErr.call(this);
+           }
+       });
+    }
+
+
 
     mission_car(id,onSucc,onErr){
        super.keyValue(id).belongsTo("mission","mission_id",(allMvm)=>{
@@ -97,6 +123,7 @@ export class MissionCar extends Query{
              .addRule(...[,'mission_id'])
              .addRule(...[,'driver_id'])
              .addRule(...[,'montant_maison'])
+            .addRule(...[,'loc_duree'])
              .addRule(...[,'prix_loc']);
 
             if (val.validate()) {

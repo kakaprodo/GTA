@@ -60,7 +60,7 @@ export default class SaveFourn extends Component {
 
            var fourn=H.getParam(this.props,"fourn");
            var isPaid=H.getParam(this.props,"is_paid");
-           
+
            //io.destroyAll();
            this.setState({fss_id:fourn.id,fourn:fourn,is_paid:isPaid?1:0});
   }
@@ -70,7 +70,7 @@ export default class SaveFourn extends Component {
      mvm.create((io)=>{
         // H.goTo(this,H.path.login);
           H.Toast("successfully")
-          H.resetModel(['2','3','4','5'],this);
+          H.resetModel(['2','3'],this);
           H.refreshPage(this.props);
 
        },(msg="error occured")=>{

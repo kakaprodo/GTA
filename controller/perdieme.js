@@ -11,9 +11,9 @@ export class Perdieme extends Query{
       this.model=BindView.model;
       this.content=BindView.container;//the state variable to contain the data
       this.agent=null;
-      this.colQuery="montant,driver_id,created_at";
+      this.colQuery="montant,driver_id,mission_id,created_at";
       /*col to send fro creating the table client for the first time*/
-      this.colCreation="id integer primary key not null, montant text,driver_id text,created_at text";
+      this.colCreation="id integer primary key not null, montant text,driver_id text,mission_id text,created_at text";
 
       this.conf();
 
@@ -30,20 +30,45 @@ export class Perdieme extends Query{
 
     }
 
-    mission(id,onSucc,onErr){
-       super.keyValue(id).belongsTo("mission","mission_id",(all_driverOperation)=>{
+    driver(id,onSucc,onErr){
+       super.keyValue(id).belongsTo("driver","driver_id",(all_driverOperation)=>{
+           if (this.content!=undefined) {
+              this.model.setState({[this.content]:all_driverOperation})
+           }
 
-           this.model.setState({[this.content]:all_driverOperation})
            if (onSucc) {
               onSucc.call(this,all_driverOperation);
            }
        },()=>{
 
-           this.model.setState({[this.content]:[]})
+         if (this.content!=undefined) {
+            this.model.setState({[this.content]:[]})
+         }
            if (onErr) {
               onErr.call(this);
            }
        });
+    }
+
+    mission(id,onSucc,onErr){
+       super.keyValue(id).belongsTo("mission","mission_id",(all_driverOperation)=>{
+
+             if (this.content!=undefined) {
+                this.model.setState({[this.content]:all_driverOperation})
+             }
+
+             if (onSucc) {
+                onSucc.call(this,all_driverOperation);
+             }
+         },()=>{
+
+           if (this.content!=undefined) {
+              this.model.setState({[this.content]:[]})
+           }
+             if (onErr) {
+                onErr.call(this);
+             }
+         });
     }
 
 
@@ -71,12 +96,13 @@ export class Perdieme extends Query{
     create(onSucc,onErr){
 
         var model=this.model;
-         val.reset();
-         val.add(["number"],model.state.montant,"mValid");
-         val.add(["required"],model.state.mission_id,"miValid");
+         val.reset().setModel(model)
+         .addRule(...[["number"],'montant'])
+         .addRule(...[,'mission_id'])
+         .addRule(...[,'driver_id']);
 
 
-         if (val.validate(this.model)) {
+         if (val.validate()) {
              //var Perdieme=model.state;
              //var date=new Date();
 

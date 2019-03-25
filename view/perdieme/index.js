@@ -93,10 +93,11 @@ export default class Allperd extends Component {
                               <View style={{padding:10,marginBottom:10}} >
 
 
-                               <Text style={{fontSize: 13,marginBottom:5}}>Montant :{item.montant}</Text>
+                               <Text style={{fontSize: 13,marginBottom:5}}>Montant :{item.montant} Um</Text>
 
-                                <Text onPress={()=>{H.goTo(this,H.path.show_mission,{id:item.mission_id})}} style={{fontSize: 13,paddingTop:10,paddingBottom:10}}>Sur mission n°: {H.round(item.mission_id)} </Text>
-                               <Text style={{fontSize: 13,marginBottom:5}}>Date : {item.created_at}</Text>
+                                <Text onPress={()=>{H.goTo(this,H.path.show_mission,{id:item.mission_id})}} style={{fontSize: 13,paddingBottom:5,paddingTop:5,...H.style.green_color}}>Sur mission n°: {H.round(item.mission_id)} </Text>
+                                <Text onPress={()=>{H.goTo(this,H.path.show_driver,{id:item.driver_id})}} style={{fontSize: 13,paddingBottom:5,paddingTop:5,...H.style.green_color}}>Driver code : {H.round(item.driver_id)} </Text>
+                             <Text style={{fontSize: 13,marginBottom:5}}>Date : {item.created_at}</Text>
                              </View>
                       </Card>
            })}

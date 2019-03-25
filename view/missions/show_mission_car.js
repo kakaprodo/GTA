@@ -97,7 +97,10 @@ export default class AllMissCar extends Component {
                                </Left>
                                <Body  >
                                  <Text onPress={()=>{H.goTo(this,H.path.show_car,{id:item.car_id})}} style={{paddingTop:5,paddingBottom:5}}>Car code :{item.car_id}</Text>
-                                 <Text note onPress={()=>{H.goTo(this,H.path.show_driver,{id:item.driver_id})}} style={{paddingTop:5,paddingBottom:5}}>Driver code :{item.car_id}</Text>
+                                 <Text note onPress={()=>{H.goTo(this,H.path.show_driver,{id:item.driver_id})}} style={{paddingTop:5,paddingBottom:5}}>
+                                        Driver code :{item.driver_id}  <Text onPress={()=>{H.goTo(this,H.path.save_perd,{mission:state.mission,driver_id:item.driver_id})}} note style={H.style.green_color}>Perdieme</Text>
+
+                                      </Text>
                                  <Text note>Prix location : {item.prix_loc} Um</Text>
                                  <Text note>Montant maison : {item.montant_maison} Um</Text>
                                </Body>

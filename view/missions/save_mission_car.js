@@ -22,7 +22,7 @@ export default class Savemcar extends Component {
         driver_id:"",
         prix_loc:"",
         montant_maison:"",
-
+        loc_duree:"",
         car_idValid:"",
         driver_idValid:"",
         prix_locValid:"",
@@ -60,7 +60,7 @@ export default class Savemcar extends Component {
 
            var mission=H.getParam(this.props,"mission");
 
-          this.setState({mission_id:mission.id,mission:mission});
+          this.setState({mission_id:mission.id,mission:mission,loc_duree:mission.duree});
   }
 
   register(){

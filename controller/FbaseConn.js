@@ -4,11 +4,12 @@ import * as firebase from 'firebase';
 // const settings = {timestampsInSnapshots: true};
 
 var config = {
-<<<<<<< HEAD
- 
-=======
-  
->>>>>>> 933eb62102fc8055a265830d81bce17548744a2a
+  apiKey: "AIzaSyCgQgTPvcaobO8mRJO5Zjrpl3oq_sP6DJE",
+   authDomain: "fkm-6c21e.firebaseapp.com",
+   databaseURL: "https://fkm-6c21e.firebaseio.com",
+   projectId: "fkm-6c21e",
+   storageBucket: "fkm-6c21e.appspot.com",
+   messagingSenderId: "261820872913"
 };
 firebase.initializeApp(config);
 

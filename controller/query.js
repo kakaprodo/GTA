@@ -25,7 +25,7 @@ export class Query extends Con{
 
    }
 
-   db(){
+   dbase(){
      return this.db;
    }
 
@@ -357,6 +357,8 @@ export class Query extends Con{
    belongsTo(table,foreinKey,onSucc,onErr){
      var md=this;
      this.db.transaction(tx=>{
+
+
        tx.executeSql(`select * from ${this.table} where ${foreinKey}=?`, [this.keyValue], (_, { rows:{_array} }) =>{
          this.item=_array;
 
@@ -537,6 +539,51 @@ export class Query extends Con{
                });
 
          return this;
+  }
+
+  allTable(onSucc,onErr){
+    var md=this;
+    this.db.transaction(tx=>{
+      tx.executeSql(`SELECT name FROM sqlite_master WHERE type ='table' AND name NOT LIKE 'sqlite_%'`,[],
+       (_, { rows:{_array} }) =>{
+        this.item=_array;
+
+
+          if (this.item.length!=0) {
+            onSucc.call(md,this.item);
+          }
+          else{
+             if (onErr) {
+                onErr.call(md);
+             }
+
+          }
+
+       },
+       (err)=>{
+           console.log(err.message);
+           if (onErr) {
+              onErr.call(md);
+           }
+       }
+      );
+    });
+  }
+
+  dataOfTable(tableName,onSucc){
+    var md=this;
+    this.db.transaction(tx=>{
+      tx.executeSql(`SELECT * FROM ${tableName} `,[],
+       (_, { rows:{_array} }) =>{
+        this.item=_array;
+
+
+           onSucc.call(md,this.item);
+
+
+       }
+      );
+    });
   }
 
 

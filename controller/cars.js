@@ -2,7 +2,9 @@
 /*Controller for client*/
 import {Query} from "./query"
 import {Validation as Valid} from "../helper/validation"
+import {MissionCar} from "./mission_car"
 var val=new Valid();
+var mcar=new MissionCar();
 
 export class Cars extends Query{
     constructor(BindView=[],creation=false){
@@ -52,24 +54,23 @@ export class Cars extends Query{
 
     resetteCar(carId,onSucc,onErr){
       var md=this;
-      super.db().transaction(tx=>{
-        tx.executeSql(`select mission.*,mission_car.* from mission_car inner join
-                       mission on mission.id=mission_car.mission_id where car_id=?
-                      `, [carId], (_, { rows:{_array} }) =>{
-          var item=_array;
+      var recette={montant_maison:0,prix_loc:0};
+        mcar.affected_car(carId,(recetteF)=>{
+              recetteF=H.getForThisMonth(recetteF);
+              for (var i = 0; i < recetteF.length; i++) {
 
-            console.log(item);
-            if (item.length!=0) {
-              onSucc.call(md,item);
+                recette.montant_maison=recette.montant_maison+(recetteF[i].montant_maison*parseInt(recetteF[i].loc_duree));
+                recette.prix_loc=recette.prix_loc+(recetteF[i].prix_loc*parseInt(recetteF[i].loc_duree));
+              }
+
+            if (onSucc) {
+               onSucc.call(this,recette);
             }
-            else{
-              onSucc.call(md,[]);
-            }
-
-         }
-        );
-      });
-
+        },()=>{
+          if (onErr) {
+             onErr.call(this,recette);
+          }
+        });
 
     }
 

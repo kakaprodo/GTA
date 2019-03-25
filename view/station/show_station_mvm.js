@@ -60,6 +60,10 @@ export default class ShowStM extends Component {
      }
    }
 
+   if (isPaid==1) {
+       H.initModel=()=>{this.init()}
+   }
+
 
 
     this.setState({station:station});
@@ -78,13 +82,19 @@ export default class ShowStM extends Component {
   }
 
   delmvm(id){
-    mvm.destroyEl(id,()=>{this.init()});
+    mvm.destroyEl(id,()=>{
+
+         this.init()
+
+    });
   }
 
   paiement(mvmS,index){
 
       mvm.remboursement(mvmS.id,{is_paid:1},()=>{
+             H.Toast('The debt is paid');
              this.init();
+             H.initModel();
 
       });
   }
@@ -106,10 +116,11 @@ export default class ShowStM extends Component {
                                        </Body>
 
                                         <Right>
-
+                                         {state.is_paid==0?
                                              <Button onPress={()=>{H.goTo(this,H.path.save_station_mvm,{station:state.station,is_paid:state.is_paid,init:()=>{this.init()}})}} success small rounded>
                                                 <Text>New</Text>
-                                             </Button>
+                                             </Button>:<Text></Text>
+                                           }
                                         </Right>
 
 
