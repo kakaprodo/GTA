@@ -37,7 +37,7 @@ export default class Dashboard extends Component {
      return {header};
   }
   init(){
-    H.isLoggedIn=true;
+
     if (!H.isLoggedIn) {
         H.logOut();
     }
@@ -66,7 +66,9 @@ export default class Dashboard extends Component {
       return <AppLoading />
     }
 
-   var optionBtn=["Change my account","Backup","Logout"];
+   var optionBtn=[{text:"Change my account",icon: "person", iconColor: H.globalStyle.green_color},
+                   {text:"Backup",icon:"cloud-upload",iconColor: H.globalStyle.green_color},
+                   {text:"Logout",icon:"log-out",iconColor: H.globalStyle.green_color}];
 
     return (
 

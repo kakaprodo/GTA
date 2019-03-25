@@ -49,9 +49,10 @@ export default class Regit extends Component {
   register(){
 
      user.create((user)=>{
+        H.Toast("successfully")
         H.resetModel(['2','3','4'],this);
         H.goTo(this,H.path.login);
-        H.Toast("successfully")
+
      },(msg="error occured")=>{
         H.Toast(msg,'danger')
      });

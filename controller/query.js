@@ -66,6 +66,7 @@ export class Query extends Con{
    }
 
    tab(table,fields){
+
       this.table=table;
       if (fields) {
         this.fields(fields);
@@ -116,6 +117,7 @@ export class Query extends Con{
 
 
    newTable(onSucc,onErr){
+      
      var rm=this;
      this.db.transaction(tx => {
 
@@ -341,11 +343,15 @@ export class Query extends Con{
 
    }
 
-   clearTable(){
+   clearTable(onDone){
+        var md=this;
        this.db.transaction(tx=>{
             tx.executeSql(`DELETE FROM ${this.table}`,[],()=>{
               this.response.msg="successfully done";
               this.response.error=false;
+              if (onDone) {
+                 onDone.call(md);
+              }
             },(err)=>{
               this.response.msg=err;
               this.response.error=false;
@@ -433,6 +439,38 @@ export class Query extends Con{
 
  }
 
+ saveData(data,toCall,onErr,table){
+   var getFields=H.getFields(data);
+   var table=table!=undefined?table:this.table;
+   var md=this;
+   this.inAction=true;
+    this.db.transaction(
+      tx => {
+        //console.log(`insert into ${this.table} (${this.col}) values (${this.tagPrepare})`);
+        var ins=tx.executeSql(`insert into ${table} (${getFields.fields}) values (${getFields.tagPrepare})`,
+                             getFields.values,
+                             ()=>{
+                               this.response.msg="successfully done";
+                               this.response.error=false;
+                               if (toCall) {
+
+                                  toCall.call(md);
+                                  this.inAction=false;
+                               }
+                             },(err)=>{
+
+                               if (onErr) {
+                                  onErr.call(md);
+                               }
+                               this.response.msg=err;
+                               this.response.error=true;
+                               this.inAction=false;
+
+                             }
+                           );
+      });
+   return this;
+ }
 
 
  save(data,toCall,onErr,table) {
@@ -442,36 +480,41 @@ export class Query extends Con{
       return console.log('wait for previous process...');;
     }
 
+    if (data.length==undefined) {//if data havent many rows
+       return  this.saveData(data,toCall,onErr,table);
+    }
 
-    var getFields=H.getFields(data);
-    var table=table!=undefined?table:this.table;
-    this.inAction=true;
-     this.db.transaction(
-       tx => {
-         //console.log(`insert into ${this.table} (${this.col}) values (${this.tagPrepare})`);
-         var ins=tx.executeSql(`insert into ${table} (${getFields.fields}) values (${getFields.tagPrepare})`,
-                              getFields.values,
-                              ()=>{
-                                this.response.msg="successfully done";
-                                this.response.error=false;
-                                if (toCall) {
+   //if we want to insert many rows at the same time
+    var counter=0;
+    var data_size=data.length;
 
-                                   toCall.call(md);
-                                   this.inAction=false;
-                                }
-                              },(err)=>{
 
-                                if (onErr) {
-                                   onErr.call(md);
-                                }
-                                this.response.msg=err;
-                                this.response.error=true;
-                                this.inAction=false;
+      var insertOneAfterAnother=function(){
+        new Promise((resolve,reject)=>{
+              var currentData=data[counter];
+              md.saveData(currentData,()=>{
+                    resolve(counter)
+              },()=>{
+                   resolve(counter)//even if there is an error,we jump to anoher data
+              },table);
+        }).then((nbIteration)=>{
+              if (nbIteration+1==data_size) {
+                    if (toCall) {
+                       toCall.call(md)
+                    }
+              }
+              else{
+                 counter++;
+                 insertOneAfterAnother();
+              }
+        });
+      }
 
-                              }
-                            );
-       });
-    return this;
+      insertOneAfterAnother();
+
+
+
+
   }
 
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Content, Form, Item, Input, Label,Text,Button,Icon,H2, Picker ,Textarea} from 'native-base';
+import { Container, Content, Form,Header,Body,Title ,Left,Right, Item, Input, Label,Text,Button,Icon,H2, Picker ,Textarea} from 'native-base';
 
 import { StyleSheet, View,KeyboardAvoidingView ,BackHandler} from 'react-native';
 import {AppLayout,AppLoading} from "../app_layout"
@@ -27,12 +27,12 @@ export default class Login extends Component {
   }
 
   static navigationOptions=({navigation})=>{
-     let headerTitle="Login form";
-     let headerStyle=H.style.headers;
-     let headerTitleStyle=H.style.title;
-     return {headerTitle,headerStyle,headerTitleStyle};
-     // let header=null;
-     // return {header};
+     // let headerTitle="Login form";
+     // let headerStyle=H.style.headers;
+     // let headerTitleStyle=H.style.title;
+     // return {headerTitle,headerStyle,headerTitleStyle};
+     let header=null;
+     return {header};
   }
 
 
@@ -78,57 +78,72 @@ export default class Login extends Component {
     return (
 
       <AppLayout>
-        <KeyboardAvoidingView  style={{flex:1,padding: 10}} behavior="padding">
+        <Header style={H.style.base_headers} noLeft>
 
-            <View style={{flex:20,justifyContent: 'center'}}>
+           <Body>
+             <Title style={H.style.title}>Login form</Title>
+           </Body>
+           <Right>
 
-               <H2 style={[H.style.center,H.style.app_color]}>{H.appLongName}</H2>
+             <Button onPress={()=>{H.goTo(this,H.path.backup)}} transparent>
+                 <Icon name='cloud-upload' />
+               </Button>
+           </Right>
+         </Header>
 
-            </View>
-            <View style={{flex:40}}>
-                 <Text style={[H.style.center,H.style.white_color,{fontSize: 13}]}>Identify your self then start working : </Text>
+          <Content>
+                <KeyboardAvoidingView  style={{flex:1,padding: 10}} behavior="padding">
 
-              <Form >
-                <View>
+                    <View style={{flex:20,justifyContent: 'center'}}>
 
-                    <Item style={H.style.inputField}  floatingLabel>
-                      <Label style={H.style.label}>Email :</Label>
-                      <Input
-                        value={state.email}
-                        keyboardType="email-address"
-                        onChangeText={(email) => H.fieldChange(this,email,"email","emailValid")}
-                       />
+                       <H2 style={[H.style.center,H.style.app_color]}>{H.appLongName}</H2>
 
-                    </Item>
-                    {H.invalid(this,"emailValid")?<Text style={H.style.error_color}>{this.state.emailValid}</Text>:<Text></Text>}
-                </View>
+                    </View>
+                    <View style={{flex:40}}>
+                         <Text style={[H.style.center,H.style.white_color,{fontSize: 13}]}>Identify your self then start working : </Text>
 
-                <View>
+                      <Form >
+                        <View>
 
-                  <Item style={H.style.inputField} floatingLabel>
-                    <Label style={H.style.label}>Password :</Label>
-                    <Input
-                        value={state.password}
-                      secureTextEntry={true}
-                      onChangeText={(password) =>  H.fieldChange(this,password,"password","passValid")}
-                     />
+                            <Item style={H.style.inputField}  floatingLabel>
+                              <Label style={H.style.label}>Email :</Label>
+                              <Input
+                                value={state.email}
+                                keyboardType="email-address"
+                                onChangeText={(email) => H.fieldChange(this,email,"email","emailValid")}
+                               />
 
-                  </Item>
-                {H.invalid(this,"passValid")?<Text style={H.style.error_color}>{this.state.passValid}</Text>:<Text></Text>}
-                </View>
+                            </Item>
+                            {H.invalid(this,"emailValid")?<Text style={H.style.error_color}>{this.state.emailValid}</Text>:<Text></Text>}
+                        </View>
 
+                        <View>
 
+                          <Item style={H.style.inputField} floatingLabel>
+                            <Label style={H.style.label}>Password :</Label>
+                            <Input
+                                value={state.password}
+                              secureTextEntry={true}
+                              onChangeText={(password) =>  H.fieldChange(this,password,"password","passValid")}
+                             />
 
-                 <Button onPress={()=>{this.login()}} success small full rounded iconRight>
-                    <Text style={H.style.textBtn}>Log in</Text>
-                    <Icon style={{fontSize: 17,...H.style.textBtn}} name="send" />
-                 </Button>
-
-              </Form>
+                          </Item>
+                        {H.invalid(this,"passValid")?<Text style={H.style.error_color}>{this.state.passValid}</Text>:<Text></Text>}
+                        </View>
 
 
-            </View>
-        </KeyboardAvoidingView>
+
+                         <Button onPress={()=>{this.login()}} success small full rounded iconRight>
+                            <Text style={H.style.textBtn}>Log in</Text>
+                            <Icon style={{fontSize: 17,...H.style.textBtn}} name="send" />
+                         </Button>
+
+                      </Form>
+
+
+                    </View>
+                </KeyboardAvoidingView>
+            </Content>
       </AppLayout>
 
     );

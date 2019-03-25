@@ -50,50 +50,18 @@
 
 
 
-    var number=[{name:"promesse",id:1},
-                 {name:"kakakprodo",id:1},
-                 {name:"doctor",id:1},
-                 {name:"elijah",id:1},
-                 {name:"enice",id:1},
-                 {name:"salem",id:1},
-                 {name:"mama",id:1},
-                 {name:"papa",id:1},
-                 {name:"vicky",id:2},
-                ];
-    var ok=[1];
-
-   var search=function(value,col=['id']){
-     number=number.filter((item) => {
-
-             var result=[];
-
-
+       var col=['id','name','age'];
+       var data={name:"promess",id:3,age:12};
+        var orderColVal=function(col,data){
+             var orderedArr=[];
              for (var i = 0; i < col.length; i++) {
-                var fieldTocheck=item[col[i]];
-                if (fieldTocheck!=undefined) {
-                    var checker=value.toString().match(fieldTocheck.toString());
-                      if (checker!=null) {
-                        result[i]=checker;
-                        //console.log(item);
-                      }
-
-                 }
-
-
+                    var colName=col[i];
+                    var value=data[colName];
+                    orderedArr[colName]=value;
              }
-             return result.length>0;
-
-
-
-     })
-      return number;
-   }
-   var col="name,id";
-      col=col.split(",");
-   var a="1 2a";
-   //    console.log(typeof a=="number");
-  // console.log(a.toString().match(2));
-   console.log(search("i 2 enice kakakprodo",col));
+            return orderedArr;
+        }
+       console.log(data.length);
 
       </script>
 </html>

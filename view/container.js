@@ -57,16 +57,10 @@ import Backup from "./backup"
 
 
 var AllScreen=createStackNavigator({
-    'backup':{screen:Backup},
+    'login':{screen:Login },
     'dashboard':{screen:Dashboard },
-
+    'backup':{screen:Backup},
     'regit':{screen:Regit },
-
-     'login':{screen:Login },
-
-
-
-
 
     'search':{screen:Search},
 
