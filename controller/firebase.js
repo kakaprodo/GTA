@@ -1,18 +1,17 @@
 import Fbase from './FbaseConn'
+import {allController} from './allController'
 
 import {Query} from "./query"
 
 export class Fb extends Query{
-    constructor(){
+    constructor(model){
       super()
       this.dbFb=Fbase.database();
       this.table=null;
+      this.model=model;
     }
 
-    newTable(tableName){
-        this.table=this.dbFb.child(tableName);
-        return this;
-    }
+
 
     sendToFirebase(tableName,data,onSucc){
         var table=this.dbFb.ref('/'+tableName);
@@ -49,7 +48,8 @@ export class Fb extends Query{
 
                    });
                    promise.then((nbItration)=>{
-                       console.log((nbItration+1)+'=='+allTable_size);
+                        var progress_parsent=(nbItration+1)*(100/allTable_size);
+                        md.model.setState({progress_parsent:H.round(progress_parsent,2)});
                         if ((nbItration+1)==allTable_size) {
 
                              if (onDone) {
@@ -67,17 +67,65 @@ export class Fb extends Query{
                prepareToSend();
 
        });
-        // var table=this.dbFb.ref('/'+tableName);
-        //       table.push({name:"deborah"});
-        //       table.on('value',values=>{
-        //             values=values.val();
-        //             for (var key in values) {
-        //                console.log(values[key]);
-        //
-        //             }
-        //
-        //       })
-        //console.log(this.dbFb);
+
       return this;
+    }
+
+    saveFromCloud(tableName,dataOfTable,onDone){
+       var md=this;
+       //we delete data of the table in order To insert new data
+       super.tab(tableName).clearTable(()=>{
+           //we insert all data,the process can take a time
+           super.save(dataOfTable,()=>{//if done
+               if (onDone) {
+                  onDone.call(md);
+               }
+           });
+       })
+    }
+
+    retrieveFromCloud(onDone){
+       var md=this;
+      this.dbFb.ref().once('value', function(snapshot) {
+          if (snapshot.val() !== null) {
+              var allDataInCloud=snapshot.val();
+              var tableNames = Object.keys(allDataInCloud);
+
+              var counter=0;
+              var data_size=tableNames.length;
+
+
+             var prepareToRetrieve=function(){
+                  var promise=new Promise((resolve,reject)=>{
+                       var tableName=tableNames[counter];
+                       var dataOfTable=allDataInCloud[tableName];
+                      md.saveFromCloud(tableName,dataOfTable,()=>{
+                           //when data of the table has been insert in local database we take another table
+                           resolve(counter)
+                      });
+
+
+                     });
+                     promise.then((nbItration)=>{
+                          var progress_parsent=(nbItration+1)*(100/data_size);
+                          md.model.setState({progress_parsent:H.round(progress_parsent,2)});
+                          if ((nbItration+1)==data_size) {
+
+                               if (onDone) {
+                                  onDone.call(md)
+                               }
+                          }
+                          else{
+
+                             counter++;
+                             prepareToRetrieve();
+                          }
+                     })
+             }
+
+             prepareToRetrieve();
+
+          }
+        });
     }
 }
