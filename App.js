@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View,YellowBox } from 'react-native';
 
 
 import AllScreen from "./view/container";
@@ -11,6 +11,9 @@ window.axios=require("axios");
 window.H=CONF;
 
 
+
+//we avoid yellow box for setting timer
+YellowBox.ignoreWarnings(['Setting a timer']);
 
 
  // export default AllScreen;

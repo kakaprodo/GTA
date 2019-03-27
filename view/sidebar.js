@@ -11,17 +11,17 @@ export default class SideBar extends Component {
       loading:true,
       user:[],
       routes:[],
-      menus:[{name:"Home",icon:"home",onPress:()=>{H.goTo(H.currentM(),H.path.dashboard,null,true)}},
-            {name:"Drivers",icon:"person",onPress:()=>{H.goTo(H.currentM(),H.path.drivers,null,true)}},
-            {name:"Cars setting",icon:"car",onPress:()=>{H.goTo(H.currentM(),H.path.cars,null,true)}},
-            {name:"Missions",icon:"send",onPress:()=>{H.goTo(H.currentM(),H.path.missions,null,true)}},
-            {name:"Carburants",icon:"train",onPress:()=>{H.goTo(H.currentM(),H.path.carburants,null,true)}},
-            {name:"Entretiens",icon:"shuffle",onPress:()=>{H.goTo(H.currentM(),H.path.entretiens,null,true)}},
-            {name:"Mashindano",icon:"nutrition",onPress:()=>{H.goTo(H.currentM(),H.path.mashindanos,null,true)}},
-            {name:"Perdiemes",icon:"cog",onPress:()=>{H.goTo(H.currentM(),H.path.perdiemes,null,true)}},
-            {name:"Fournisseurs",icon:"logo-tux",onPress:()=>{H.goTo(H.currentM(),H.path.fournisseurs,null,true)}},
-            {name:"Station",icon:"pint",onPress:()=>{H.goTo(H.currentM(),H.path.stations,null,true)}},
-            {name:"Repport",icon:"logo-wordpress",onPress:()=>{H.goTo(H.currentM(),H.path.repports,null,true)}},
+      menus:[{name:"Home",icon:"home",onPress:()=>{H.goTo(this,H.path.dashboard,null,true)}},
+            {name:"Drivers",icon:"person",onPress:()=>{H.goTo(this,H.path.drivers,null,true)}},
+            {name:"Cars setting",icon:"car",onPress:()=>{H.goTo(this,H.path.cars,null,true)}},
+            {name:"Missions",icon:"send",onPress:()=>{H.goTo(this,H.path.missions,null,true)}},
+            {name:"Carburants",icon:"train",onPress:()=>{H.goTo(this,H.path.carburants,null,true)}},
+            {name:"Entretiens",icon:"shuffle",onPress:()=>{H.goTo(this,H.path.entretiens,null,true)}},
+            {name:"Mashindano",icon:"nutrition",onPress:()=>{H.goTo(this,H.path.mashindanos,null,true)}},
+            {name:"Perdiemes",icon:"cog",onPress:()=>{H.goTo(this,H.path.perdiemes,null,true)}},
+            {name:"Fournisseurs",icon:"logo-tux",onPress:()=>{H.goTo(this,H.path.fournisseurs,null,true)}},
+            {name:"Station",icon:"pint",onPress:()=>{H.goTo(this,H.path.stations,null,true)}},
+            {name:"Repport",icon:"logo-wordpress",onPress:()=>{H.goTo(this,H.path.repports,null,true)}},
 
 
            ]
@@ -33,11 +33,28 @@ export default class SideBar extends Component {
      H.initIcon(this,false);
 
   }
+  // componentWillReceiveProps(nextprops){
+  //     this.props=nextprops;
+  //
+  //
+  //     const {state} = this.props.navigation.dangerouslyGetParent();
+  //     const {isDrawerOpen}=state.routes[0];
+  //
+  //     if (isDrawerOpen) {
+  //         if (!H.isLoggedIn) {
+  //             H.closeDrawer();
+  //         }
+  //     }
+  //
+  // }
+
+
+
   render() {
 
-    var user=this.state.user;
+    var user=H.User;
     var menus=this.state.menus;
-    if (this.state.loading) {
+    if (this.state.loading || !H.isLoggedIn) {
       return <View></View>
     }
     return (
@@ -51,7 +68,7 @@ export default class SideBar extends Component {
                 justifyContent: 'center',
                 alignItems: 'center',
                 backgroundColor: H.globalStyle.transp_color5}}>
-                 <Thumbnail   source={H.img.users.user1} />
+                 <Thumbnail   source={H.img.zootopya.zoo3} />
                  <Title style={H.style.app_color}>{user.names}</Title>
                  <Subtitle style={H.style.green_color}>{user.email}</Subtitle>
               </View>

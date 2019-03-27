@@ -108,7 +108,7 @@ export default class Dashboard extends Component {
                                             H.goTo(this,H.path.regit)
                                         break;
                                       case 1:
-                                          H.goTo(this,H.path.backup)
+                                          H.goTo(this,H.path.backup,{source:true})
 
                                         break;
                                     case 2:

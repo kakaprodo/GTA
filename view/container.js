@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
-import {createStackNavigator, createAppContainer} from 'react-navigation';
+import {createStackNavigator, createAppContainer,createDrawerNavigator} from 'react-navigation';
 import {Root,Drawer} from "native-base"
 import SideBar from './sidebar';
 import Login from "./user/login"
@@ -56,80 +56,88 @@ import Search from "./research"
 import Backup from "./backup"
 
 
-var AllScreen=createStackNavigator({
-    'login':{screen:Login },
-    'dashboard':{screen:Dashboard },
-    'backup':{screen:Backup},
-    'regit':{screen:Regit },
-
-    'search':{screen:Search},
 
 
-    'carburants':{screen:AllCarb},
-    'entretiens':{screen:AllEntr},
-    'perdiemes':{screen:AllPerd},
+const AllScreen = createStackNavigator(
+           {    'login':{screen:Login },
+               'dashboard':{screen:Dashboard },
+               'backup':{screen:Backup},
+               'regit':{screen:Regit },
+
+               'search':{screen:Search},
 
 
-   'repports':{screen:AllRepport},
-   'show_repport':{screen:ShowRepport},
-
-  'fournisseurs':{screen:AllFourn},
-  'create_fournisseur':{screen:CreateFourn  },
-  'show_fournisseur':{screen:ShowFourn},
-  'edit_fournisseur':{screen:EditFourn},
-  'save_fss_mvm':{screen:SaveFssMvm},
-
-  'stations':{screen:AllStation},
-  'create_station':{screen:CreateStation  },
-  'show_station':{screen:ShowStation},
-  'edit_station':{screen:EditStation},
-  'save_station_mvm':{screen:SaveStMvm},
-
-  'fournisseurs':{screen:AllFss},
-  'create_fournisseur':{screen:CreateFss  },
+               'carburants':{screen:AllCarb},
+               'entretiens':{screen:AllEntr},
+               'perdiemes':{screen:AllPerd},
 
 
+              'repports':{screen:AllRepport},
+              'show_repport':{screen:ShowRepport},
 
-  'cars':{screen:AllCars},
-  'create_car':{screen:CreateCar },
-  'show_car':{screen:ShowCar},
-  'edit_car':{screen:EditCar},
-  'save_entretien':{screen:SaveEntretien},
+             'fournisseurs':{screen:AllFourn},
+             'create_fournisseur':{screen:CreateFourn  },
+             'show_fournisseur':{screen:ShowFourn},
+             'edit_fournisseur':{screen:EditFourn},
+             'save_fss_mvm':{screen:SaveFssMvm},
 
-  'mashindanos':{screen:AllMach},
-  'create_mashindano':{screen:CreateMash  },
+             'stations':{screen:AllStation},
+             'create_station':{screen:CreateStation  },
+             'show_station':{screen:ShowStation},
+             'edit_station':{screen:EditStation},
+             'save_station_mvm':{screen:SaveStMvm},
 
-  'missions':{screen:AllMission},
-  'create_mission':{screen:CreateMission },
-  'show_mission':{screen:ShowMission },
-  'edit_mission':{screen:EditMission},
-  'save_carb':{screen:SaveCarb},
-  'save_perd':{screen:SavePerd},
-  'save_mission_car':{screen:SaveMissionCar},
+             'fournisseurs':{screen:AllFss},
+             'create_fournisseur':{screen:CreateFss  },
 
 
 
-  'drivers':{screen:AllDrivers},
-  'create_driver':{screen:CreateDriver },
-  'show_driver':{screen:ShowDriver},
-  'edit_driver':{screen:EditDriver},
-  "driverin_out":{screen:DriverIO},
+             'cars':{screen:AllCars},
+             'create_car':{screen:CreateCar },
+             'show_car':{screen:ShowCar},
+             'edit_car':{screen:EditCar},
+             'save_entretien':{screen:SaveEntretien},
+
+             'mashindanos':{screen:AllMach},
+             'create_mashindano':{screen:CreateMash  },
+
+             'missions':{screen:AllMission},
+             'create_mission':{screen:CreateMission },
+             'show_mission':{screen:ShowMission },
+             'edit_mission':{screen:EditMission},
+             'save_carb':{screen:SaveCarb},
+             'save_perd':{screen:SavePerd},
+             'save_mission_car':{screen:SaveMissionCar},
 
 
 
+             'drivers':{screen:AllDrivers},
+             'create_driver':{screen:CreateDriver },
+             'show_driver':{screen:ShowDriver},
+             'edit_driver':{screen:EditDriver},
+             "driverin_out":{screen:DriverIO},
 
 
 
-  // 'demo':{screen:Demo},
+           },
+           {
+             navigationOptions: {header: null}
 
 
+           }
 
+    );
 
+var drawer=createDrawerNavigator({
 
+     AllScreen:{screen:AllScreen}
 
-});
+    },{
+       contentComponent:(props)=><SideBar {...props}/>
+    }
+    );
 
-const Scr=createAppContainer(AllScreen);
+const Scr=createAppContainer(drawer);
 
 // export default App;
 
@@ -146,12 +154,8 @@ export default class All extends Component {
     var state=this.state;
     return (
       <Root>
-        <Drawer
-         ref={(ref) => { H.drawer = ref; }}
-         content={<SideBar navigator={this.navigator} />}
-         onClose={() => H.closeDrawer()} >
-            <Scr/>
-        </Drawer>
+        <Scr/>
+
       </Root>
 
   );

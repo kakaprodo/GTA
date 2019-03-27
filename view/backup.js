@@ -29,6 +29,7 @@ export default class Buckup extends Component {
       progress_parsent:0,
       msg_onEnd:"",
       start_backup:false,//when user start to backup or retrieve data
+      source:false,//or login: if from login ,the button send will not appear
 
     }
     fb=new Fb(this);
@@ -47,24 +48,46 @@ export default class Buckup extends Component {
 
   componentDidMount() {
      H.initIcon(this);
+     var source=H.getParam(this.props,'source')
+     this.setState({source:source})
+
 
 
   }
 
+  doneBuckup(){
+     this.setState({start_backup:false,msg_onEnd:"",progress_parsent:0});
+     fb.closeConnection();
+     H.Toast('Well confirmed')
+  }
+
   sendData(){
 
-     this.setState({start_backup:true,msg_onEnd:"Sending data to cloud",progress_parsent:0});
-     fb.sendToCloud(()=>{
-         this.setState({msg_onEnd:"Your data is now secured on line"})
+    H.swal("Have you checked well the data you want to send? because this operation will change "+
+           "all your online data depending on the local data that you want to send" ,()=>{
+      this.setState({start_backup:true,msg_onEnd:"Sending data to cloud",progress_parsent:0});
+      fb.sendToCloud(()=>{
+          H.Toast('Operation well done')
+          this.setState({msg_onEnd:"Your data is now secured on line, Click now on done button to confirm"})
 
-     });
+      });
+    })
+
+
+
+
    }
 
   getData(){
+
+    H.swal("Do you really need to put your online data into the local storage? because this operation will change "+
+           "all your local data depending on the online data that you want to retrieve" ,()=>{
       this.setState({start_backup:true,msg_onEnd:"Retrieving data from cloud",progress_parsent:0});
       fb.retrieveFromCloud(()=>{
-         this.setState({msg_onEnd:"Your data is now available in your local device"})
+           H.Toast('Operation well done')
+         this.setState({msg_onEnd:"Your data is now available in your local device, Click now on done button to confirm"})
       })
+    });
   }
 
 
@@ -97,6 +120,11 @@ export default class Buckup extends Component {
                    <Body>
                      <Title style={H.style.title}>Backup</Title>
                    </Body>
+                   <Right>
+                     <Button onPress={()=>{this.doneBuckup()}} transparent>
+                       <Icon name='checkmark' />
+                     </Button>
+                   </Right>
 
                  </Header>
                   <Content  padder style={H.style.content}>
@@ -118,17 +146,20 @@ export default class Buckup extends Component {
                                    >
                                        <Text style={{ fontSize: 18,...H.style.green_color}}>{state.progress_parsent}%</Text>
                                    </ProgressCircle>
-                                   <Text note style={{padding: 5}}>{state.msg_onEnd}</Text>
+                                   <Text note style={{padding: 5,...H.style.center}}>{state.msg_onEnd}</Text>
                           </View>:
                           <Text></Text>
                       }
 
+                      {state.source?//is when user is connected that he can see this button
                         <View style={{alignItems: 'center',marginBottom:30}}>
-                           <Button onPress={()=>{this.sendData()}} iconRight small success full rounded>
-                                <Text>Send your data</Text>
-                                <Icon name="cloud-upload"/>
-                           </Button>
-                        </View>
+                         <Button onPress={()=>{this.sendData()}} iconRight small success full rounded>
+                              <Text>Send your data</Text>
+                              <Icon name="cloud-upload"/>
+                         </Button>
+                      </View>:
+                      <Text></Text>
+                    }
 
                         <View style={{alignItems: 'center',marginBottom:10}}>
                             <Button onPress={()=>{this.getData()}} iconRight small success full rounded>

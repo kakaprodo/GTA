@@ -5,13 +5,14 @@
     "privacy": "public",
     "sdkVersion": "31.0.0",
     "platforms": [
+      "ios",
       "android"
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/img/logo_icon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/img/logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -22,7 +23,12 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.gtamanagementios.agency"
+    },
+    "android": {
+      "package": "com.gtamanagementand.agency",
+    
     },
     "description": "An application to handle all operation of the company gta fk management"
   }

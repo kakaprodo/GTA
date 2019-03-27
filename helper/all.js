@@ -280,7 +280,8 @@ export var CONF={
   }
   ,
   closeDrawer(){
-    this.drawer._root.close()
+    var {navigation}=Models.sidebar.props;
+    navigation.closeDrawer()
   },
   openDrawer(){
     if (!this.isLoggedIn) {
@@ -288,7 +289,8 @@ export var CONF={
     }
     else{
       Models.sidebar.setState({user:this.User});
-      this.drawer._root.open()
+      var {navigation}=Models.sidebar.props;
+      navigation.openDrawer()
     }
 
   },

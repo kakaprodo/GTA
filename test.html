@@ -40,28 +40,12 @@
     //      // document.write(number)+"<br>";
     //      console.log(...[2]);
 
+    class A{
+      
 
-    var round=function(number,AfterComa){
-       var numberArr=number.toString().split(".");
-
-           number=numberArr[0]+(numberArr[1]!=undefined?"."+numberArr[1].substring(0,AfterComa):"");
-           return parseFloat(number);
     }
 
-
-
-       var col=['id','name','age'];
-       var data={name:"promess",id:3,age:12};
-        var orderColVal=function(col,data){
-             var orderedArr=[];
-             for (var i = 0; i < col.length; i++) {
-                    var colName=col[i];
-                    var value=data[colName];
-                    orderedArr[colName]=value;
-             }
-            return orderedArr;
-        }
-       console.log(data.length);
+       console.log(name());
 
       </script>
 </html>

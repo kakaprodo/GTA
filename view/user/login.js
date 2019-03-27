@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Content, Form,Header,Body,Title ,Left,Right, Item, Input, Label,Text,Button,Icon,H2, Picker ,Textarea} from 'native-base';
 
-import { StyleSheet, View,KeyboardAvoidingView ,BackHandler} from 'react-native';
+import { StyleSheet, View,KeyboardAvoidingView ,ScrollView,BackHandler} from 'react-native';
 import {AppLayout,AppLoading} from "../app_layout"
 import {User} from "../../controller/user"
 
@@ -85,13 +85,14 @@ export default class Login extends Component {
            </Body>
            <Right>
 
-             <Button onPress={()=>{H.goTo(this,H.path.backup)}} transparent>
+             <Button onPress={()=>{H.goTo(this,H.path.backup,{source:false})}} transparent>
                  <Icon name='cloud-upload' />
                </Button>
            </Right>
          </Header>
 
           <Content>
+              <ScrollView>
                 <KeyboardAvoidingView  style={{flex:1,padding: 10}} behavior="padding">
 
                     <View style={{flex:20,justifyContent: 'center'}}>
@@ -140,9 +141,10 @@ export default class Login extends Component {
 
                       </Form>
 
-
+                     <View style={{height: 200}}></View>
                     </View>
                 </KeyboardAvoidingView>
+                </ScrollView>
             </Content>
       </AppLayout>
 

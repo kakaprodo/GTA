@@ -12,7 +12,14 @@ export var Images={
          user8:require("./8.jpeg"),
          user9:require("./9.jpeg"),
          user10:require("./10.jpeg"),
-         user11:require("./11.jpeg")
+         user11:require("./11.jpeg"),
+
+      },
+      zootopya:{
+         zoo1:require("./zoo1.jpeg"),
+         zoo2:require("./zoo2.jpeg"),
+         zoo3:require("./zoo3.jpeg"),
+         zoo4:require("./zoo4.jpeg"),
       },
       drivers:{
         driver0:require("./d0.png"),
