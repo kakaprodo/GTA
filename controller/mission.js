@@ -20,6 +20,7 @@ export class Mission extends Query{
       this.colSearch="id,chef_mission,organisation";
       this.colAlias={id:"Mission n°",chef_mission:"Chef mission",organisation:"Organisation"};
       this.modelName="mission";
+      this.contentImg="id";
       /*col to send fro creating the table client for the first time*/
       this.colCreation="id integer primary key not null,"+
                        "chef_mission text,organisation text,"+

@@ -11,9 +11,9 @@ export class Carburant extends Query{
       this.model=BindView.model;
       this.content=BindView.container;//the state variable to contain the data
       this.agent=null;
-      this.colQuery="quantite,kmp,mission_id,created_at";
+      this.colQuery="quantite,kmp,mission_id,descr1,descr2,created_at";
       /*col to send fro creating the table client for the first time*/
-      this.colCreation="id integer primary key not null, quantite text,kmp text,mission_id text,created_at text";
+      this.colCreation="id integer primary key not null, quantite text,kmp text,mission_id text,descr1 text,descr2 text,created_at text";
 
       this.conf();
 
@@ -24,9 +24,10 @@ export class Carburant extends Query{
     conf(){
       //Higuration for SQL request
 
-     super.tab("carburant",this.colCreation).newTable(()=>{
-                       super.fields(this.colQuery)
-                   },()=>{super.fields(this.colQuery)});
+     super.tab("carburant",this.colCreation).addTableColumn('descr2','text')
+               // .newTable(()=>{
+               //         super.fields(this.colQuery)
+               //     },()=>{super.fields(this.colQuery)});
 
     }
 
@@ -53,10 +54,11 @@ export class Carburant extends Query{
 
     index(onSucc,onNodata){
       super.all((ios)=>{
-
+       console.log(ios)
             if (onSucc) {
                onSucc.call(this,ios)
             }
+          
             if (this.content!=undefined) {
                this.model.setState({[this.content]:ios});
             }

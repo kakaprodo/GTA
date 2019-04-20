@@ -58,7 +58,7 @@ export default class Allstations extends Component {
            for (var i = 0; i < data.length; i++) {
                   total=total+H.getTotal(data[i].mvm,"quantite",{is_paid:0})
            }
-           this.setState({total:total});
+           this.setState({total:total,allstation:data.reverse()});
     },()=>{
         this.setState({total:0});
     });
@@ -134,9 +134,7 @@ export default class Allstations extends Component {
                                     onPress={()=>{H.goTo(this,"show_station",{id:item.id})}}
                                     avatar key={index}>
                                     <Left>
-                                      <Button transparent>
-                                        <Icon style={{color:H.randomColor()}} name='pint' />
-                                      </Button>
+                                       <H.DivImg size={40}  name={item.station_name}/>
                                     </Left>
                                     <Body  >
 

@@ -100,7 +100,8 @@ export default class Showcar extends Component {
 
                   <Header style={H.style.base_headers}>
                      <Left>
-                         <Thumbnail small source={require('../../assets/img/car1.jpeg')} />
+                         <H.DivImg size={40} name={car.marque}/>
+                        
                      </Left>
                      <Body>
                        <Title style={H.style.title}>{car.marque}</Title>
@@ -147,16 +148,19 @@ export default class Showcar extends Component {
                                <Right></Right>
                           </ListItem>
 
-                          <ListItem icon>
+                          <ListItem icon 
+                                    button
+                                    onPress={()=>{H.goTo(this,"show_driver",{id:car.driver_id})}}
+                                 >
                                 <Left>
                                   <Button style={H.style.headers}>
-                                    <Icon active name="color-fill" />
+                                    <Icon active name="radio-button-off" />
                                   </Button>
                                 </Left>
                                 <Body>
 
-                                  <Text>{car.color}</Text>
-                                  <Text note>Color</Text>
+                                  <Text style={H.style.green_color}>{car.driver_id}</Text>
+                                  <Text note>Driver's code</Text>
                                 </Body>
                                 <Right></Right>
                            </ListItem>

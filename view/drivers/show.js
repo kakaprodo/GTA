@@ -34,17 +34,6 @@ export default class ShowDriver extends Component {
   }
 
   static navigationOptions=({navigation})=>{
-    //  let headerTitle="Welcome";
-    //  let headerStyle=H.style.headers;
-    //  let headerTitleStyle=H.style.title;
-    //  headerRight=  <Button
-    //     onPress={() => alert('This is a button!')}
-    //     title="Info"
-    //     color="#fff"
-    //   />
-    //
-    //
-    // return {headerTitle,headerStyle,headerTitleStyle,headerRight};
      let header=null;
      return {header};
   }
@@ -59,9 +48,18 @@ export default class ShowDriver extends Component {
     var picNum=H.getParam(this.props,"pic")
 
     driver.show(id,()=>{
+        //getting the perdieme of the driver
         driver.driver_perdieme(id,(perdF)=>{
               this.setState({montant_perdieme:perdF.montant})
         });
+
+        //getting the cars driven by this driver
+        driver.car(id,(list_car)=>{
+
+             this.state.driver.cars=list_car;
+              this.setState({driver:this.state.driver})
+        })
+
     },()=>{H.goBack(this.props)});
 
     this.setState({id:id});
@@ -85,11 +83,13 @@ export default class ShowDriver extends Component {
 
 
 
+
     if (state.loading || driver==null ) {
       return <AppLoading />
     }
 
-
+   var {cars}=driver;
+   cars=cars===undefined?[]:cars;
 
 
 
@@ -102,7 +102,7 @@ export default class ShowDriver extends Component {
 
                   <Header style={H.style.base_headers}>
                     <Left>
-                        <Thumbnail small source={H.img.drivers['driver'+state.picNum]} />
+                        <H.DivImg size={40} name={driver.names}/>
                     </Left>
                      <Body>
                        <Title style={H.style.title}>{driver.names}</Title>
@@ -175,6 +175,33 @@ export default class ShowDriver extends Component {
                                  </Body>
                                  <Right></Right>
                             </ListItem>
+                          </List>
+
+                          <List>
+
+                          <CardItem header>
+                             <Text> List of cars driven by this driver : {cars.length}</Text>
+                          </CardItem>
+
+                            {
+                              cars.map((car,index)=>{
+                                return <ListItem button  key={index+'car'} icon
+                                        onPress={()=>{H.goTo(this,"show_car",{id:car.id})}}
+                                        >
+                                          <Left>
+                                            <Button style={H.style.headers}>
+                                              <Icon active name="car" />
+                                            </Button>
+                                          </Left>
+                                          <Body>
+
+                                           <Text>{car.marque}</Text>
+                                           <Text note>Plaque : {car.plaque}</Text>
+                                          </Body>
+                                          <Right></Right>
+                                     </ListItem>
+                              })
+                            }
                           </List>
 
                           <List>

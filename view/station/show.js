@@ -87,7 +87,7 @@ export default class ShowStation extends Component {
 
                   <Header style={H.style.base_headers}>
                      <Left>
-                         <Icon style={{color:'white'}} name="pint" />
+                        <H.DivImg size={40}  name={station.station_name}/>
                      </Left>
                      <Body>
                        <Title style={H.style.title}>{station.station_name}</Title>

@@ -23,6 +23,7 @@ export default class ShowCarb extends Component {
       loading:true,
       mission_id:null,
       refreshing:true,
+      mission:[],
       list:[],
       total:0,
     }
@@ -49,7 +50,7 @@ export default class ShowCarb extends Component {
     var props=this.props;
     var mission=props.mission;
 
-    this.setState({mission_id:mission.id});
+    this.setState({mission_id:mission.id,mission:mission});
 
     carb.mission(mission.id,(mission)=>{
        var total=H.getTotal(mission,'quantite');
@@ -80,7 +81,7 @@ export default class ShowCarb extends Component {
                                           <Text>Total quantity : {state.total} </Text>
                                        </Body>
                                        <Right>
-                                         <Button onPress={()=>{H.goTo(this,H.path.save_carb,{mission_id:state.mission_id,init:()=>{this.init()}})}} success small rounded>
+                                         <Button onPress={()=>{H.goTo(this,H.path.save_carb,{mission:state.mission,init:()=>{this.init()}})}} success small rounded>
                                             <Text>New</Text>
                                          </Button>
                                        </Right>

@@ -68,6 +68,7 @@ export default class Allperd extends Component {
   Listperd(isForMonth=true){
       var state=this.state;
       var perdindanos=isForMonth?state.dataOfMonth:state.allperd;
+      perdindanos=perdindanos.reverse();
       var total=H.getTotal(perdindanos,"montant");
       return (
       <View>

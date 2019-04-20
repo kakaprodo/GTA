@@ -87,7 +87,7 @@ export default class Showfourn extends Component {
 
                   <Header style={H.style.base_headers}>
                      <Left>
-                         <Icon style={{color:'white'}} name="pint" />
+                        <H.DivImg size={40} name={fourn.maison}/>
                      </Left>
                      <Body>
                        <Title style={H.style.title}>{fourn.maison}</Title>

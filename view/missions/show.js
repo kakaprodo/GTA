@@ -98,9 +98,7 @@ export default class Showmission extends Component {
 
                   <Header style={H.style.base_headers}>
                     <Left>
-                      <Button transparent>
-                        <Icon style={{color:"white"}} name='navigate' />
-                      </Button>
+                      <H.DivImg size={40}  name={"n "+mission.id}/>
                     </Left>
                      <Body>
                        <Title style={H.style.title}>Mission n°:{mission.id}</Title>

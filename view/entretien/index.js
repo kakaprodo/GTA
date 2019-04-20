@@ -68,6 +68,7 @@ export default class Allentr extends Component {
   Listentr(isForMonth=true){
       var state=this.state;
       var entrindanos=isForMonth?state.dataOfMonth:state.allentr;
+      entrindanos=entrindanos.reverse();
       var total=H.getTotal(entrindanos,"montant");
       return (
       <View>

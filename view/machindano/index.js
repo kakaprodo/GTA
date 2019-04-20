@@ -67,6 +67,7 @@ export default class Allmashindanos extends Component {
   ListMash(isForMonth=true){
       var state=this.state;
       var mashindanos=isForMonth?state.dataOfMonth:state.allMash;
+      mashindanos=mashindanos.reverse();
       var total=H.getTotal(mashindanos);
       return (
       <View>

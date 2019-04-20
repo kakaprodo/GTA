@@ -68,6 +68,7 @@ export default class Allcarb extends Component {
   Listcarb(isForMonth=true){
       var state=this.state;
       var carbindanos=isForMonth?state.dataOfMonth:state.allcarb;
+      carbindanos=carbindanos.reverse();
       var total=H.getTotal(carbindanos,"quantite");
       return (
       <View>
@@ -96,6 +97,8 @@ export default class Allcarb extends Component {
                                <Text style={{fontSize: 13,marginBottom:5}}>Quantité :{item.quantite}</Text>
                                <Text style={{fontSize: 13,marginBottom:5}}>Km parcouru : {item.kmp} km</Text>
                                 <Text onPress={()=>{H.goTo(this,H.path.show_mission,{id:item.mission_id})}} style={{fontSize: 13,paddingTop:10,paddingBottom:10}}>Sur mission n°: {H.round(item.mission_id)} </Text>
+                               <Text style={{fontSize: 13,marginBottom:5}}>Description1 : {item.descr1}</Text>
+                                <Text style={{fontSize: 13,marginBottom:5}}>Description2 : {item.descr2}</Text>
                                <Text style={{fontSize: 13,marginBottom:5}}>Date : {item.created_at}</Text>
                              </View>
                       </Card>

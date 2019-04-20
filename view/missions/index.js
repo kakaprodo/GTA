@@ -62,6 +62,7 @@ export default class Allmissions extends Component {
   Listentr(isForMonth=true){
     var state=this.state;
     var entries=isForMonth?state.dataOfMonth:state.missions;
+    entries=entries.reverse();
     var total=H.getTotal(entries,"total_maison");
 
     return <View>
@@ -75,9 +76,7 @@ export default class Allmissions extends Component {
                        onPress={()=>{H.goTo(this,"show_mission",{id:item.id})}}
                        avatar key={index}>
                        <Left>
-                         <Button transparent>
-                           <Icon style={{color:H.randomColor()}} name='navigate' />
-                         </Button>
+                          <H.DivImg  name={"n "+item.id}/>
                        </Left>
                        <Body  >
                      <Text >Mission n° : {item.id}</Text>

@@ -13,12 +13,13 @@ export class Cars extends Query{
       this.model=BindView.model;
       this.content=BindView.container;//the state variable to contain the data
       this.agent=null;
-      this.colQuery="marque,plaque,color,created_at";
-      this.colSearch="id,marque,plaque,color";
-      this.colAlias={id:'Code',marque:"Marque",plaque:"Plaque",color:"Color"};
+      this.colQuery="marque,plaque,driver_id,created_at";
+      this.colSearch="id,marque,plaque,driver_id";
+      this.colAlias={id:'Code',marque:"Marque",plaque:"Plaque",driver_id:"Driver code"};
       this.modelName="car";
+      this.contentImg="marque";
       /*col to send fro creating the table client for the first time*/
-      this.colCreation="id integer primary key not null, marque text,plaque text,color text,created_at text";
+      this.colCreation="id integer primary key not null, marque text,plaque text,driver_id text,created_at text";
 
       this.conf();
 
@@ -35,7 +36,19 @@ export class Cars extends Query{
 
     }
 
+   driver(id,onSucc){
 
+       super.keyValue(id).belongsTo("driver","driver_id",(all_car)=>{
+           if (onSucc) {
+              onSucc(all_car)
+           }
+       },()=>{
+
+           if (onSucc) {
+              onSucc([])
+           }
+       });
+    }
 
 
     index(onSucc,onNodata){
@@ -43,16 +56,21 @@ export class Cars extends Query{
         if (onSucc) {
            onSucc.call(this,cars)
         }
-          this.model.setState({[this.content]:cars});
+        if (this.content!==undefined) {
+           this.model.setState({[this.content]:cars});
+        }
+          
         },(cars)=>{
           if (onNodata) {
              onNodata.call(this,[])
           }
-           this.model.setState({[this.content]:cars});
+          if (this.content!==undefined) {
+           this.model.setState({[this.content]:[]});
+        }
       });
     }
 
-    resetteCar(carId,onSucc,onErr){
+    resetteCar(carId,onSucc,onErr){//the amount the car gain per month
       var md=this;
       var recette={montant_maison:0,prix_loc:0};
         mcar.affected_car(carId,(recetteF)=>{
@@ -82,7 +100,7 @@ export class Cars extends Query{
 
          val.add(["required"],model.state.marque,"marqueValid");
          val.add(["required"],model.state.plaque,"plaqueValid");
-         val.add(["required"],model.state.color,"colorValid");
+         val.add(["required"],model.state.driver_id,"driver_idValid");
 
 
 
@@ -90,7 +108,7 @@ export class Cars extends Query{
              var car=model.state;
              var date=new Date();
 
-             var data=[car.marque,car.plaque,car.color,H.now()];
+             var data=super.getData(this.model);//[car.marque,car.plaque,car.color,H.now()];
 
                //we insert new info of the agent
                super.insert(data,()=>{
@@ -138,7 +156,7 @@ export class Cars extends Query{
 
                  val.add(["required"],model.state.marque,"marqueValid");
                  val.add(["required"],model.state.plaque,"plaqueValid");
-                 val.add(["required"],model.state.color,"colorValid");
+                 val.add(["required"],model.state.driver_id,"driver_idValid");
 
 
 
@@ -146,7 +164,7 @@ export class Cars extends Query{
                      var car=model.state;
                      var date=new Date();
 
-                     var data=[car.marque,car.plaque,car.color,car.car.created_at];
+                     var data=super.getData(this.model,false);//[car.marque,car.plaque,car.color,car.car.created_at];
 
                        //we insert new info of the agent
                        super.keyValue(id).update(data,()=>{

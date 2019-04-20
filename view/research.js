@@ -91,7 +91,7 @@ export default class Research extends Component {
 
     var state=this.state;
 
-    if (state.loading ) {
+    if (state.loading && state.alldata===null) {
       return <AppLoading />
     }
 
@@ -101,42 +101,39 @@ export default class Research extends Component {
 
     return (
 
+            <AppLayout noBack={true}>
 
-
-
-          <AppLayout noBack={true}>
-
-
-                   <Header style={H.style.base_headers} searchBar rounded>
+                <Header style={H.style.base_headers} searchBar rounded>
                       <Item>
                         <Icon name="ios-search" />
                         <Input value={state.value}
                            autoFocus
                            onChangeText={(val)=>{this.search(val)}} />
-                         <Icon name="logo-slack" />
+                         {!H.isEmpty(state.value)?
+                           <Button onPress={()=>{this.search('')}} transparent>
+                            <Icon style={{color:'black'}} name="close" />
+                          </Button>
+                         :<Text></Text>}
                       </Item>
-                      <Button transparent>
-                        <Text>Search</Text>
-                      </Button>
+                      
                     </Header>
                    <Content  padder style={H.style.content}>
 
                     {this.state.dataFound.length>0?
-                      <View>
-                                  <CardItem header style={{height: 50}}>
-                                       <Text>Results found: {state.dataFound.length}</Text>
-                                  </CardItem>
+                         <View>
+                                <CardItem header style={{height: 50}}>
+                                    <Text>Results found: {state.dataFound.length}</Text>
+                                </CardItem>
 
 
 
                                  <List style={{marginLeft:-3}}>
                                     {state.dataFound.map((item,index) => {
 
-                                         return <ListItem onPress={()=>{H.goTo(this,"show_"+state.modelName,{id:item.id,repport:item})}}
+                                         return <ListItem style={{marginBottom:10}} onPress={()=>{H.goTo(this,"show_"+state.modelName,{id:item.id,repport:item})}}
                                                      avatar key={index}>
                                                      <Left>
-
-                                                       <Thumbnail small source={H.img.search.ok} />
+                                                        <H.DivImg  name={(state.modelName=="mission"?"N ":"")+item[state.model.contentImg]+" "||"R p"}/>
                                                      </Left>
                                                     <Body>
 
@@ -145,12 +142,17 @@ export default class Research extends Component {
 
                                                                 return  <Text key={index2} style={{fontSize: 13,marginBottom:5}}>{H.alias(state.model.colAlias,colName)} : {item[colName]}</Text>
                                                             })
+
                                                        }
+
                                                    </Body>
                                                    <Right>
-                                                     <Button onPress={()=>{this.delItem(item)}} transparent>
+                                                     {state.modelName!=="repport"?
+                                                        <Button onPress={()=>{this.delItem(item)}} transparent>
                                                          <Icon style={{fontSize: 30,color:"#b71c1c"}}  name="trash" />
-                                                     </Button>
+                                                     </Button>:<Text></Text>
+                                                   }
+                                                     
 
                                                    </Right>
 

@@ -52,6 +52,13 @@ import AllCarb from "./carburant/"
 import AllPerd from "./perdieme/"
 import AllEntr from "./entretien/"
 
+
+import AllMechan from "./mechanician/"
+import CreateMechan from "./mechanician/create"
+import ShowMechan from "./mechanician/show"
+import EditMechan from "./mechanician/edit"
+
+
 import Search from "./research"
 import Backup from "./backup"
 
@@ -59,8 +66,10 @@ import Backup from "./backup"
 
 
 const AllScreen = createStackNavigator(
-           {    'login':{screen:Login },
-               'dashboard':{screen:Dashboard },
+           {
+            'dashboard':{screen:Dashboard },
+             'login':{screen:Login },
+
                'backup':{screen:Backup},
                'regit':{screen:Regit },
 
@@ -108,6 +117,11 @@ const AllScreen = createStackNavigator(
              'save_carb':{screen:SaveCarb},
              'save_perd':{screen:SavePerd},
              'save_mission_car':{screen:SaveMissionCar},
+
+             'mechanicians':{screen:AllMechan},
+             'create_mechanician':{screen:CreateMechan},
+             'show_mechanician':{screen:ShowMechan},
+             'edit_mechanician':{screen:EditMechan},
 
 
 

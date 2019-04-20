@@ -17,6 +17,7 @@ export class Fournisseur extends Query{
       this.colSearch="maison";
       this.colAlias={maison:'Firm name'};
       this.modelName="fournisseur";
+      this.contentImg="maison";
       /*col to send fro creating the table client for the first time*/
       this.colCreation="id integer primary key not null,motif text,maison text,created_at text";
      mvm=new FournMvm(BindView,"fss_id");

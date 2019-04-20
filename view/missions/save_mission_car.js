@@ -27,7 +27,8 @@ export default class Savemcar extends Component {
         driver_idValid:"",
         prix_locValid:"",
         montant_maisonValid:"",
-        mission:"",
+        mission:[],
+        isExpired:false,
 
 
 
@@ -59,6 +60,9 @@ export default class Savemcar extends Component {
   init(){
 
            var mission=H.getParam(this.props,"mission");
+           H.dateSameMonth(mission.created_at,H.now(...[,'my']),true,()=>{
+                this.setState({isExpired:true})
+           });
 
           this.setState({mission_id:mission.id,mission:mission,loc_duree:mission.duree});
   }
@@ -82,8 +86,13 @@ export default class Savemcar extends Component {
   render() {
 
     var state=this.state;
+
     if (state.loading) {
       return <AppLoading />
+    }
+
+    if (state.isExpired) {
+       return <AppLayout><H.ExpiredOp date={H.format(state.mission.created_at,'my')} force={()=>{this.setState({isExpired:false})}}/></AppLayout>
     }
 
 
@@ -165,6 +174,7 @@ export default class Savemcar extends Component {
                     </Form>
 
                   </View>
+                  
               </KeyboardAvoidingView>
             </ScrollView>
 

@@ -16,6 +16,8 @@ import {pathRouter} from "./pathRouter"
 // export const MW=mw;
 
 import {style,globalStyle} from "./style"
+import ExpiredOp from "../view/expired_operation"
+import DivImg from "./div_image"
 
 
 
@@ -35,7 +37,8 @@ export var CONF={
     HOST_IMG:"http://192.168.43.25:8000/img",
 
     // cache:cashe,
-
+    ExpiredOp:ExpiredOp,
+    DivImg:DivImg,
     style:style,
     appName:"GTA",
     img:Images,
@@ -294,11 +297,26 @@ export var CONF={
     }
 
   },
+  format(date,type){
+       if (date===undefined) {return;}
+       
+       var dateArr=date.split("at")[0];
+       if (dateArr!==undefined) {
+          dateArr=date.split('/');
+
+          if (type==="my") {
+            
+            date=dateArr[1]+"/"+dateArr[2];
+          }
+       }
+       return date;
+  }
+  ,
   now(full=false,format){
     var date=new Date()
     var result;
     if (full) {
-      result=date.getDate()+"/"+(date.getMonth()+1)+"/"+date.getFullYear()+" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
+      result=date.getDate()+"/"+(date.getMonth()+1)+"/"+date.getFullYear()+" at "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
     }
     result=date.getDate()+"/"+(date.getMonth()+1)+"/"+date.getFullYear();
 
@@ -390,7 +408,10 @@ export var CONF={
      })
      return data;
   },
-  formatMonthYear(mothYear){
+  formatMonthYear(mothYear,dateNotReady=false){
+       if (dateNotReady) {
+          mothYear=this.format(mothYear,'my')
+       }
        var res=mothYear.split("/");
        return this.monthName(res[0])+" "+res[1];
   }
@@ -460,7 +481,7 @@ export var CONF={
      return total;
 
   },
-  dateSameMonth(date1,date2,date2IsReady=false){
+  dateSameMonth(date1,date2,date2IsReady=false,toCall,callWhenStateIs){
        date1=(date1.split(" ")[0]).split("/");
        var monthYear1=date1[1]+"/"+date1[2];
 
@@ -474,9 +495,17 @@ export var CONF={
          var monthYear2=date2[1]+"/"+date2[2];
        }
 
-       if (monthYear1==monthYear2) {
+       if (monthYear1===monthYear2) {
+         if (toCall) {
+            if(callWhenStateIs)
+             {toCall();}
+         }
          return true
        }
+       if (toCall) {
+            if(callWhenStateIs===false)
+             {toCall();}
+         }
        return false;
 
   },
@@ -536,7 +565,13 @@ export var CONF={
                if (fieldTocheck!=undefined) {
                    value=value.toString().toLowerCase();
                    fieldTocheck=fieldTocheck.toString().toLowerCase()
-                   var checker=fieldTocheck.match(value);
+                   var checker=null;
+                   
+                   try {
+                     checker=fieldTocheck.match(value);
+                   } catch(e) {
+                     
+                   }
 
                      if (checker!=null) {
                        result[i]=checker;
@@ -551,6 +586,16 @@ export var CONF={
       })
     return data;
   },
+  shortName(name){//give a short of given name,eg:kaka prodo='Kp'
+    if (name===undefined) {
+      return "";
+    }
+     name=name.split(" ");
+    var name1=name[0]!==undefined?name[0].charAt(0):"";
+    var name2=name[1]!==undefined?name[1].charAt(0):"";
+    name=name1.toUpperCase()+''+name2.toLowerCase();
+    return name;
+  }
 
 
 

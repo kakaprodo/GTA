@@ -15,6 +15,7 @@ export class Station extends Query{
       this.colQuery="station_name,created_at";
       this.colSearch="station_name";
       this.colAlias={station_name:'Station name'};
+      this.contentImg="station_name";
       this.modelName="station";
       /*col to send fro creating the table client for the first time*/
       this.colCreation="id integer primary key not null,station_name,created_at text";

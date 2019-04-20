@@ -231,6 +231,21 @@ export var style=StyleSheet.create({
  },
  sidebarIcon:{
     color:globalStyle.green_color
+ },
+ div_image:{
+     height:50,
+     width:50,
+     borderTopRightRadius: 50,
+     borderBottomRightRadius: 50,
+     borderTopLeftRadius: 50,
+     borderBottomLeftRadius: 50,
+     alignItems: 'center',
+     justifyContent: 'center'
+ },
+ div_img_text:{
+   color:'white',
+   fontSize:14,
+   
  }
 
 })

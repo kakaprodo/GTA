@@ -5,6 +5,9 @@ import { StyleSheet, View,ScrollView,KeyboardAvoidingView } from 'react-native';
 import {AppLayout,AppLoading} from "./app_layout"
 
 import {User} from "../controller/user"
+import {Repport} from "../controller/repport"//
+
+var repport=new Repport();//
 
 var user;
 
@@ -37,7 +40,7 @@ export default class Dashboard extends Component {
      return {header};
   }
   init(){
-
+    H.isLoggedIn=true;
     if (!H.isLoggedIn) {
         H.logOut();
     }
@@ -49,6 +52,9 @@ export default class Dashboard extends Component {
     this.init();
 
     H.initIcon(this);
+
+    //we will be saving new repport if it doesnt exist automatically when user reach this table
+    repport.repportHandler("save");
 
 
   }

@@ -62,7 +62,9 @@ export default class AllDrivers extends Component {
 
   init(){
 
-    driver.index();
+    driver.index((all)=>{
+       this.setState({drivers:all.reverse()})
+    });
   }
 
   delDriver(chauffeur){
@@ -130,12 +132,10 @@ export default class AllDrivers extends Component {
                                     onPress={()=>{H.goTo(this,"show_driver",{id:item.id,pic:NumImg})}}
                                     avatar key={index}>
                                     <Left>
-                                      <Text></Text>
-                                      <Thumbnail small source={H.img.drivers['driver'+NumImg]} />
+                                      <H.DivImg  name={item.names}/>
                                     </Left>
                                     <Body  >
                                       <Text>{item.names} / code :{item.id}</Text>
-                                      <Text note>Sex : {item.sex}</Text>
                                       <Text note>Created : {item.created_at}</Text>
                                     </Body>
                                     <Right>

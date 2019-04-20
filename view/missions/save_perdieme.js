@@ -24,7 +24,9 @@ export default class SavePerd extends Component {
         diValid:"",
         mission_id:"",
         driver_id:"",
-        driver:[]
+        driver:[],
+        isExipred:false,
+        mission:[],
 
 
 
@@ -58,8 +60,13 @@ export default class SavePerd extends Component {
 
            var mission=H.getParam(this.props,"mission");
            var driver_id=H.getParam(this.props,"driver_id");
+
            this.setState({mission:mission,mission_id:mission.id,driver_id:driver_id});
            driver.show(driver_id);
+           
+           H.dateSameMonth(mission.created_at,H.now(...[,'my']),true,()=>{
+                this.setState({isExpired:true})
+           });
   }
 
   register(){
@@ -84,6 +91,10 @@ export default class SavePerd extends Component {
     var state=this.state;
     if (state.loading) {
       return <AppLoading />
+    }
+
+    if (state.isExpired) {
+       return <AppLayout><H.ExpiredOp date={H.format(state.mission.created_at,'my')} force={()=>{this.setState({isExpired:false})}}/></AppLayout>
     }
 
 

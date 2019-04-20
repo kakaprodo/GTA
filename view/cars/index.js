@@ -54,7 +54,9 @@ export default class Allcars extends Component {
 
   init(){
 
-    car.index();
+    car.index((all)=>{
+      this.setState({cars:all.reverse()})
+    });
   }
 
   delcar(veh){
@@ -119,15 +121,16 @@ export default class Allcars extends Component {
 
                      <List style={{marginLeft:-3}}>
                         {cars.map((item,index) => {
-
+                           
+                           
                           return <ListItem button
                                     onPress={()=>{H.goTo(this,"show_car",{id:item.id})}}
                                     avatar key={index}>
                                     <Left>
-                                      <Text></Text>
-                                      <Thumbnail square source={require('../../assets/img/cars.jpeg')} />
+                                       <H.DivImg bgColor={(bgColor)=>this.color=bgColor} name={item.marque}/>
                                     </Left>
                                     <Body  >
+                                    
                                       <Text>{item.marque}</Text>
                                       <Text note>Plaque : {item.plaque} / code :{item.id}</Text>
                                       <Text note>Created : {item.created_at}</Text>

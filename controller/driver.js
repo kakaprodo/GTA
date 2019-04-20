@@ -4,9 +4,11 @@ import {Query} from "./query"
 import {Validation as Valid} from "../helper/validation"
 import {IO} from "./driver_io"
 import {Perdieme} from "./perdieme"
+import {Cars} from "./cars"
 var io=new IO(undefined,'driver_id');
 var perd=new Perdieme();
 var val=new Valid();
+var car=new Cars();
 
 export class Driver extends Query{
     constructor(BindView=[],creation=false){
@@ -21,6 +23,7 @@ export class Driver extends Query{
       this.colSearch="names,id";
       this.colAlias={id:'Code',names:'Names'};
       this.modelName="driver";
+      this.contentImg="names";
       this.conf();
 
 
@@ -36,15 +39,26 @@ export class Driver extends Query{
 
     }
 
+    car(id,onSucc){//it gives the list of cars in which this driver work
+       car.driver(id,(listCar)=>{
+             
+            if (onSucc) {
+               onSucc(listCar);
+            }
+        });
+    }
+
 
     driver_perdieme(id,onSucc){
         perd.driver(id,(perdiemes)=>{
             perdiemes=H.getForThisMonth(perdiemes);
+
             var montant=H.getTotal(perdiemes,'montant');
             if (onSucc) {
                onSucc.call(this,{montant:montant})
             }
         },()=>{
+
             if (onSucc) {
                onSucc.call(this,{montant:0})
             }
@@ -76,13 +90,13 @@ export class Driver extends Query{
         var model=this.model;
          val.reset();
          val.add(["required"],model.state.name,"nameValid");
-         val.add(["required"],model.state.sex,"sexValid");
+
 
 
          if (val.validate(this.model)) {
              var driver=model.state;
              var date=new Date();
-
+             driver.sex='M';
              var data=[driver.name,driver.sex,H.now(true)];
 
                //we insert new info of the agent
@@ -130,13 +144,14 @@ export class Driver extends Query{
                  val.reset();
 
                  val.add(["required"],model.state.name,"nameValid");
-                 val.add(["required"],model.state.sex,"sexValid");
+
 
 
 
                  if (val.validate(this.model)) {
                      var driver=model.state;
                      var date=new Date();
+                     driver.sex='M';
 
                      var data=[driver.name,driver.sex,driver.driver.created_at];
 

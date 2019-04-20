@@ -58,7 +58,7 @@ export default class Allfourns extends Component {
            for (var i = 0; i < data.length; i++) {
                   total=total+H.getTotal(data[i].mvm,"montant",{is_paid:0})
            }
-           this.setState({total:total});
+           this.setState({total:total,allfourn:data.reverse()});
     },()=>{
         this.setState({total:0});
     });
@@ -133,9 +133,7 @@ export default class Allfourns extends Component {
                                     onPress={()=>{H.goTo(this,"show_fournisseur",{id:item.id})}}
                                     avatar key={index}>
                                     <Left>
-                                      <Button transparent>
-                                        <Icon style={{color:H.randomColor()}} name='pint' />
-                                      </Button>
+                                       <H.DivImg  name={item.maison}/>
                                     </Left>
                                     <Body  >
 

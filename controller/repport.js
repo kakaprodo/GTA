@@ -74,7 +74,11 @@ export class Repport extends Query{
                 //we check if the mois_annee doesn't exist then we save()
                 var dataToCheck={mois_annee:H.now(...[,'my'])};
 
-              super.exist(...[dataToCheck,()=>{resp.call(md)},()=>{
+              super.exist(...[dataToCheck,()=>{
+                    if (resp) {
+                       resp.call(md)
+                    }
+              },()=>{
                    super.save(RepportToSave,()=>{
                        if (resp) {
                            resp.call(md,RepportToSave);

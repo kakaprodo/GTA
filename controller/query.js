@@ -115,6 +115,45 @@ export class Query extends Con{
        return this;
    }
 
+   renameTab(newName,succ){
+       this.db.transaction(tx => {
+             tx.executeSql(
+               `ALTER TABLE ${this.table} RENAME TO ${newName} `
+             );
+             //the value of col=id integer primary key not null, names text, email text,picture text,key text
+         },function(err){
+             console.log("error",err);
+         },
+         function(success){
+           if (succ) {
+               succ();
+           }
+         }
+       );
+       
+   }
+
+
+   addTableColumn(colName,type="text",succ){
+       this.db.transaction(tx => {
+             tx.executeSql(
+               `ALTER TABLE ${this.table} ADD COLUMN ${colName} ${type}`
+             );
+             //the value of col=id integer primary key not null, names text, email text,picture text,key text
+         },function(err){
+             console.log("error",err);
+         },
+         function(success){
+           if (succ) {
+               succ();
+           }
+         }
+       );
+
+       return this;
+       
+   }
+
 
    newTable(onSucc,onErr){
       
@@ -364,8 +403,8 @@ export class Query extends Con{
      var md=this;
      this.db.transaction(tx=>{
 
-
-       tx.executeSql(`select * from ${this.table} where ${foreinKey}=?`, [this.keyValue], (_, { rows:{_array} }) =>{
+       
+       tx.executeSql(`select * from ${this.table} where ${foreinKey}=?`, [this.keyValue.toString()], (_, { rows:{_array} }) =>{
          this.item=_array;
 
 

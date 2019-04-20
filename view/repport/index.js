@@ -57,7 +57,7 @@ export default class Allrepports extends Component {
     repport.repportHandler("save",(data)=>{
           repport.index(...[(allRepport)=>{
                  //console.log(allRepport);
-                this.setState({total:H.getTotal(allRepport,"resultat_net")})
+                this.setState({total:H.getTotal(allRepport,"resultat_net"),repports:allRepport})
           },,true]);
     });
 

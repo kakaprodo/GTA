@@ -17,10 +17,10 @@ export default class Createcar extends Component {
         loading:true,
         plaque:"",
         marque:"",
-        color:"",
+        driver_id:"",
         plaqueValid:"",
         marqueValid:"",
-        colorValid:"",
+        driver_idValid:"",
 
       }
 
@@ -79,7 +79,7 @@ export default class Createcar extends Component {
            <KeyboardAvoidingView behavior='padding' style={{flex:1,padding: 10,justifyContent: 'center'}}>
 
                <View style={{flex:40}}>
-                <Text style={[H.style.center,H.style.white_color]}>Registration of a new car : </Text>
+                <Text style={[H.style.center,H.style.white_driver_id]}>Registration of a new car : </Text>
 
                    <Form >
                       <View>
@@ -114,15 +114,16 @@ export default class Createcar extends Component {
                      <View>
 
                           <Item style={H.style.inputField} floatingLabel>
-                           <Label style={H.style.label}>Color of car :</Label>
+                           <Label style={H.style.label}>Driver's code of this car :</Label>
                            <Input
-                            value={state.color}
-                             onChangeText={(name)=>{H.fieldChange(this,name,"color","colorValid")}}
+                            value={state.driver_id}
+                             keyboardType="numeric"
+                             onChangeText={(name)=>{H.fieldChange(this,name,"driver_id","driver_idValid")}}
                            />
 
 
                          </Item>
-                         {H.invalid(this,"colorValid")?<Text style={H.style.error_color}>{this.state.colorValid}</Text>:<Text></Text>}
+                         {H.invalid(this,"driver_idValid")?<Text style={H.style.error_color}>{this.state.driver_idValid}</Text>:<Text></Text>}
                     </View>
 
 

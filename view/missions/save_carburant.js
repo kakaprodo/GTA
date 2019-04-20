@@ -20,8 +20,12 @@ export default class SaveCarb extends Component {
         quantite:"",
         kmp:"",
         mission_id:"",
+        descr1:"",
+        descr2:"",
         qValid:"",
         kmpValid:"",
+        isExpired:false,
+        mission:[],
 
 
 
@@ -52,9 +56,12 @@ export default class SaveCarb extends Component {
 
   init(){
 
-           var mission_id=H.getParam(this.props,"mission_id");
+           var mission=H.getParam(this.props,"mission");
 
-          this.setState({mission_id:mission_id});
+          this.setState({mission_id:mission.id,mission:mission});
+          H.dateSameMonth(mission.created_at,H.now(...[,'my']),true,()=>{
+                this.setState({isExpired:true})
+           },false/* callback if false*/);
   }
 
   register(){
@@ -78,6 +85,10 @@ export default class SaveCarb extends Component {
     var state=this.state;
     if (state.loading) {
       return <AppLoading />
+    }
+
+    if (state.isExpired) {
+       return <AppLayout><H.ExpiredOp date={H.format(state.mission.created_at,'my')} force={()=>{this.setState({isExpired:false})}}/></AppLayout>
     }
 
 
@@ -119,10 +130,38 @@ export default class SaveCarb extends Component {
                     </View>
 
 
+                     <View>
+
+                          <Item style={H.style.inputField} floatingLabel>
+                           <Label style={H.style.label}>Other descriptiion(1) :</Label>
+                           <Input
+                             value={state.descr1}
+                             
+                             onChangeText={(name)=>{H.fieldChange(this,name,"descr1")}}
+                           />
+
+                         </Item>
+                        
+                    </View>
+                    <View>
+
+                          <Item style={H.style.inputField} floatingLabel>
+                           <Label style={H.style.label}>Other descriptiion(2) :</Label>
+                           <Input
+                             value={state.descr2}
+                             
+                             onChangeText={(name)=>{H.fieldChange(this,name,"descr2")}}
+                           />
+
+                         </Item>
+                        
+                    </View>
 
 
 
-                        <Button onPress={()=>{this.register()}} success small full rounded iconRight>
+
+
+                        <Button style={{marginTop:10}} onPress={()=>{this.register()}} success small full rounded iconRight>
                           <Text style={H.style.textBtn}>Save</Text>
                           <Icon style={{fontSize: 17,...H.style.textBtn}} name="save" />
                        </Button>
