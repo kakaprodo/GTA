@@ -106,7 +106,8 @@ export default class ShowCarb extends Component {
 
                                                              <Text style={{fontSize: 13,marginBottom:5}}>Quantity:{item.quantite}</Text>
                                                              <Text style={{fontSize: 13,marginBottom:5}}>Km parcouru:{item.kmp} Km</Text>
-                                                             <Text style={{fontSize: 13,marginBottom:5}}>Date :{item.created_at}</Text>
+                                                              <Text style={{fontSize: 13,marginBottom:5}}>Description1:{item.descr1}</Text>
+                                                               <Text style={{fontSize: 13,marginBottom:5}}>Description2:{item.descr2}</Text>
                                                            </View>
                                                           </Card>
 

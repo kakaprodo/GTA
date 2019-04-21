@@ -85,7 +85,7 @@ export default class Allmissions extends Component {
 
                    </Body>
                    <Right>
-                     <Button onPress={()=>{this.delmission(item)}} transparent>
+                     <Button onPress={()=>{this.delmission(item,isForMonth)}} transparent>
                          <Icon style={{fontSize: 30,color:"#b71c1c"}}  name="trash" />
                      </Button>
 
@@ -100,8 +100,13 @@ export default class Allmissions extends Component {
 
 
 
-  delmission(chauffeur){
-      mission.destroyEl(chauffeur.id,()=>{this.init()});
+  delmission(missionDel,isForMonth){
+    var state=this.state;
+ 
+      mission.destroyEl(missionDel.id,()=>{
+          H.handleOnDelete(missionDel,isForMonth,'dataOfMonth','missions',this);
+          
+      });
   }
 
 

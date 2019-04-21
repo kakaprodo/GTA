@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Header,Container, Content, Form, Item, Input,Subtitle, Label,Text,Button,Icon,H2,H3,Body,Title,
   Card, CardItem ,Image,Thumbnail,List,ListItem, Left, Right, Tabs,Tab,TabHeading} from 'native-base';
 
-import { StyleSheet, View,ScrollView,Platform,BackHandler } from 'react-native';
+import { StyleSheet, View,ScrollView,Platform,BackHandler ,TouchableOpacity} from 'react-native';
 import {AppLayout,AppLoading} from "../app_layout"
 
 import {Entretien} from "../../controller/entretien"
@@ -97,8 +97,12 @@ export default class Allentr extends Component {
                                <Text style={{fontSize: 13,marginBottom:5}}>Motif :{item.motif}</Text>
                                <Text style={{fontSize: 13,marginBottom:5}}>Montant :{item.montant}</Text>
 
-
-                                <Text onPress={()=>{H.goTo(this,H.path.show_car,{id:item.car_id})}} style={{fontSize: 13,paddingTop:10,paddingBottom:10}}>Sur vehicule n°: {H.round(item.car_id)} </Text>
+                               <TouchableOpacity onPress={()=>{H.goTo(this,H.path.show_car,{id:item.car_id})}}>
+                                   <Text  style={{fontSize: 13,paddingTop:10,paddingBottom:10}}>Sur vehicule n°: {H.round(item.car_id)} </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={()=>{H.goTo(this,H.path.show_mechanician,{id:item.mechanician_id})}}>
+                                  <Text style={{fontSize: 13,marginBottom:5}}>Click to see the techanician</Text>
+                               </TouchableOpacity>
                                <Text style={{fontSize: 13,marginBottom:5}}>Date : {item.created_at}</Text>
                              </View>
                       </Card>

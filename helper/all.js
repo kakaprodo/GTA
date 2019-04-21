@@ -7,7 +7,7 @@
 // import {Validation as Valid} from "./validation";
 import { Font, AppLoading,Permissions,Location } from "expo";
 import React, { Component } from 'react';
-import {Alert} from "react-native"
+import {Alert,TouchableOpacity} from "react-native"
 import {Toast} from "native-base"
 const rColor=require('randomcolor');
 import  {Images} from "../assets/img/images"
@@ -356,9 +356,9 @@ export var CONF={
 
   },
   getFields(data=[]){
-    var fields=H.arrKeys(data);
+    var fields=this.arrKeys(data);
     var fieldString=fields.toString();
-    var values=H.arrValues(data);
+    var values=this.arrValues(data,'string');
     var nbRow=fields.length;
     var tagPrepare=nbRow>0?"?":null;//preparation query for insert specially
     var colUpdate="";//preparation of query for update
@@ -389,9 +389,25 @@ export var CONF={
   arrKeys(arr=[]){
      return Object.keys(arr);
   },
-  arrValues(arr=[]){
-     return Object.values(arr);
+  arrValues(arr=[],format){
+    arr=Object.values(arr);
+
+     if (format==="string") {//transform all value to string
+        arr=this.stringifyValue(arr);
+     }
+     return arr;
   },
+  stringifyValue(obj) {
+      var keys=Object.keys(obj);
+      var finalResult=[];
+      for (var i = 0;i<keys.length;i++) {
+            finalResult[keys[i]]=obj[keys[i]].toString();
+         
+      }
+
+      return finalResult;
+ }
+  ,
   fieldMach(data,fieldToCheck){
       var resp=true;
       var fields=this.arrKeys(fieldToCheck);
@@ -597,6 +613,22 @@ export var CONF={
     var name2=name[1]!==undefined?name[1].charAt(0):"";
     name=name1.toUpperCase()+''+name2.toLowerCase();
     return name;
+  },
+  handleOnDelete(itemToDel,isForMonth,dataOfMonth,allItems,md){
+      if (isForMonth){
+               var list=md.state[dataOfMonth].filter((item)=>{
+                  return itemToDel.id!==item.id;
+               });
+
+               md.setState({dataOfMonth:list})
+           }
+           else{
+               var list=md.state[allItems].filter((item)=>{
+                  return itemToDel.id!==item.id;
+               });
+
+              md.setState({[allItems]:list})
+           }
   }
 
 

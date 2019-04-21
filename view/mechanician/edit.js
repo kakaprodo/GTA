@@ -18,7 +18,7 @@ export default class Createmec extends Component {
         name:"",
         nameValid:"",
         id:null,
-        mec:null,
+        mec:[],
         
 
       }
@@ -88,7 +88,7 @@ export default class Createmec extends Component {
            <KeyboardAvoidingView behavior='padding' style={{flex:1,padding: 10,justifyContent: 'center'}}>
 
                <View style={{flex:40}}>
-                <Text style={[H.style.center,H.style.white_driver_id]}>Registration of a new mechanician : </Text>
+                <Text style={[H.style.center,H.style.white_driver_id]}>Edition of {state.mec.name} : </Text>
 
                    <Form >
                       <View>
@@ -96,7 +96,7 @@ export default class Createmec extends Component {
                            <Item style={H.style.inputField} floatingLabel>
                             <Label style={H.style.label}>name of Mechanician :</Label>
                             <Input
-                               value={state.name}
+                               value={state.name || state.mec.name}
                               onChangeText={(name)=>{H.fieldChange(this,name,"name","nameValid")}}
                             />
 

@@ -22,7 +22,7 @@ export default class Allcarb extends Component {
       refreshing:true,
       dataOfMonth:[],
       allcarb:[],
-      dataOfMonth:[],
+      
       total:0
     }
     H.setModel("current",this);
@@ -61,8 +61,12 @@ export default class Allcarb extends Component {
     },,true]);
   }
 
-  delcarb(carbind){
-      carb.destroyEl(carbind.id,()=>{this.init()});
+  delcarb(carbind,isForMonth){
+      carb.destroyEl(carbind.id,()=>{
+            var state=this.state;
+            
+            H.handleOnDelete(carbind,isForMonth,'dataOfMonth','allcarb',this);
+      });
   }
 
   Listcarb(isForMonth=true){
@@ -86,7 +90,7 @@ export default class Allcarb extends Component {
               return <Card key={index}>
                              <CardItem header style={{backgroundColor: '#ccc',height: 50}}>
                                <Text>N° {opNumb}</Text>
-                               <Button onPress={()=>{this.delcarb(item)}} style={{position: 'absolute',right: 5,top:10}} danger small>
+                               <Button onPress={()=>{this.delcarb(item,isForMonth)}} style={{position: 'absolute',right: 5,top:10}} danger small>
                                  <Icon name="trash" />
                                </Button>
                              </CardItem>

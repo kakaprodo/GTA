@@ -60,7 +60,7 @@ export class Station extends Query{
                this.model.setState({[this.content]:ios});
              }
           });
-        }
+    }
 
   create(onSucc,onErr){
 

@@ -94,15 +94,32 @@ export class Mechanician extends Query{
         }
 
         show(id,onSucc,onErr){
-           return super.keyValue(id).getByKey((station)=>{
+           return super.keyValue(id).getByKey((mechanician)=>{
+                 mechanician.monthly_entretien=0;
+                 mechanician.total_entretien=0;
+                 super.hasMany('entretien','mechanician_id',(entretiens)=>{
 
-                if (this.content!=undefined) {
-                  this.model.setState({[this.content]:station});
-                }
+                       mechanician.monthly_entretien=H.getTotal(H.getForThisMonth(entretiens));
+                       mechanician.total_entretien=H.getTotal(entretiens);
+                       if (this.content!=undefined) {
+                          this.model.setState({[this.content]:mechanician});
+                        }
 
-                if (onSucc) {
-                    onSucc.call(this,station);
-                }
+                        if (onSucc) {
+                            onSucc(mechanician);
+                        }
+                 },()=>{
+
+                      if (this.content!=undefined) {
+                          this.model.setState({[this.content]:mechanician});
+                        }
+
+                        if (onSucc) {
+                            onSucc(mechanician);
+                        }
+
+                 });
+                
 
            },()=>{
              if (this.content!=undefined) {
@@ -153,7 +170,7 @@ export class Mechanician extends Query{
     destroyEl(id,onSucc,onErr,noAlert=false){
 
         super.keyValue(id).destroy(()=>{
-               entretien.destroyEl(...[id,,,true]);
+              // entretien.destroyEl(...[id,,,true]);
              if (onSucc) {
                 onSucc.call(this);
              }

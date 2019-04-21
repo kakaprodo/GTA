@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Header,Container, Content, Form, Item, Input, Label,Text,Button,Icon,H2,H3,Body,Title,
   Card, CardItem ,Image,Thumbnail,List,ListItem, Left, Right, Switch} from 'native-base';
 
-import { StyleSheet, View,ScrollView,Platform,BackHandler } from 'react-native';
+import { StyleSheet, View,ScrollView,Platform,BackHandler,TouchableOpacity  } from 'react-native';
 import {AppLayout,AppLoading} from "../app_layout"
 
 import {MissionCar} from "../../controller/mission_car"
@@ -41,10 +41,11 @@ export default class AllMissCar extends Component {
 
   init(){
     var props=this.props;
-    var mission=props.mission;
-    var modelMission=props.modelMission;
+    var {mission,modelMission}=props;
+
 
      this.setState({mission:mission})
+     
     car.mission_car(mission.id,(carF)=>{
        var total_maison=H.getTotal(carF,'montant_maison');
        var total_prix_loc=H.getTotal(carF,'prix_loc');
@@ -98,9 +99,10 @@ export default class AllMissCar extends Component {
                                <Body  >
                                  <Text onPress={()=>{H.goTo(this,H.path.show_car,{id:item.car_id})}} style={{paddingTop:5,paddingBottom:5}}>Car code :{item.car_id}</Text>
                                  <Text note onPress={()=>{H.goTo(this,H.path.show_driver,{id:item.driver_id})}} style={{paddingTop:5,paddingBottom:5}}>
-                                        Driver code :{item.driver_id}  <Text onPress={()=>{H.goTo(this,H.path.save_perd,{mission:state.mission,driver_id:item.driver_id})}} note style={H.style.green_color}>Perdieme</Text>
+                                        Driver code :{item.driver_id}  <Text onPress={()=>{H.goTo(this,H.path.save_perd,{mission:state.mission,driver_id:item.driver_id})}}  note style={H.style.green_color}>Perdieme</Text>
+                                                                      
 
-                                      </Text>
+                                   </Text>
                                  <Text note>Prix location : {item.prix_loc} Um</Text>
                                  <Text note>Montant maison : {item.montant_maison} Um</Text>
                                </Body>

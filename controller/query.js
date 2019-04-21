@@ -41,7 +41,7 @@ export class Query extends Con{
          let colName=colNames[i];
        if (state[colName]!=undefined) {
 
-             data[i]=state[colName];
+             data[i]=state[colName].toString();
 
 
        }
@@ -204,6 +204,7 @@ export class Query extends Con{
                                   }
                                 },(err)=>{
                                  this.inAction=false;
+                               
                                   if (onErr) {
                                      onErr.call(md);
                                   }
@@ -339,7 +340,8 @@ export class Query extends Con{
 
       if (noAlert) {//if we dont need user confirmation
         this.db.transaction(tx=>{
-             tx.executeSql(`DELETE FROM ${this.table} where ${this.keyName}=? `, [this.keyValue],()=>{
+             
+             tx.executeSql(`DELETE FROM ${this.table} where ${this.keyName}=? `, [this.keyValue.toString()],()=>{
                this.response.msg="successfully done";
                this.response.error=false;
                if (onSucc) {
@@ -359,6 +361,7 @@ export class Query extends Con{
 
       H.swal('Do you want to delete this item',()=>{
         this.db.transaction(tx=>{
+            console.log(`DELETE FROM ${this.table} where ${this.keyName}=${this.keyValue} `);
              tx.executeSql(`DELETE FROM ${this.table} where ${this.keyName}=? `, [this.keyValue],()=>{
                this.response.msg="successfully done";
                this.response.error=false;
@@ -402,9 +405,33 @@ export class Query extends Con{
    belongsTo(table,foreinKey,onSucc,onErr){
      var md=this;
      this.db.transaction(tx=>{
-
+      
        
        tx.executeSql(`select * from ${this.table} where ${foreinKey}=?`, [this.keyValue.toString()], (_, { rows:{_array} }) =>{
+         this.item=_array;
+
+
+           if (this.item.length!=0) {
+             onSucc.call(md,this.item);
+           }
+           else{
+             onErr.call(md);
+           }
+
+        }
+       );
+     });
+
+     return this;
+   }
+
+
+   hasMany(table,foreinKey,onSucc,onErr){
+     var md=this;
+     this.db.transaction(tx=>{
+
+       
+       tx.executeSql(`select * from ${table} where ${foreinKey}=?`, [this.keyValue.toString()], (_, { rows:{_array} }) =>{
          this.item=_array;
 
 

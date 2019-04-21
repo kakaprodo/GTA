@@ -54,7 +54,7 @@ export class Carburant extends Query{
 
     index(onSucc,onNodata){
       super.all((ios)=>{
-       console.log(ios)
+       
             if (onSucc) {
                onSucc.call(this,ios)
             }

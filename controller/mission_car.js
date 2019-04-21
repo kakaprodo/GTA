@@ -27,7 +27,7 @@ export class MissionCar extends Query{
       super.tab("mission_car",this.colCreation).newTable(()=>{
                        super.fields(this.colQuery)
                    },()=>{super.fields(this.colQuery)});
-
+   
     }
 
     with(data,resp){
@@ -95,6 +95,7 @@ export class MissionCar extends Query{
 
     index(onSucc,onNodata,isDesc=false){
           super.all((ios)=>{
+           
               ios=isDesc?H.descOrder(ios):ios;
 
               if (onSucc) {

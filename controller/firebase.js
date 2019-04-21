@@ -36,7 +36,13 @@ export class Fb extends Query{
     sendToFirebase(tableName,data,onSucc){
 
 
-
+          //we check if data exist
+          if (data.length>0) {
+              if (onSucc) {
+               onSucc.call(this)
+             }
+            return;
+          }
          var table=this.dbFb.ref('/'+tableName);
          table.set(data);
          if (onSucc) {

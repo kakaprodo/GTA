@@ -115,7 +115,7 @@ export default class Showmec extends Component {
                                </Left>
                                <Body>
 
-                                 <Text>{0} Um</Text>
+                                 <Text>{mec.monthly_entretien} Um</Text>
                                  <Text note>Monthly maintenance amount</Text>
                                </Body>
                                <Right></Right>
@@ -131,7 +131,7 @@ export default class Showmec extends Component {
                                 </Left>
                                 <Body>
 
-                                  <Text>{0} Um</Text>
+                                  <Text>{mec.total_entretien} Um</Text>
                                   <Text note>Total maintenance amount</Text>
                                 </Body>
                                 <Right></Right>

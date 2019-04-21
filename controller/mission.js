@@ -4,8 +4,10 @@ import {Query} from "./query"
 import {Validation as Valid} from "../helper/validation"
 import {Carburant as Carb} from "./carburant"
 import {Perdieme as Perd} from "./perdieme"
+import {MissionCar} from "./mission_car"
 var carb=new Carb(undefined,'mission_id');
 var perd=new Perd(undefined,'mission_id');
+var missionCar=new MissionCar(undefined,'mission_id');;
 var val=new Valid();
 
 export class Mission extends Query{
@@ -202,12 +204,19 @@ export class Mission extends Query{
     destroyEl(id,onSucc,onErr,noAlert=false){
 
         super.keyValue(id).destroy(()=>{
-            carb.destroyEl(id,undefined,undefined,true);
-            perd.destroyEl(id,undefined,undefined,true);
+            carb.destroyEl(id,()=>{
+                perd.destroyEl(id,()=>{
+                    missionCar.destroyEl(id,()=>{
 
-             if (onSucc) {
-                onSucc.call(this);
-             }
+                         if (onSucc) {
+                            onSucc();
+                         }
+                    },undefined,true);
+                },undefined,true);
+            },undefined,true);
+            
+            
+
         },()=>{
           if (onErr) {
              onErr.call(this);

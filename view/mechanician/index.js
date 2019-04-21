@@ -19,7 +19,6 @@ export default class AllMech extends Component {
       super(props);
       this.state={
       loading:true,
-
       refreshing:true,
       mecs:[],
     }

@@ -5,8 +5,10 @@ import { StyleSheet, View,ScrollView,KeyboardAvoidingView,BackHandler,Platform }
 import {AppLayout,AppLoading} from "../app_layout"
 
 import {Entretien} from "../../controller/entretien"
+import {Mechanician} from "../../controller/mechanician"
 
 var entr;
+var mec;
 
 let listener=null;
 
@@ -19,17 +21,19 @@ export default class DriverIO extends Component {
         loading:true,
         montant:"",
         motif:"",
-        type:"",
+        mechanician_id:"",
         car_id:"",
         montantValid:"",
         motifValid:"",
-        typeValid:"",
+        mechanician_idValid:"",
         car_idValid:"",
+        allMecs:[],
         car:"",
 
      }
 
     entr=new Entretien({model:this});
+    mec=new Mechanician({model:this,container:'allMecs'});
   }
 
   static navigationOptions=({navigation})=>{
@@ -59,9 +63,10 @@ export default class DriverIO extends Component {
 
            var car=H.getParam(this.props,"car");
 
-
            //io.destroyAll();
            this.setState({car_id:car.id,car:car});
+           //we take all mechanicial
+           mec.index();
   }
 
   register(){
@@ -113,10 +118,11 @@ export default class DriverIO extends Component {
                      </View>
 
                      <View>
-
+                         
                           <Item style={H.style.inputField} floatingLabel>
                            <Label style={H.style.label}>Montant :</Label>
                            <Input
+
                              value={state.montant}
                              keyboardType="numeric"
                              onChangeText={(name)=>{H.fieldChange(this,name,"montant","montantValid")}}
@@ -128,7 +134,7 @@ export default class DriverIO extends Component {
 
 
                   <View style={{margin:10}}>
-                        <Label style={H.style.label}>Select the techinician's type :</Label>
+                        <Label style={H.style.label}>Select the mechanician :</Label>
                           <Item style={H.style.inputField} picker>
 
                             <Picker
@@ -138,24 +144,20 @@ export default class DriverIO extends Component {
                               placeholder="Mark out of 5"
                               placeholderStyle={H.style.app_color}
                               placeholderIconColor={{color:"red"}}
-                              selectedValue={this.state.type}
-                              onValueChange={(sex)=>{H.fieldChange(this,sex,"type","typeValid")}}
+                              selectedValue={this.state.mechanician_id}
+                              onValueChange={(sex)=>{H.fieldChange(this,sex,"mechanician_id","mechanician_idValid")}}
                              >
                              <Picker.Item label="Click to select" value="" />
-                             <Picker.Item label="Mechanicien" value={'Mechanicien'} />
-                             <Picker.Item label="Electricien" value={'Electricien'} />
-                             <Picker.Item label="Electronicien" value={'Electronicien'} />
-                             <Picker.Item label="Frigogiste" value={'Frigogiste'} />
-                             <Picker.Item label="Derborceleur" value={'Derborceleur'} />
-                             <Picker.Item label="Maintenancier" value={'Maintenancier'} />
-                             <Picker.Item label="Garnisseur" value={'Garnisseur'} />
-                             <Picker.Item label="Quado" value={'Quado'} />
-                             <Picker.Item label="Lavage" value={'Lavage'} />
-
+                             
+                             { 
+                              state.allMecs.map((mec,index)=>{
+                                 return <Picker.Item key={'mec'+index} label={mec.name} value={mec.id} />
+                               })
+                              }
 
                               </Picker>
                             </Item>
-                            {H.invalid(this,"typeValid")?<Text style={H.style.error_color}>{this.state.typeValid}</Text>:<Text></Text>}
+                            {H.invalid(this,"mechanician_idValid")?<Text style={H.style.error_color}>{this.state.mechanician_idValid}</Text>:<Text></Text>}
                         </View>
 
 

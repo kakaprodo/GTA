@@ -227,7 +227,7 @@ export class Repport extends Query{
     destroyEl(id,onSucc,onErr,noAlert=false){
 
         super.keyValue(id).destroy(()=>{
-              mvm.destroyEl(...[id,,,true]);
+              
              if (onSucc) {
                 onSucc.call(this);
              }

@@ -11,20 +11,21 @@ export class Entretien extends Query{
       this.model=BindView.model;
       this.content=BindView.container;//the state variable to contain the data
       this.agent=null;
-      this.colQuery="motif,montant,car_id,type,created_at";
+      this.colQuery="motif,montant,car_id,mechanician_id,created_at";
       /*col to send fro creating the table client for the first time*/
-      this.colCreation="id integer primary key not null,motif text,montant text,car_id text,type text,created_at text";
+      this.colCreation="id integer primary key not null,motif text,montant text,car_id text,mechanician_id text,created_at text";
 
       this.conf();
 
 
-
+     
     }
 
     conf(){
       //Higuration for SQL request
-
-     super.tab("entretien",this.colCreation).newTable(()=>{
+     
+     super.tab("entretien",this.colCreation)
+                 .newTable(()=>{
                        super.fields(this.colQuery)
                    },()=>{super.fields(this.colQuery)});
 
@@ -55,7 +56,7 @@ export class Entretien extends Query{
   index(onSucc,onNodata,isDesc=false){
           super.all((ios)=>{
               ios=isDesc?H.descOrder(ios):ios;
-
+              
               if (onSucc) {
                  onSucc.call(this,ios)
               }
@@ -80,15 +81,15 @@ export class Entretien extends Query{
              .addRule(["required"],'motif')
              .addRule(["number"],'montant')
              .addRule(["required"],'car_id')
-             .addRule(["required"],'type');
+             .addRule(["required"],'mechanician_id');
 
 
-
+              
 
              if (val.validate()) {
                  var entretien=model.state;
                  var data=super.getData(this.model);
-
+                 
                    //we insert new info of the agent
                    super.insert(data,()=>{
                        if (onSucc) {
@@ -96,7 +97,7 @@ export class Entretien extends Query{
                        }
                    },()=>{
                      if (onErr) {
-                         onErr.call(this,"Input error");
+                         onErr.call(this,"Refuse to save");
                      }
                    });
              }
@@ -139,7 +140,7 @@ export class Entretien extends Query{
                     .addRule(["required"],'motif')
                     .addRule(["number"],'montant')
                     .addRule(["required"],'car_id')
-                    .addRule(["required"],'type');
+                    .addRule(["required"],'mechanician_id');
 
 
 
