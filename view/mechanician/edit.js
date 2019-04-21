@@ -17,6 +17,8 @@ export default class Createmec extends Component {
         loading:true,
         name:"",
         nameValid:"",
+        id:null,
+        mec:null,
         
 
       }
@@ -25,12 +27,14 @@ export default class Createmec extends Component {
   }
 
   static navigationOptions=({navigation})=>{
-     let headerTitle="New mechanician";
+    
+     let headerTitle="Edit Mechanician";
      let headerStyle=H.style.headers;
      let headerTitleStyle=H.style.title;
      return {headerTitle,headerStyle,headerTitleStyle};
      // let header=null;
      // return {header};
+ 
   }
 
 
@@ -39,17 +43,27 @@ export default class Createmec extends Component {
      H.initIcon(this);
   }
 
-  componentDidMount(){
-
+ componentDidMount(){
+   this.init();
   }
 
-  register(){
+  init(){
+    var id=H.getParam(this.props,"id");
+    this.setState({id:id});
+    mec.show(id,(mec)=>{
+         this.setState({mec:mec});
+    },()=>{H.goBack(this.props)});
+   }
 
-     mec.create((mec)=>{
-        // H.goTo(this,H.path.login);
-        H.resetModel(['2','3','4'],this);
-        H.Toast("successfully")
-        H.refreshPage(this.props)
+  editMec(){
+    var id=this.state.id;
+     mec.edit(id,(mec)=>{
+         //H.goBack(this.props);
+         H.Toast("successfully")
+        H.resetModel(['2','3'],this);
+        this.init();
+        H.refreshPage(this.props);
+
      },(msg="error occured")=>{
         H.Toast(msg,'danger')
 
@@ -80,7 +94,7 @@ export default class Createmec extends Component {
                       <View>
 
                            <Item style={H.style.inputField} floatingLabel>
-                            <Label style={H.style.label}>name of mechanician :</Label>
+                            <Label style={H.style.label}>name of Mechanician :</Label>
                             <Input
                                value={state.name}
                               onChangeText={(name)=>{H.fieldChange(this,name,"name","nameValid")}}
@@ -93,8 +107,8 @@ export default class Createmec extends Component {
 
 
 
-                        <Button onPress={()=>{this.register()}} success small full rounded iconRight>
-                          <Text style={H.style.textBtn}>Save</Text>
+                        <Button onPress={()=>{this.editMec()}} success small full rounded iconRight>
+                          <Text style={H.style.textBtn}>Edit now</Text>
                           <Icon style={{fontSize: 17,...H.style.textBtn}} name="save" />
                        </Button>
 

@@ -31,17 +31,6 @@ export default class Research extends Component {
   }
 
   static navigationOptions=({navigation})=>{
-    //  let headerTitle="Welcome";
-    //  let headerStyle=H.style.headers;
-    //  let headerTitleStyle=H.style.title;
-    //  headerRight=  <Button
-    //     onPress={() => alert('This is a button!')}
-    //     title="Info"
-    //     color="#fff"
-    //   />
-    //
-    //
-    // return {headerTitle,headerStyle,headerTitleStyle,headerRight};
      let header=null;
      return {header};
   }
@@ -53,6 +42,12 @@ export default class Research extends Component {
 
   }
 
+  componentWillReceiveProps(nextprops){
+     this.props=nextprops;
+      
+     this.init();
+  }
+
   init(){
 
     var model=H.getParam(this.props,"model");
@@ -62,7 +57,7 @@ export default class Research extends Component {
                    modelName:modelName,model:model});
     model.index(...[(allData)=>{
 
-          this.setState({alldata:allData});
+          this.setState({alldata:allData,start:false,dataFound:[],value:''});
     },,true]);
   }
 
@@ -84,6 +79,8 @@ export default class Research extends Component {
              this.setState({dataFound:dataFound});
       });
   }
+
+
 
 
 
@@ -130,7 +127,7 @@ export default class Research extends Component {
                                  <List style={{marginLeft:-3}}>
                                     {state.dataFound.map((item,index) => {
 
-                                         return <ListItem style={{marginBottom:10}} onPress={()=>{H.goTo(this,"show_"+state.modelName,{id:item.id,repport:item})}}
+                                         return <ListItem onPress={()=>{H.goTo(this,"show_"+state.modelName,{id:item.id,repport:item})}}
                                                      avatar key={index}>
                                                      <Left>
                                                         <H.DivImg  name={(state.modelName=="mission"?"N ":"")+item[state.model.contentImg]+" "||"R p"}/>
@@ -140,7 +137,7 @@ export default class Research extends Component {
                                                       {
                                                             state.checkCol.map((colName,index2) => {
 
-                                                                return  <Text key={index2} style={{fontSize: 13,marginBottom:5}}>{H.alias(state.model.colAlias,colName)} : {item[colName]}</Text>
+                                                                return  <Text key={index2} style={{fontSize: 13,marginBottom:5}}><Text style={H.style.green_color} note>{H.alias(state.model.colAlias,colName)} :</Text> {item[colName]}</Text>
                                                             })
 
                                                        }

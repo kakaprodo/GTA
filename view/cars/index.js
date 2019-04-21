@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Header,Container, Content, Form, Item, Input, Label,Text,Button,Icon,H2,H3,Body,Title,
-  Card, CardItem ,Image,Thumbnail,List,ListItem, Left, Right, Switch} from 'native-base';
+  Card, CardItem ,Image,Thumbnail,List,ListItem, Left, Right, Spiner} from 'native-base';
 
 import { StyleSheet, View,ScrollView,Platform,BackHandler } from 'react-native';
 import {AppLayout,AppLoading} from "../app_layout"
@@ -118,7 +118,7 @@ export default class Allcars extends Component {
 
 
 
-
+                     <H.LoadingData data={cars}/>
                      <List style={{marginLeft:-3}}>
                         {cars.map((item,index) => {
                            
@@ -146,6 +146,7 @@ export default class Allcars extends Component {
 
 
                     </List>
+                    
                   </Content>
 
             </AppLayout>

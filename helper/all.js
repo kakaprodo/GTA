@@ -18,6 +18,7 @@ import {pathRouter} from "./pathRouter"
 import {style,globalStyle} from "./style"
 import ExpiredOp from "../view/expired_operation"
 import DivImg from "./div_image"
+import LoadingData from './loading_data'
 
 
 
@@ -39,6 +40,7 @@ export var CONF={
     // cache:cashe,
     ExpiredOp:ExpiredOp,
     DivImg:DivImg,
+    LoadingData:LoadingData,
     style:style,
     appName:"GTA",
     img:Images,

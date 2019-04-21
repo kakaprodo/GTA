@@ -120,6 +120,7 @@ export default class Allstations extends Component {
                      </Right>
                    </Header>
                    <Content  padder style={H.style.content}>
+                       <H.LoadingData data={state.allstation}/>
                      <List style={{marginLeft:-3}}>
                           <CardItem header>
                              <Text>Total consommation :          <Text style={H.style.green_color}>{state.total}</Text></Text>

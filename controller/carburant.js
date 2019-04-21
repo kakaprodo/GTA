@@ -24,10 +24,10 @@ export class Carburant extends Query{
     conf(){
       //Higuration for SQL request
 
-     super.tab("carburant",this.colCreation).addTableColumn('descr2','text')
-               // .newTable(()=>{
-               //         super.fields(this.colQuery)
-               //     },()=>{super.fields(this.colQuery)});
+     super.tab("carburant",this.colCreation)
+               .newTable(()=>{
+                       super.fields(this.colQuery)
+                   },()=>{super.fields(this.colQuery)});
 
     }
 

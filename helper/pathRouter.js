@@ -54,9 +54,9 @@ export var pathRouter={
     backup:"backup",
 
     mechanicians:"mechanicians",
-    create_mechanician:"create_fournisseur",
-    show_mechanician:'show_fournisseur',
-    edit_mechanician:'edit_fournisseur',
+    create_mechanician:"create_mechanician",
+    show_mechanician:'show_mechanician',
+    edit_mechanician:'edit_mechanician',
 
 
 

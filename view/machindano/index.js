@@ -156,7 +156,7 @@ export default class Allmashindanos extends Component {
                      </Right>
                    </Header>
                    <Content  padder style={H.style.content}>
-
+                     <H.LoadingData data={state.allMash}/>
                      <Tabs tabBarUnderlineStyle={H.style.headers}>
                          <Tab heading={
                                    <TabHeading style={{backgroundColor: 'white'}}>

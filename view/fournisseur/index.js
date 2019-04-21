@@ -120,6 +120,7 @@ export default class Allfourns extends Component {
                      </Right>
                    </Header>
                    <Content  padder style={H.style.content}>
+                      <H.LoadingData data={state.allfourn}/>
                      <List style={{marginLeft:-3}}>
                           <CardItem header>
                              <Text>Total dettes :          <Text style={H.style.green_color}>{state.total} Um</Text></Text>

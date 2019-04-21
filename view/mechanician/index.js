@@ -14,7 +14,7 @@ let listener=null;
 
 
 
-export default class Allcars extends Component {
+export default class AllMech extends Component {
   constructor(props){
       super(props);
       this.state={
@@ -41,7 +41,7 @@ export default class Allcars extends Component {
 
   init(){
 
-    car.index((all)=>{
+    mec.index((all)=>{
       this.setState({mecs:all.reverse()})
     });
   }
@@ -55,7 +55,7 @@ export default class Allcars extends Component {
   render() {
 
     var state=this.state;
-     var cars=state.cars;
+     var mecs=state.mecs;
 
 
 
@@ -76,16 +76,14 @@ export default class Allcars extends Component {
                        </Button>
                      </Left>
                      <Body>
-                       <Title style={H.style.title}>All cars</Title>
+                       <Title style={H.style.title}>All mechanicians</Title>
                      </Body>
                      <Right>
                        <Button onPress={()=>{H.goTo(this,H.path.search,{model:mec})}} transparent>
                          <Icon name='search' />
                        </Button>
 
-                       <Button onPress={()=>{this.init()}} transparent>
-                         <Icon name='refresh' />
-                       </Button>
+                       
 
 
                        <Button onPress={()=>{H.goTo(this,H.path.create_mechanician,{init:()=>{this.init()}})}} transparent>
@@ -98,9 +96,9 @@ export default class Allcars extends Component {
 
 
 
-
+                     <H.LoadingData data={state.mecs}/>
                      <List style={{marginLeft:-3}}>
-                        {cars.map((item,index) => {
+                        {mecs.map((item,index) => {
                            
                            
                           return <ListItem button

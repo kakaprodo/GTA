@@ -117,7 +117,7 @@ export default class Allrepports extends Component {
 
 
 
-
+                      <H.LoadingData data={repports}/>
                      <List style={{marginLeft:-3}}>
                          <CardItem header>
                             <Text>Total resultat net : {state.total} Um</Text>

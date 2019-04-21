@@ -21,6 +21,7 @@ export default class SideBar extends Component {
             {name:"Perdiemes",icon:"cog",onPress:()=>{H.goTo(this,H.path.perdiemes,null,true)}},
             {name:"Fournisseurs",icon:"logo-tux",onPress:()=>{H.goTo(this,H.path.fournisseurs,null,true)}},
             {name:"Station",icon:"pint",onPress:()=>{H.goTo(this,H.path.stations,null,true)}},
+            {name:"Mechanician",icon:"hammer",onPress:()=>{H.goTo(this,H.path.mechanicians,null,true)}},
             {name:"Repport",icon:"logo-wordpress",onPress:()=>{H.goTo(this,H.path.repports,null,true)}},
 
 

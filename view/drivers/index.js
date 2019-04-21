@@ -123,7 +123,7 @@ export default class AllDrivers extends Component {
                    <Content padder style={H.style.content}>
 
 
-
+                      <H.LoadingData data={drivers}/>
 
                      <List style={{marginLeft:-3}}>
                         {drivers.map((item,index) => {

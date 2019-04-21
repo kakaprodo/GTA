@@ -22,7 +22,7 @@ export class Mechanician extends Query{
       this.colCreation="id integer primary key not null,name,created_at text";
 
       this.conf();
-      mvm=new StationMvm(BindView,"station_id");
+     
 
 
 
@@ -43,10 +43,10 @@ export class Mechanician extends Query{
               ios=isDesc?H.descOrder(ios):ios;
 
                if (this.content!=undefined) {
-                    this.model.setState({[this.content]:finalDataJoined});
+                    this.model.setState({[this.content]:ios});
                  }
                  if (onSucc) {
-                    onSucc.call(this,finalDataJoined)
+                    onSucc.call(this,ios)
                  }
 
 

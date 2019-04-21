@@ -151,7 +151,7 @@ export default class Allentr extends Component {
                      </Right>
                    </Header>
                    <Content  padder style={H.style.content}>
-
+                      <H.LoadingData data={state.allentr}/>
                      <Tabs tabBarUnderlineStyle={H.style.headers}>
                          <Tab heading={
                                    <TabHeading style={{backgroundColor: 'white'}}>

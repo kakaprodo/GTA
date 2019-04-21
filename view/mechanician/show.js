@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Header,Container, Content, Form, Item, Input,Subtitle, Label,Text,Button,Icon,H2,H3,Body,Title,
-  mecd, mecdItem ,Image,Thumbnail,List,ListItem, Left, Right, Tabs,Tab,TabHeading} from 'native-base';
+  Card, CardItem ,Image,Thumbnail,List,ListItem, Left, Right, Tabs,Tab,TabHeading} from 'native-base';
 
 import { StyleSheet, View,ScrollView,Platform,BackHandler } from 'react-native';
 import {AppLayout,AppLoading} from "../app_layout"
@@ -90,9 +90,9 @@ export default class Showmec extends Component {
                    <Content padder style={H.style.content}>
 
                      <ScrollView>
-                       <mecdItem header>
-                          <Text> mechanician's informations</Text>
-                       </mecdItem>
+                       <CardItem header>
+                          <Text> Mechanician's informations</Text>
+                       </CardItem>
                        <List>
                          <ListItem icon>
                                <Left>
@@ -110,12 +110,12 @@ export default class Showmec extends Component {
                          <ListItem icon>
                                <Left>
                                  <Button style={H.style.headers}>
-                                   <Icon active name="key" />
+                                   <Icon active name="logo-euro" />
                                  </Button>
                                </Left>
                                <Body>
 
-                                 <Text>{0}</Text>
+                                 <Text>{0} Um</Text>
                                  <Text note>Monthly maintenance amount</Text>
                                </Body>
                                <Right></Right>
@@ -126,12 +126,12 @@ export default class Showmec extends Component {
                                  >
                                 <Left>
                                   <Button style={H.style.headers}>
-                                    <Icon active name="radio-button-off" />
+                                    <Icon active name="logo-euro" />
                                   </Button>
                                 </Left>
                                 <Body>
 
-                                  <Text>{0}</Text>
+                                  <Text>{0} Um</Text>
                                   <Text note>Total maintenance amount</Text>
                                 </Body>
                                 <Right></Right>
@@ -142,7 +142,7 @@ export default class Showmec extends Component {
                                  >
                                 <Left>
                                   <Button style={H.style.headers}>
-                                    <Icon active name="radio-button-off" />
+                                    <Icon active name="calendar" />
                                   </Button>
                                 </Left>
                                 <Body>
