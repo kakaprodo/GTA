@@ -8,6 +8,7 @@
 import { Font, AppLoading,Permissions,Location } from "expo";
 import React, { Component } from 'react';
 import {Alert,TouchableOpacity} from "react-native"
+import {connect} from 'react-redux';
 import {Toast} from "native-base"
 const rColor=require('randomcolor');
 import  {Images} from "../assets/img/images"
@@ -19,6 +20,7 @@ import {style,globalStyle} from "./style"
 import ExpiredOp from "../view/expired_operation"
 import DivImg from "./div_image"
 import LoadingData from './loading_data'
+import {Variables} from './variables'
 
 
 
@@ -36,7 +38,7 @@ var Models={
 export var CONF={
     DNS:"http://192.168.43.25:8000/api",
     HOST_IMG:"http://192.168.43.25:8000/img",
-
+    const:Variables,
     // cache:cashe,
     ExpiredOp:ExpiredOp,
     DivImg:DivImg,
@@ -57,9 +59,15 @@ export var CONF={
     allInputRef:[],
     iconLoaded:false,
     initModel:null,
-    logOut(){
+    msg_404:'The list is empty',
+    con:connect,//connection of react and redux
+    logOut(model){
         this.isLoggedIn=false;
-        this.goTo(this.currentM(),this.path.login);
+        return {type:this.const.LOGOUT,done:()=>{
+              this.goTo(model,this.path.login);
+        }}
+        
+        
     },
     initModel(){
         if (this.initModel!=undefined){
@@ -75,8 +83,15 @@ export var CONF={
     btn(){
        return ['success','small','full','rounded','iconRight'];
     },
-    setModel(modelName,value){
-      Models[modelName]=value;
+    setModel(modelName,modelObject){
+      var {state}=modelObject.props.navigation;
+      
+      if (modelName!==undefined) {
+         Models[modelName]=modelObject;
+      }
+      
+
+      return {type:this.const.SET_CURRENT_PAGE,info_page:state};
     }
     ,
     encrypt(data){
@@ -99,9 +114,11 @@ export var CONF={
       m.setState({[varName]:value});
     },
     goTo(model,screen,params={},isFromMenu=false){
+      
       if (model.props.navigation==undefined) {
         return this.Toast("Component navigation error:",'danger',15000);
       }
+      params=params===undefined?{}:params;
       model.props.navigation.navigate(screen,params);
       if (isFromMenu) {
          this.closeDrawer();
@@ -110,10 +127,10 @@ export var CONF={
 
     ,
     setRouteModel(model){
-
+      
       if (Models.sidebar!=null) {
         // console.log('init2');
-        Models.sidebar.setState({routes:model});
+        //Models.sidebar.setState({routes:model});
       }
 
     },
@@ -127,6 +144,10 @@ export var CONF={
          });
 
          model.setState({ loading: false });
+         var {setModel}=model.props;
+         if (setModel!==undefined) {
+             setModel(...[,model]);
+         }
        }
 
 
@@ -192,48 +213,6 @@ export var CONF={
         }
         return string;
    },
-   locationDistance(){
-     function distance(lon1, lat1, lon2, lat2) {
-          var R = 6371; // Radius of the earth in km
-          var dLat = (lat2-lat1).toRad();  // Javascript functions in radians
-          var dLon = (lon2-lon1).toRad();
-          var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                  Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) *
-                  Math.sin(dLon/2) * Math.sin(dLon/2);
-          var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-          var d = R * c; // Distance in km
-          return d;
-        }
-
-        /** Converts numeric degrees to radians */
-        if (typeof(Number.prototype.toRad) === "undefined") {
-          Number.prototype.toRad = function() {
-            return this * Math.PI / 180;
-          }
-        }
-
-        window.navigator.geolocation.getCurrentPosition(function(pos) {
-          console.log(pos);
-          console.log(
-            distance(pos.coords.longitude, pos.coords.latitude, 42.37, 71.03)
-          );
-        });
-   },
-
-   getLocation:async (model) => {
-        let { status } = await Permissions.askAsync(Permissions.LOCATION);
-        let resp=[];
-        if (status !== 'granted') {
-           resp.msg='Permission to access location was denied';
-           resp.error=true;
-        }
-
-        let location = await Location.getCurrentPositionAsync({});
-        models.setState({loc:location});
-        resp.location={latitude: location.coords.latitude, longitude: location.coords.longitude, latitudeDelta: 0.0922, longitudeDelta: 0.0421 };
-        return resp;
-
-   },
    inputFocused (model,refName) {
       setTimeout(() => {
         let scrollResponder = model.refs.scrollView.getScrollResponder();
@@ -289,14 +268,9 @@ export var CONF={
     navigation.closeDrawer()
   },
   openDrawer(){
-    if (!this.isLoggedIn) {
-        this.logOut();
-    }
-    else{
-      Models.sidebar.setState({user:this.User});
       var {navigation}=Models.sidebar.props;
       navigation.openDrawer()
-    }
+    
 
   },
   format(date,type){
@@ -401,7 +375,9 @@ export var CONF={
       var keys=Object.keys(obj);
       var finalResult=[];
       for (var i = 0;i<keys.length;i++) {
-            finalResult[keys[i]]=obj[keys[i]].toString();
+           var current=obj[keys[i]];
+
+            finalResult[keys[i]]=current===undefined?current:current.toString();
          
       }
 
@@ -615,20 +591,24 @@ export var CONF={
     return name;
   },
   handleOnDelete(itemToDel,isForMonth,dataOfMonth,allItems,md){
-      if (isForMonth){
-               var list=md.state[dataOfMonth].filter((item)=>{
+    
+               var forMonth=md.state[dataOfMonth].filter((item)=>{
                   return itemToDel.id!==item.id;
                });
 
-               md.setState({dataOfMonth:list})
-           }
-           else{
-               var list=md.state[allItems].filter((item)=>{
+               var all_list=md.state[allItems].filter((item)=>{
                   return itemToDel.id!==item.id;
                });
 
-              md.setState({[allItems]:list})
-           }
+               md.setState({[dataOfMonth]:forMonth,[allItems]:all_list,...this.msg404(all_list)})
+          
+  },
+  msg404(item){
+      if (item===undefined) {
+         return {};
+      }
+
+      return {msg404:item.length===0?this.msg_404:''};
   }
 
 

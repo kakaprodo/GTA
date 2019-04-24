@@ -14,7 +14,7 @@ let listener=null;
 
 
 
-export default class Allrepports extends Component {
+ class Allrepports extends Component {
   constructor(props){
       super(props);
       this.state={
@@ -58,7 +58,7 @@ export default class Allrepports extends Component {
           repport.index(...[(allRepport)=>{
                  //console.log(allRepport);
                 this.setState({total:H.getTotal(allRepport,"resultat_net"),repports:allRepport})
-          },,true]);
+          },()=>{this.setState(H.msg404([]))},true]);
     });
 
   }
@@ -117,7 +117,7 @@ export default class Allrepports extends Component {
 
 
 
-                      <H.LoadingData data={repports}/>
+                      
                      <List style={{marginLeft:-3}}>
                          <CardItem header>
                             <Text>Total resultat net : {state.total} Um</Text>
@@ -146,6 +146,7 @@ export default class Allrepports extends Component {
 
 
                       </List>
+                      <H.LoadingData msg={this.state.msg404||''} data={repports}/>
                   </Content>
 
             </AppLayout>
@@ -154,3 +155,12 @@ export default class Allrepports extends Component {
     );
   }
 }
+
+
+const mapDispatchToProps=(dispatch)=>{
+      return {
+                setModel:function(){dispatch(H.setModel(...arguments))}
+              }
+}
+
+export default H.con(...[,mapDispatchToProps])(Allrepports)

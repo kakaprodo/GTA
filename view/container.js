@@ -67,9 +67,8 @@ import Backup from "./backup"
 
 const AllScreen = createStackNavigator(
            {
-            'dashboard':{screen:Dashboard },
-             'login':{screen:Login },
-
+               'login':{screen:Login },
+               'dashboard':{screen:Dashboard },
                'backup':{screen:Backup},
                'regit':{screen:Regit },
 

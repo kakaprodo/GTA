@@ -7,7 +7,7 @@ import {User} from "../../controller/user"
 
 var user;
 
-export default class Login extends Component {
+class Login extends Component {
 
   constructor(props){
       super(props);
@@ -27,10 +27,6 @@ export default class Login extends Component {
   }
 
   static navigationOptions=({navigation})=>{
-     // let headerTitle="Login form";
-     // let headerStyle=H.style.headers;
-     // let headerTitleStyle=H.style.title;
-     // return {headerTitle,headerStyle,headerTitleStyle};
      let header=null;
      return {header};
   }
@@ -38,26 +34,25 @@ export default class Login extends Component {
 
 
   componentWillMount() {
+     
+     var {info_page:IP,isLoggedIn,user}=this.props;
+     if (isLoggedIn) {
+      
+       H.goTo(this,IP.routeName,IP.params);
+     }
      H.initIcon(this);
+     
   }
 
-  componentDidMount(){
-     // BackHandler.addEventListener('hardwareBackPress',()=>{
-     //      var init=H.getParam(this.props,"init");
-     //      if (init!=undefined) {
-     //        init();
-     //      }
-     //
-     //        console.log('ok');
-     // });
-  }
+
 
   login(){
 
     user.login((user)=>{
        H.resetModel(['2','3'],this);
        H.isLoggedIn=true;
-       H.goTo(this,H.path.dashboard,{user:user});
+       this.props.loggin(user);
+       H.goTo(this,H.path.dashboard);
        H.Toast("successfully")
     },(msg="error occured")=>{
        H.Toast(msg,'danger')
@@ -85,9 +80,7 @@ export default class Login extends Component {
            </Body>
            <Right>
 
-             <Button onPress={()=>{H.goTo(this,H.path.backup,{source:false})}} transparent>
-                 <Icon name='cloud-upload' />
-               </Button>
+          
            </Right>
          </Header>
 
@@ -151,3 +144,21 @@ export default class Login extends Component {
     );
   }
 }
+
+
+const mapStateToProps=(state)=>{
+      return {
+                user:state.user,
+                isLoggedIn:state.isLoggedIn,
+                info_page:state.info_page
+              }
+}
+
+
+const mapDispatchToProps=(dispatch)=>{
+      return {
+                loggin:function(user){dispatch({type:H.const.SUCCESS_LOGGIN,user:user})}
+              }
+}
+
+export default H.con(mapStateToProps,mapDispatchToProps)(Login)

@@ -2,49 +2,39 @@ import React, { Component } from 'react';
 import { Header,Container, Content, Form,ActionSheet, Item, Input, Label,Text,Button,Icon,H2,H3,Body,Title, Picker ,Textarea,Left,Right} from 'native-base';
 
 import { StyleSheet, View,ScrollView,KeyboardAvoidingView } from 'react-native';
+
 import {AppLayout,AppLoading} from "./app_layout"
 
-import {User} from "../controller/user"
+
 import {Repport} from "../controller/repport"//
 
 var repport=new Repport();//
 
-var user;
 
 
-export default class Dashboard extends Component {
+class Dashboard extends Component {
   constructor(props){
       super(props);
       this.state={
       loading:true,
       user:null,
     }
-    H.setModel("current",this);
-    user=new User({model:this,container:"user"});
-    this.drawer=null;
+
+     this.drawer=null;
   }
 
   static navigationOptions=({navigation})=>{
-    //  let headerTitle="Welcome";
-    //  let headerStyle=H.style.headers;
-    //  let headerTitleStyle=H.style.title;
-    //  headerRight=  <Button
-    //     onPress={() => alert('This is a button!')}
-    //     title="Info"
-    //     color="#fff"
-    //   />
-    //
-    //
-    // return {headerTitle,headerStyle,headerTitleStyle,headerRight};
+    
      let header=null;
      return {header};
   }
   init(){
-    H.isLoggedIn=true;
-    if (!H.isLoggedIn) {
-        H.logOut();
-    }
-    user.show();
+     var {user,isLoggedIn}=this.props;
+    
+     if (!isLoggedIn) {
+        return  this.props.logOut(this);
+      }
+     this.setState({user:user})
   }
 
   componentWillMount() {
@@ -52,9 +42,11 @@ export default class Dashboard extends Component {
     this.init();
 
     H.initIcon(this);
-
+    
     //we will be saving new repport if it doesnt exist automatically when user reach this table
     repport.repportHandler("save");
+
+    
 
 
   }
@@ -96,10 +88,7 @@ export default class Dashboard extends Component {
 
                        <Button
                            onPress={() =>{
-                             if (!H.isLoggedIn) {
-                                 H.logOut();
-                             }
-                             else{
+                             
                                ActionSheet.show(
                                  {
                                    options: optionBtn,
@@ -118,17 +107,15 @@ export default class Dashboard extends Component {
 
                                         break;
                                     case 2:
-
-                                        H.logOut();
-
-                                      break;
+                                        this.props.logOut(this);
+                                     break;
                                      default:return;
 
                                     }
                                  }
                                )
 
-                             }
+                             
                            }}
 
                            transparent>
@@ -162,3 +149,22 @@ export default class Dashboard extends Component {
     );
   }
 }
+
+const mapStateToProps=(state)=>{
+      return {
+                user:state.user,
+                isLoggedIn:state.isLoggedIn,
+                info_page:state.info_page
+              }
+}
+
+
+
+const mapDispatchToProps=(dispatch)=>{
+      return {
+                setModel:function(){dispatch(H.setModel(...arguments))},
+                logOut:function(){dispatch(H.logOut(...arguments))}
+              }
+}
+
+export default H.con(mapStateToProps,mapDispatchToProps)(Dashboard);

@@ -14,7 +14,7 @@ let listener=null;
 
 
 
-export default class Allperd extends Component {
+class Allperd extends Component {
   constructor(props){
       super(props);
       this.state={
@@ -58,11 +58,13 @@ export default class Allperd extends Component {
     perd.index(...[(perds)=>{
           var dataForMonth=H.getForThisMonth(perds);
           this.setState({dataOfMonth:dataForMonth});
-    },,true]);
+    },()=>{this.setState(H.msg404([]))},true]);
   }
 
-  delperd(perdind){
-      perd.destroyEl(perdind.id,()=>{this.init()});
+  delperd(perdind,isForMonth){
+      perd.destroyEl(perdind.id,()=>{
+           H.handleOnDelete(perdind,isForMonth,'dataOfMonth','allperd',this);
+      });
   }
 
   Listperd(isForMonth=true){
@@ -86,7 +88,7 @@ export default class Allperd extends Component {
               return <Card key={index}>
                              <CardItem header style={{backgroundColor: '#ccc',height: 50}}>
                                <Text>N° {opNumb}</Text>
-                               <Button onPress={()=>{this.delperd(item)}} style={{position: 'absolute',right: 5,top:10}} danger small>
+                               <Button onPress={()=>{this.delperd(item,isForMonth)}} style={{position: 'absolute',right: 5,top:10}} danger small>
                                  <Icon name="trash" />
                                </Button>
                              </CardItem>
@@ -150,7 +152,7 @@ export default class Allperd extends Component {
                      </Right>
                    </Header>
                    <Content  padder style={H.style.content}>
-                     <H.LoadingData data={state.allperd}/>
+                     
                      <Tabs tabBarUnderlineStyle={H.style.headers}>
                          <Tab heading={
                                    <TabHeading style={{backgroundColor: 'white'}}>
@@ -172,7 +174,7 @@ export default class Allperd extends Component {
 
                      </Tabs>
 
-
+                    <H.LoadingData msg={this.state.msg404||''} data={state.allperd}/>
                   </Content>
 
             </AppLayout>
@@ -181,3 +183,12 @@ export default class Allperd extends Component {
     );
   }
 }
+
+
+const mapDispatchToProps=(dispatch)=>{
+      return {
+                setModel:function(){dispatch(H.setModel(...arguments))}
+              }
+}
+
+export default H.con(...[,mapDispatchToProps])(Allperd)

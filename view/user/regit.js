@@ -9,7 +9,7 @@ import {User} from "../../controller/user"
 var user;
 
 
-export default class Regit extends Component {
+class Regit extends Component {
 
   constructor(props){
       super(props);
@@ -144,3 +144,11 @@ export default class Regit extends Component {
     );
   }
 }
+
+const mapDispatchToProps=(dispatch)=>{
+      return {
+                setModel:function(){dispatch(H.setModel(...arguments))}
+              }
+}
+
+export default H.con(...[,mapDispatchToProps])(Regit)

@@ -16,7 +16,7 @@ let listener=null;
 
 
 
-export default class ShowDriver extends Component {
+class ShowDriver extends Component {
   constructor(props){
       super(props);
       this.state={
@@ -259,3 +259,11 @@ export default class ShowDriver extends Component {
     );
   }
 }
+
+const mapDispatchToProps=(dispatch)=>{
+      return {
+                setModel:function(){dispatch(H.setModel(...arguments))}
+              }
+}
+
+export default H.con(...[,mapDispatchToProps])(ShowDriver)

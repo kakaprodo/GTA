@@ -25,7 +25,7 @@ export default class Research extends Component {
       start:false,
       total:0//total result
     }
-    H.setModel("current",this);
+    
 
 
   }
@@ -49,7 +49,8 @@ export default class Research extends Component {
   }
 
   init(){
-
+     
+    
     var model=H.getParam(this.props,"model");
     var checkCol=model.colSearch;//col in which we are going to search for data
     var modelName=model.modelName;
@@ -179,3 +180,4 @@ export default class Research extends Component {
     );
   }
 }
+

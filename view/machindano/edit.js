@@ -9,7 +9,7 @@ import {Cars} from "../../controller/cars"
 var car;
 
 
-export default class EditCar extends Component {
+class EditCar extends Component {
 
   constructor(props){
       super(props);
@@ -152,3 +152,12 @@ export default class EditCar extends Component {
     );
   }
 }
+
+
+const mapDispatchToProps=(dispatch)=>{
+      return {
+                setModel:function(){dispatch(H.setModel(...arguments))}
+              }
+}
+
+export default H.con(...[,mapDispatchToProps])(EditCar)

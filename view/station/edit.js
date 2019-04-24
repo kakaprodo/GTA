@@ -10,7 +10,7 @@ import {Station} from "../../controller/station"
 var station;
 
 
-export default class Editstation extends Component {
+class Editstation extends Component {
 
   constructor(props){
       super(props);
@@ -120,3 +120,12 @@ export default class Editstation extends Component {
     );
   }
 }
+
+
+const mapDispatchToProps=(dispatch)=>{
+      return {
+                setModel:function(){dispatch(H.setModel(...arguments))}
+              }
+}
+
+export default H.con(...[,mapDispatchToProps])(Editstation)

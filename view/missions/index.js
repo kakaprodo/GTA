@@ -14,7 +14,7 @@ let listener=null;
 
 
 
-export default class Allmissions extends Component {
+class Allmissions extends Component {
   constructor(props){
       super(props);
       this.state={
@@ -56,13 +56,13 @@ export default class Allmissions extends Component {
     mission.index(...[(missions)=>{
       var dataForMonth=H.getForThisMonth(missions);
       this.setState({dataOfMonth:dataForMonth});
-    },,true]);
+    },()=>{this.setState(H.msg404([]))},true]);
   }
 
   Listentr(isForMonth=true){
     var state=this.state;
     var entries=isForMonth?state.dataOfMonth:state.missions;
-    entries=entries.reverse();
+ 
     var total=H.getTotal(entries,"total_maison");
 
     return <View>
@@ -161,7 +161,7 @@ export default class Allmissions extends Component {
                      </Right>
                    </Header>
                    <Content padder style={H.style.content}>
-                      <H.LoadingData data={state.missions}/>
+                     
                      <Tabs tabBarUnderlineStyle={H.style.headers}>
                          <Tab heading={
                                    <TabHeading style={{backgroundColor: 'white'}}>
@@ -184,7 +184,7 @@ export default class Allmissions extends Component {
                      </Tabs>
 
 
-
+                     <H.LoadingData msg={this.state.msg404||''} data={state.missions}/>
 
 
                   </Content>
@@ -199,3 +199,12 @@ export default class Allmissions extends Component {
 
 
 }
+
+
+const mapDispatchToProps=(dispatch)=>{
+      return {
+                setModel:function(){dispatch(H.setModel(...arguments))}
+              }
+}
+
+export default H.con(...[,mapDispatchToProps])(Allmissions)

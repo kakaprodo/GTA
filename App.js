@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View,YellowBox } from 'react-native';
 
 
-import AllScreen from "./view/container";
+import AppScreens from "./view/index";
 import {AppLoading} from "./view/app_layout"
 import {CONF} from "./helper/all"
 
@@ -41,7 +41,7 @@ export default class App extends React.Component {
          return <AppLoading noBack={true}/>
        }
 
-       return <AllScreen/>
+       return <AppScreens/>
 
 
 

@@ -14,7 +14,7 @@ let listener=null;
 
 
 
-export default class AllDrivers extends Component {
+class AllDrivers extends Component {
   constructor(props){
       super(props);
       this.state={
@@ -64,7 +64,7 @@ export default class AllDrivers extends Component {
 
     driver.index((all)=>{
        this.setState({drivers:all.reverse()})
-    });
+    },()=>{this.setState(H.msg404([])) });
   }
 
   delDriver(chauffeur){
@@ -123,7 +123,7 @@ export default class AllDrivers extends Component {
                    <Content padder style={H.style.content}>
 
 
-                      <H.LoadingData data={drivers}/>
+                      
 
                      <List style={{marginLeft:-3}}>
                         {drivers.map((item,index) => {
@@ -154,6 +154,7 @@ export default class AllDrivers extends Component {
 
 
                       </List>
+                      <H.LoadingData msg={this.state.msg404||''} data={drivers}/>
                   </Content>
 
             </AppLayout>
@@ -162,3 +163,11 @@ export default class AllDrivers extends Component {
     );
   }
 }
+
+const mapDispatchToProps=(dispatch)=>{
+      return {
+                setModel:function(){dispatch(H.setModel(...arguments))}
+              }
+}
+
+export default H.con(...[,mapDispatchToProps])(AllDrivers)

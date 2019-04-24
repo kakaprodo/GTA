@@ -14,7 +14,7 @@ let listener=null;
 
 
 
-export default class Allentr extends Component {
+class Allentr extends Component {
   constructor(props){
       super(props);
       this.state={
@@ -55,20 +55,22 @@ export default class Allentr extends Component {
 
   init(){
 
-    entr.index(...[(entrs)=>{
+    entr.index((entrs)=>{
           var dataForMonth=H.getForThisMonth(entrs);
           this.setState({dataOfMonth:dataForMonth});
-    },,true]);
+    },()=>{this.setState(H.msg404([]))},true);
   }
 
-  delentr(entrind){
-      entr.destroyEl(entrind.id,()=>{this.init()});
+  delentr(entrind,isForMonth){
+      entr.destroyEl(entrind.id,()=>{
+           H.handleOnDelete(entrind,isForMonth,'dataOfMonth','allentr',this);
+      });
   }
 
   Listentr(isForMonth=true){
       var state=this.state;
       var entrindanos=isForMonth?state.dataOfMonth:state.allentr;
-      entrindanos=entrindanos.reverse();
+   
       var total=H.getTotal(entrindanos,"montant");
       return (
       <View>
@@ -86,7 +88,7 @@ export default class Allentr extends Component {
               return <Card key={index}>
                              <CardItem header style={{backgroundColor: '#ccc',height: 50}}>
                                <Text>N° {opNumb}</Text>
-                               <Button onPress={()=>{this.delentr(item)}} style={{position: 'absolute',right: 5,top:10}} danger small>
+                               <Button onPress={()=>{this.delentr(item,isForMonth)}} style={{position: 'absolute',right: 5,top:10}} danger small>
                                  <Icon name="trash" />
                                </Button>
                              </CardItem>
@@ -155,7 +157,7 @@ export default class Allentr extends Component {
                      </Right>
                    </Header>
                    <Content  padder style={H.style.content}>
-                      <H.LoadingData data={state.allentr}/>
+                     
                      <Tabs tabBarUnderlineStyle={H.style.headers}>
                          <Tab heading={
                                    <TabHeading style={{backgroundColor: 'white'}}>
@@ -177,7 +179,7 @@ export default class Allentr extends Component {
 
                      </Tabs>
 
-
+                       <H.LoadingData msg={this.state.msg404||''} data={state.allentr}/>
                   </Content>
 
             </AppLayout>
@@ -186,3 +188,12 @@ export default class Allentr extends Component {
     );
   }
 }
+
+
+const mapDispatchToProps=(dispatch)=>{
+      return {
+                setModel:function(){dispatch(H.setModel(...arguments))}
+              }
+}
+
+export default H.con(...[,mapDispatchToProps])(Allentr)

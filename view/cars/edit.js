@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Content, Form, Item, Input, Label,Text,Button,Icon,H2, Picker ,Textarea} from 'native-base';
-
+import {connect} from 'react-redux';
 import { StyleSheet, View,ScrollView,KeyboardAvoidingView } from 'react-native';
 import {AppLayout,AppLoading} from "../app_layout"
 
@@ -9,7 +9,7 @@ import {Cars} from "../../controller/cars"
 var car;
 
 
-export default class EditCar extends Component {
+class EditCar extends Component {
 
   constructor(props){
       super(props);
@@ -42,6 +42,7 @@ export default class EditCar extends Component {
 
   componentWillMount() {
      H.initIcon(this);
+     this.props.setState(...[,this]);
 
   }
 
@@ -155,3 +156,12 @@ export default class EditCar extends Component {
     );
   }
 }
+
+
+const mapDispatchToProps=(dispatch)=>{
+      return {
+                setModel:function(){dispatch(H.setModel(...arguments))}
+              }
+}
+
+export default connect(...[,mapDispatchToProps])(EditCar)

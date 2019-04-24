@@ -14,7 +14,7 @@ let listener=null;
 
 
 
-export default class Allcarb extends Component {
+class Allcarb extends Component {
   constructor(props){
       super(props);
       this.state={
@@ -25,40 +25,31 @@ export default class Allcarb extends Component {
       
       total:0
     }
-    H.setModel("current",this);
+    
     carb=new Carburant({model:this,container:"allcarb"});
 
   }
 
   static navigationOptions=({navigation})=>{
-    //  let headerTitle="Welcome";
-    //  let headerStyle=H.style.headers;
-    //  let headerTitleStyle=H.style.title;
-    //  headerRight=  <Button
-    //     onPress={() => alert('This is a button!')}
-    //     title="Info"
-    //     color="#fff"
-    //   />
-    //
-    //
-    // return {headerTitle,headerStyle,headerTitleStyle,headerRight};
-     let header=null;
+    let header=null;
      return {header};
   }
 
   componentDidMount() {
      H.initIcon(this);
      this.init();
+     this.props.setModel("current",this);
 
 
   }
 
   init(){
 
-    carb.index(...[(carbs)=>{
+    carb.index((carbs)=>{
           var dataForMonth=H.getForThisMonth(carbs);
+         
           this.setState({dataOfMonth:dataForMonth});
-    },,true]);
+    },()=>{this.setState(H.msg404([]))},true);
   }
 
   delcarb(carbind,isForMonth){
@@ -72,7 +63,7 @@ export default class Allcarb extends Component {
   Listcarb(isForMonth=true){
       var state=this.state;
       var carbindanos=isForMonth?state.dataOfMonth:state.allcarb;
-      carbindanos=carbindanos.reverse();
+      
       var total=H.getTotal(carbindanos,"quantite");
       return (
       <View>
@@ -127,7 +118,7 @@ export default class Allcarb extends Component {
     }
 
 
-
+    
 
 
     return (
@@ -176,7 +167,7 @@ export default class Allcarb extends Component {
                          </Tab>
 
                      </Tabs>
-
+                     <H.LoadingData msg={this.state.msg404||''} data={state.allcarb}/>
 
                   </Content>
 
@@ -186,3 +177,12 @@ export default class Allcarb extends Component {
     );
   }
 }
+
+
+const mapDispatchToProps=(dispatch)=>{
+      return {
+                setModel:function(){dispatch(H.setModel(...arguments))}
+              }
+}
+
+export default H.con(...[,mapDispatchToProps])(Allcarb)

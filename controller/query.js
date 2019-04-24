@@ -340,7 +340,7 @@ export class Query extends Con{
 
       if (noAlert) {//if we dont need user confirmation
         this.db.transaction(tx=>{
-             
+              console.log(`DELETE FROM ${this.table} where ${this.keyName}=${this.keyValue.toString()} `)
              tx.executeSql(`DELETE FROM ${this.table} where ${this.keyName}=? `, [this.keyValue.toString()],()=>{
                this.response.msg="successfully done";
                this.response.error=false;

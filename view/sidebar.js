@@ -3,7 +3,7 @@ import { Container,Title,Subtitle,Header, Content, Card, CardItem ,Image,Thumbna
          ListItem, Text, Icon, Left, Body, Right, Switch,Button} from 'native-base';
 import {View,ScrollView} from "react-native"
 
-export default class SideBar extends Component {
+class SideBar extends Component {
   constructor(props){
 
     super(props)
@@ -23,6 +23,7 @@ export default class SideBar extends Component {
             {name:"Station",icon:"pint",onPress:()=>{H.goTo(this,H.path.stations,null,true)}},
             {name:"Mechanician",icon:"hammer",onPress:()=>{H.goTo(this,H.path.mechanicians,null,true)}},
             {name:"Repport",icon:"logo-wordpress",onPress:()=>{H.goTo(this,H.path.repports,null,true)}},
+            {name:"Logout",icon:"log-out",onPress:()=>{this.props.logOut(this)}},
 
 
            ]
@@ -33,29 +34,18 @@ export default class SideBar extends Component {
   componentWillMount() {
      H.initIcon(this,false);
 
-  }
-  // componentWillReceiveProps(nextprops){
-  //     this.props=nextprops;
-  //
-  //
-  //     const {state} = this.props.navigation.dangerouslyGetParent();
-  //     const {isDrawerOpen}=state.routes[0];
-  //
-  //     if (isDrawerOpen) {
-  //         if (!H.isLoggedIn) {
-  //             H.closeDrawer();
-  //         }
-  //     }
-  //
-  // }
+     
 
+  }
+ 
 
 
   render() {
 
-    var user=H.User;
+  
+    var {user,isLoggedIn}=this.props;
     var menus=this.state.menus;
-    if (this.state.loading || !H.isLoggedIn) {
+    if (this.state.loading || !isLoggedIn) {
       return <View></View>
     }
     return (
@@ -104,3 +94,21 @@ export default class SideBar extends Component {
     );
   }
 }
+
+const mapStateToProps=(state)=>{
+      return {
+                user:state.user,
+                isLoggedIn:state.isLoggedIn,
+                
+              }
+}
+
+
+
+const mapDispatchToProps=(dispatch)=>{
+      return {
+               logOut:function(){dispatch(H.logOut(...arguments))}
+              }
+}
+
+export default H.con(mapStateToProps,mapDispatchToProps)(SideBar);

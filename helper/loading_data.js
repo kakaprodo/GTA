@@ -16,14 +16,20 @@ export default class LoadingData extends Component{
 	 }
 
   render(){
-     	  var {data}=this.props;
+     	  var {data,msg}=this.props;
        
          if (data==undefined) {
            return <View></View>
          }
 
          if (data.length===0) {
-           return <View style={H.style.center}><Spinner color={H.globalStyle.green_color} /></View>
+           return <View style={H.style.center}>
+                       {H.isEmpty(msg)?
+                         <Spinner color={H.globalStyle.green_color} />:
+                         <Text style={{...H.style.center,...H.style.red_color}}>{msg}</Text>
+                       }
+                        
+                  </View>
          }
          return <View></View>
           

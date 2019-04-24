@@ -9,7 +9,7 @@ import {Driver} from "../../controller/driver"
 var driver;
 
 
-export default class CreateDriver extends Component {
+class CreateDriver extends Component {
 
   constructor(props){
       super(props);
@@ -39,6 +39,7 @@ export default class CreateDriver extends Component {
 
   componentWillMount() {
      H.initIcon(this);
+     this.props.setModel(...[,this])
   }
 
   componentDidMount(){
@@ -138,3 +139,11 @@ export default class CreateDriver extends Component {
     );
   }
 }
+
+const mapDispatchToProps=(dispatch)=>{
+      return {
+                setModel:function(){dispatch(H.setModel(...arguments))}
+              }
+}
+
+export default H.con(...[,mapDispatchToProps])(CreateDriver)

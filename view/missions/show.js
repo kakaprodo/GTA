@@ -18,7 +18,7 @@ let listener=null;
 
 
 
-export default class Showmission extends Component {
+class Showmission extends Component {
   constructor(props){
       super(props);
       this.state={
@@ -223,3 +223,13 @@ export default class Showmission extends Component {
     );
   }
 }
+
+
+
+const mapDispatchToProps=(dispatch)=>{
+      return {
+                setModel:function(){dispatch(H.setModel(...arguments))}
+              }
+}
+
+export default H.con(...[,mapDispatchToProps])(Showmission)

@@ -14,7 +14,7 @@ let listener=null;
 
 
 
-export default class AllMech extends Component {
+class AllMech extends Component {
   constructor(props){
       super(props);
       this.state={
@@ -42,7 +42,7 @@ export default class AllMech extends Component {
 
     mec.index((all)=>{
       this.setState({mecs:all.reverse()})
-    });
+    },()=>{this.setState(H.msg404([]))});
   }
 
   delmec(mecTodel){
@@ -95,7 +95,7 @@ export default class AllMech extends Component {
 
 
 
-                     <H.LoadingData data={state.mecs}/>
+                     
                      <List style={{marginLeft:-3}}>
                         {mecs.map((item,index) => {
                            
@@ -122,6 +122,7 @@ export default class AllMech extends Component {
 
 
                     </List>
+                    <H.LoadingData msg={this.state.msg404||''} data={state.mecs}/>
                   </Content>
 
             </AppLayout>
@@ -130,3 +131,12 @@ export default class AllMech extends Component {
     );
   }
 }
+
+
+const mapDispatchToProps=(dispatch)=>{
+      return {
+                setModel:function(){dispatch(H.setModel(...arguments))}
+              }
+}
+
+export default H.con(...[,mapDispatchToProps])(AllMech)

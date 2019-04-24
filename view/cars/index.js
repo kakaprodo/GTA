@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Header,Container, Content, Form, Item, Input, Label,Text,Button,Icon,H2,H3,Body,Title,
   Card, CardItem ,Image,Thumbnail,List,ListItem, Left, Right, Spiner} from 'native-base';
-
+import {connect} from 'react-redux';
 import { StyleSheet, View,ScrollView,Platform,BackHandler } from 'react-native';
 import {AppLayout,AppLoading} from "../app_layout"
 
@@ -14,7 +14,7 @@ let listener=null;
 
 
 
-export default class Allcars extends Component {
+class Allcars extends Component {
   constructor(props){
       super(props);
       this.state={
@@ -25,30 +25,20 @@ export default class Allcars extends Component {
 
       cars:[],
     }
-    H.setModel("current",this);
+    
     car=new Cars({model:this,container:"cars"});
 
   }
 
   static navigationOptions=({navigation})=>{
-    //  let headerTitle="Welcome";
-    //  let headerStyle=H.style.headers;
-    //  let headerTitleStyle=H.style.title;
-    //  headerRight=  <Button
-    //     onPress={() => alert('This is a button!')}
-    //     title="Info"
-    //     color="#fff"
-    //   />
-    //
-    //
-    // return {headerTitle,headerStyle,headerTitleStyle,headerRight};
-     let header=null;
+   let header=null;
      return {header};
   }
 
   componentDidMount() {
      H.initIcon(this);
      this.init();
+     this.props.setModel("current",this);
 
   }
 
@@ -56,7 +46,7 @@ export default class Allcars extends Component {
 
     car.index((all)=>{
       this.setState({cars:all.reverse()})
-    });
+    },()=>{this.setState(H.msg404([])) });
   }
 
   delcar(veh){
@@ -118,7 +108,7 @@ export default class Allcars extends Component {
 
 
 
-                     <H.LoadingData data={cars}/>
+                     
                      <List style={{marginLeft:-3}}>
                         {cars.map((item,index) => {
                            
@@ -146,6 +136,7 @@ export default class Allcars extends Component {
 
 
                     </List>
+                    <H.LoadingData msg={this.state.msg404||''} data={cars}/>
                     
                   </Content>
 
@@ -155,3 +146,11 @@ export default class Allcars extends Component {
     );
   }
 }
+
+const mapDispatchToProps=(dispatch)=>{
+      return {
+                setModel:function(){dispatch(H.setModel(...arguments))}
+              }
+}
+
+export default connect(...[,mapDispatchToProps])(Allcars)

@@ -8,7 +8,7 @@
       "ios",
       "android"
     ],
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/img/logo_icon.png",
     "splash": {
@@ -27,8 +27,7 @@
       "bundleIdentifier": "com.gtamanagementios.agency"
     },
     "android": {
-      "package": "com.gtamanagementand.agency",
-    
+      "package": "com.gtamanagementand.agency"
     },
     "description": "An application to handle all operation of the company gta fk management"
   }

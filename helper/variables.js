@@ -1,0 +1,8 @@
+
+
+export const Variables={
+	  LOADING:'LOADING',
+	  SET_CURRENT_PAGE:'SET_CURRENT_PAGE',
+	  SUCCESS_LOGGIN:'SUCCESS_LOGGIN',
+	  LOGOUT:'LOGOUT',
+}

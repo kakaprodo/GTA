@@ -40,6 +40,7 @@ export default class Editdriver extends Component {
 
   componentWillMount() {
      H.initIcon(this);
+     
   }
 
   componentDidMount(){
@@ -144,3 +145,5 @@ export default class Editdriver extends Component {
     );
   }
 }
+
+

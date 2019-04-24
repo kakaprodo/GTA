@@ -9,7 +9,7 @@ import {Mashindano} from "../../controller/machindano"
 var mash;
 
 
-export default class Createmashindano extends Component {
+class Createmashindano extends Component {
 
   constructor(props){
       super(props);
@@ -143,3 +143,12 @@ export default class Createmashindano extends Component {
     );
   }
 }
+
+
+const mapDispatchToProps=(dispatch)=>{
+      return {
+                setModel:function(){dispatch(H.setModel(...arguments))}
+              }
+}
+
+export default H.con(...[,mapDispatchToProps])(Createmashindano)

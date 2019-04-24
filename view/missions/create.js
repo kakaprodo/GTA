@@ -9,7 +9,7 @@ import {Mission} from "../../controller/mission"
 var mission;
 
 
-export default class Createmission extends Component {
+class Createmission extends Component {
 
   constructor(props){
       super(props);
@@ -173,3 +173,12 @@ export default class Createmission extends Component {
     );
   }
 }
+
+
+const mapDispatchToProps=(dispatch)=>{
+      return {
+                setModel:function(){dispatch(H.setModel(...arguments))}
+              }
+}
+
+export default H.con(...[,mapDispatchToProps])(Createmission)

@@ -9,7 +9,7 @@ import {Mechanician} from "../../controller/mechanician"
 var mec;
 
 
-export default class Createmec extends Component {
+class Createmec extends Component {
 
   constructor(props){
       super(props);
@@ -109,3 +109,12 @@ export default class Createmec extends Component {
     );
   }
 }
+
+
+const mapDispatchToProps=(dispatch)=>{
+      return {
+                setModel:function(){dispatch(H.setModel(...arguments))}
+              }
+}
+
+export default H.con(...[,mapDispatchToProps])(Createmec)

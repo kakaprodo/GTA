@@ -14,8 +14,7 @@ let listener=null;
 
 
 
-
-export default class Showcar extends Component {
+class Showcar extends Component {
   constructor(props){
       super(props);
       this.state={
@@ -28,31 +27,20 @@ export default class Showcar extends Component {
 
       car:null,
     }
-    H.setModel("current",this);
+    
     car=new Cars({model:this,container:"car"});
 
   }
 
   static navigationOptions=({navigation})=>{
-    //  let headerTitle="Welcome";
-    //  let headerStyle=H.style.headers;
-    //  let headerTitleStyle=H.style.title;
-    //  headerRight=  <Button
-    //     onPress={() => alert('This is a button!')}
-    //     title="Info"
-    //     color="#fff"
-    //   />
-    //
-    //
-    // return {headerTitle,headerStyle,headerTitleStyle,headerRight};
-     let header=null;
+    let header=null;
      return {header};
   }
 
   componentWillMount() {
      H.initIcon(this);
      this.init();
-
+    this.props.setModel("current",this);
   }
 
   init(){
@@ -238,3 +226,11 @@ export default class Showcar extends Component {
     );
   }
 }
+
+const mapDispatchToProps=(dispatch)=>{
+      return {
+                setModel:function(){dispatch(H.setModel(...arguments))}
+              }
+}
+
+export default H.con(...[,mapDispatchToProps])(Showcar)

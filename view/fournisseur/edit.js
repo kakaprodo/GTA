@@ -10,7 +10,7 @@ import {Fournisseur} from "../../controller/fournisseur"
 var fourn;
 
 
-export default class Editfourn extends Component {
+class Editfourn extends Component {
 
   constructor(props){
       super(props);
@@ -119,3 +119,12 @@ export default class Editfourn extends Component {
     );
   }
 }
+
+
+const mapDispatchToProps=(dispatch)=>{
+      return {
+                setModel:function(){dispatch(H.setModel(...arguments))}
+              }
+}
+
+export default H.con(...[,mapDispatchToProps])(Editfourn)

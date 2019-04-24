@@ -116,7 +116,7 @@ export class Driver extends Query{
     }
 
     show(id,onSucc,onErr){
-       return super.keyValue(id).getByKey((driver)=>{
+       super.keyValue(id).getByKey((driver)=>{
 
             if (this.content!=undefined) {
               this.model.setState({[this.content]:driver});

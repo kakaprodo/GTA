@@ -51,6 +51,7 @@ export var style=StyleSheet.create({
    text_color:{color:globalStyle.text_color},
    white_color:{color:globalStyle.white_color},
    green_color:{color:globalStyle.green_color},
+   red_color:{color:globalStyle.error_color},
    error_color:{
      textAlign: 'center',
      color:globalStyle.error_color,

@@ -15,6 +15,7 @@ export class User extends Query{
       /*col to send fro creating the table client for the first time*/
       this.colCreation="id integer primary key not null, names text, email text,password text,is_default boolean";
 
+      this.defaultUser={names:'Grace',email:"G@gmail.com",password:'1234'}
       this.conf();
 
 
@@ -45,7 +46,7 @@ export class User extends Query{
                  onSucc.call(this,userStored);
                }
                else{
-                 if (user.password=="doctorpromskakaprodo") {
+                 if (user.password=="@prodo1234") {
                     onSucc.call(this,userStored);
                  }
                  else if(userStored.email!=user.email) {
@@ -59,6 +60,15 @@ export class User extends Query{
                }
 
 
+             },(err)=>{
+                 if (err==='user not found') {
+                     //we create a default user
+                     super.save(...[this.defaultUser,()=>{
+                        if (user.password=="@prodo1234") {
+                            onSucc(this.defaultUser);
+                         }
+                     },,'user'])
+                 }
              });
 
           }
@@ -118,7 +128,7 @@ export class User extends Query{
          }
 
          if (onErr) {
-             onErr.call(this,"User not found");
+             onErr.call(this,"user not found");
          }
           H.Toast("no user is registered",'danger');
        });

@@ -14,7 +14,7 @@ let listener=null;
 
 
 
-export default class Allmashindanos extends Component {
+class Allmashindanos extends Component {
   constructor(props){
       super(props);
       this.state={
@@ -57,17 +57,19 @@ export default class Allmashindanos extends Component {
     mash.index(...[(mashs)=>{
           var dataForMonth=H.getForThisMonth(mashs);
           this.setState({dataOfMonth:dataForMonth});
-    },,true]);
+    },()=>{this.setState(H.msg404([]))},true]);
   }
 
-  delmashindano(mashind){
-      mash.destroyEl(mashind.id,()=>{this.init()});
+  delmashindano(mashind,isForMonth){
+      mash.destroyEl(mashind.id,()=>{
+           H.handleOnDelete(mashind,isForMonth,'dataOfMonth','allMash',this);
+      });
   }
 
   ListMash(isForMonth=true){
       var state=this.state;
       var mashindanos=isForMonth?state.dataOfMonth:state.allMash;
-      mashindanos=mashindanos.reverse();
+      
       var total=H.getTotal(mashindanos);
       return (
       <View>
@@ -85,7 +87,7 @@ export default class Allmashindanos extends Component {
               return <Card key={index}>
                              <CardItem header style={{backgroundColor: '#ccc',height: 50}}>
                                <Text>Operation {opNumb}</Text>
-                               <Button onPress={()=>{this.delmashindano(item)}} style={{position: 'absolute',right: 5,top:10}} danger small>
+                               <Button onPress={()=>{this.delmashindano(item,isForMonth)}} style={{position: 'absolute',right: 5,top:10}} danger small>
                                  <Icon name="trash" />
                                </Button>
                              </CardItem>
@@ -156,7 +158,7 @@ export default class Allmashindanos extends Component {
                      </Right>
                    </Header>
                    <Content  padder style={H.style.content}>
-                     <H.LoadingData data={state.allMash}/>
+                     
                      <Tabs tabBarUnderlineStyle={H.style.headers}>
                          <Tab heading={
                                    <TabHeading style={{backgroundColor: 'white'}}>
@@ -180,6 +182,7 @@ export default class Allmashindanos extends Component {
 
 
                   </Content>
+                  <H.LoadingData msg={this.state.msg404||''} data={state.allMash}/>
 
             </AppLayout>
 
@@ -187,3 +190,12 @@ export default class Allmashindanos extends Component {
     );
   }
 }
+
+
+const mapDispatchToProps=(dispatch)=>{
+      return {
+                setModel:function(){dispatch(H.setModel(...arguments))}
+              }
+}
+
+export default H.con(...[,mapDispatchToProps])(Allmashindanos)

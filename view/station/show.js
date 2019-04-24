@@ -15,7 +15,7 @@ let listener=null;
 
 
 
-export default class ShowStation extends Component {
+class ShowStation extends Component {
   constructor(props){
       super(props);
       this.state={
@@ -174,3 +174,12 @@ export default class ShowStation extends Component {
     );
   }
 }
+
+
+const mapDispatchToProps=(dispatch)=>{
+      return {
+                setModel:function(){dispatch(H.setModel(...arguments))}
+              }
+}
+
+export default H.con(...[,mapDispatchToProps])(ShowStation)

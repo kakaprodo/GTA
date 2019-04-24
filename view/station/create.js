@@ -13,7 +13,7 @@ var station;
 let listener=null;
 
 
-export default class CreateStation extends Component {
+ class CreateStation extends Component {
 
   constructor(props){
       super(props);
@@ -115,3 +115,12 @@ register(){
     );
   }
 }
+
+
+const mapDispatchToProps=(dispatch)=>{
+      return {
+                setModel:function(){dispatch(H.setModel(...arguments))}
+              }
+}
+
+export default H.con(...[,mapDispatchToProps])(CreateStation)

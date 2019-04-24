@@ -13,7 +13,7 @@ var fb;
 
 
 
-export default class Buckup extends Component {
+class Buckup extends Component {
   constructor(props){
       super(props);
       this.state={
@@ -33,7 +33,7 @@ export default class Buckup extends Component {
 
     }
     fb=new Fb(this);
-    H.setModel("current",this);
+    
 
 
   }
@@ -50,7 +50,7 @@ export default class Buckup extends Component {
      H.initIcon(this);
      var source=H.getParam(this.props,'source')
      this.setState({source:source})
-
+     
 
 
   }
@@ -179,3 +179,11 @@ export default class Buckup extends Component {
     );
   }
 }
+
+const mapDispatchToProps=(dispatch)=>{
+      return {
+                setModel:function(){dispatch(H.setModel(...arguments))}
+              }
+}
+
+export default H.con(...[,mapDispatchToProps])(Buckup)

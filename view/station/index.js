@@ -14,7 +14,7 @@ let listener=null;
 
 
 
-export default class Allstations extends Component {
+class Allstations extends Component {
   constructor(props){
       super(props);
       this.state={
@@ -60,7 +60,7 @@ export default class Allstations extends Component {
            }
            this.setState({total:total,allstation:data.reverse()});
     },()=>{
-        this.setState({total:0});
+        this.setState({total:0,...H.msg404([])});
     });
   }
 
@@ -120,7 +120,7 @@ export default class Allstations extends Component {
                      </Right>
                    </Header>
                    <Content  padder style={H.style.content}>
-                       <H.LoadingData data={state.allstation}/>
+                       
                      <List style={{marginLeft:-3}}>
                           <CardItem header>
                              <Text>Total consommation :          <Text style={H.style.green_color}>{state.total}</Text></Text>
@@ -157,6 +157,7 @@ export default class Allstations extends Component {
 
 
                       </List>
+                      <H.LoadingData  msg={this.state.msg404||''} data={state.allstation}/>
                   </Content>
 
             </AppLayout>
@@ -165,3 +166,12 @@ export default class Allstations extends Component {
     );
   }
 }
+
+
+const mapDispatchToProps=(dispatch)=>{
+      return {
+                setModel:function(){dispatch(H.setModel(...arguments))}
+              }
+}
+
+export default H.con(...[,mapDispatchToProps])(Allstations)

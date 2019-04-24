@@ -11,7 +11,7 @@ var mec;
 
 
 
-export default class Showmec extends Component {
+class Showmec extends Component {
   constructor(props){
       super(props);
       this.state={
@@ -164,3 +164,12 @@ export default class Showmec extends Component {
     );
   }
 }
+
+
+const mapDispatchToProps=(dispatch)=>{
+      return {
+                setModel:function(){dispatch(H.setModel(...arguments))}
+              }
+}
+
+export default H.con(...[,mapDispatchToProps])(Showmec)

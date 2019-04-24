@@ -40,11 +40,7 @@ export default class ShowEntr extends Component {
   componentDidMount() {
      //H.initIcon(this);
       this.init();
-     //  if (Platform.OS == "android" && listener == null) {
-     //    listener = BackHandler.addEventListener("hardwareBackPress", () => {
-     //       this.init();
-     //    })
-     // }
+     
 
   }
 

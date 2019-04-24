@@ -13,8 +13,7 @@ let listener=null;
 
 
 
-
-export default class Allfourns extends Component {
+ class Allfourns extends Component {
   constructor(props){
       super(props);
       this.state={
@@ -60,7 +59,8 @@ export default class Allfourns extends Component {
            }
            this.setState({total:total,allfourn:data.reverse()});
     },()=>{
-        this.setState({total:0});
+        this.setState({total:0,...H.msg404([])});
+
     });
   }
 
@@ -120,7 +120,7 @@ export default class Allfourns extends Component {
                      </Right>
                    </Header>
                    <Content  padder style={H.style.content}>
-                      <H.LoadingData data={state.allfourn}/>
+                      
                      <List style={{marginLeft:-3}}>
                           <CardItem header>
                              <Text>Total dettes :          <Text style={H.style.green_color}>{state.total} Um</Text></Text>
@@ -156,6 +156,7 @@ export default class Allfourns extends Component {
 
 
                       </List>
+                      <H.LoadingData data={state.allfourn}/>
                   </Content>
 
             </AppLayout>
@@ -164,3 +165,12 @@ export default class Allfourns extends Component {
     );
   }
 }
+
+
+const mapDispatchToProps=(dispatch)=>{
+      return {
+                setModel:function(){dispatch(H.setModel(...arguments))}
+              }
+}
+
+export default H.con(...[,mapDispatchToProps])(Allfourns)
